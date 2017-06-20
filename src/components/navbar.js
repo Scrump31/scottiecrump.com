@@ -4,20 +4,16 @@ import Appbar from 'muicss/lib/react/appbar';
 import Container from 'muicss/lib/react/container';
 import Row from 'muicss/lib/react/row';
 import Col from 'muicss/lib/react/col';
-import Button from 'muicss/lib/react/button';
 
 
 const styles = {
-  s1: {
-    verticalAlign: 'middle',
-  },
   row: {
     textAlign: 'center',
     fontSize: '3rem',
     paddingTop: 4,
   },
   a: {
-    color: 'white',
+    color: '#fff',
     textDecoration: 'none',
   },
   active: {
