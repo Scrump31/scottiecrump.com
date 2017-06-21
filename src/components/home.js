@@ -4,10 +4,12 @@ import Row from 'muicss/lib/react/row';
 import Col from 'muicss/lib/react/col';
 import NavBar from './navbar';
 import Footer from './footer';
+import { logoBG } from './componentStyles/colors';
 
 const styles = {
   textCenter: {
     textAlign: 'center',
+    color: logoBG,
   },
 };
 const { textCenter } = styles;

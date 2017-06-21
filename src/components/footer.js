@@ -7,6 +7,11 @@ import { white, orange, boxShadow } from './componentStyles/colors';
 
 
 const styles = {
+  appbar: {
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
+  },
   row: {
     textAlign: 'center',
     fontSize: '3rem',
@@ -23,17 +28,17 @@ const styles = {
   },
   i: {
     background: orange,
-    padding: '4px 10px',
+    padding: '6px 10px',
     borderRadius: '50%',
     boxShadow,
   },
 };
-const { row, h4, a, i } = styles;
+const { appbar, row, h4, a, i } = styles;
 
 export default function Footer() {
   return (
     <div>
-      <Appbar>
+      <Appbar style={appbar}>
         <Container fluid>
           <Row style={row}>
             <Col xs="6" md="3">
@@ -78,7 +83,7 @@ export default function Footer() {
             </Col>
           </Row>
           <Row>
-            <Col md="12"><h4 style={h4}>CodeMeUpScottie.com © 2017.</h4></Col>
+            <Col md="12"><h4 style={h4}>© 2017 CodeMeUpScottie.com</h4></Col>
           </Row>
         </Container>
       </Appbar>
