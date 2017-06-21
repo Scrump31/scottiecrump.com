@@ -4,7 +4,8 @@ import Appbar from 'muicss/lib/react/appbar';
 import Container from 'muicss/lib/react/container';
 import Row from 'muicss/lib/react/row';
 import Col from 'muicss/lib/react/col';
-
+import { white, orange, boxShadow, logoBG } from './componentStyles/colors';
+import '../sass/navbar.scss';
 
 const styles = {
   row: {
@@ -12,16 +13,26 @@ const styles = {
     fontSize: '3rem',
     paddingTop: 4,
   },
+  muiColMd2: {
+    marginTop: 3,
+  },
   a: {
-    color: '#fff',
+    textDecoration: 'none',
+    color: white,
+  },
+  logoA: {
+    color: orange,
+    boxShadow,
+    padding: 5,
+    background: logoBG,
     textDecoration: 'none',
   },
   active: {
     fontWeight: 'bold',
-    textDecoration: 'underline',
+    color: orange,
   },
 };
-const { row, a, active } = styles;
+const { row, a, logoA, active, muiColMd2 } = styles;
 
 export default function NavBar() {
   return (
@@ -29,10 +40,10 @@ export default function NavBar() {
       <Appbar>
         <Container fluid>
           <Row style={row}>
-            <Col md="3">
-              <NavLink style={a} to="/">Scottie Crump</NavLink>
+            <Col style={muiColMd2} md="2">
+              <NavLink style={logoA} to="/">SC</NavLink>
             </Col>
-            <Col md="2" md-offset="3">
+            <Col md="2" md-offset="4">
               <NavLink
                 style={a}
                 to="/about"
