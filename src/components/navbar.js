@@ -4,7 +4,8 @@ import Appbar from 'muicss/lib/react/appbar';
 import Container from 'muicss/lib/react/container';
 import Row from 'muicss/lib/react/row';
 import Col from 'muicss/lib/react/col';
-import { white, orange, boxShadow, logoBG } from './componentStyles/colors';
+import Button from 'muicss/lib/react/button';
+import { white, orange, logoBG } from './componentStyles/colors';
 import '../sass/navbar.scss';
 
 const styles = {
@@ -22,17 +23,22 @@ const styles = {
   },
   logoA: {
     color: orange,
-    boxShadow,
-    padding: 5,
+    padding: 23,
     background: logoBG,
     textDecoration: 'none',
+    fontSize: 30,
+  },
+  logoBtn: {
+    margin: 0,
+    height: 48,
+    padding: 0,
   },
   active: {
     fontWeight: 'bold',
     color: orange,
   },
 };
-const { row, a, logoA, active, muiColMd2 } = styles;
+const { row, a, logoA, logoBtn, active, muiColMd2 } = styles;
 
 export default function NavBar() {
   return (
@@ -41,7 +47,9 @@ export default function NavBar() {
         <Container fluid>
           <Row style={row}>
             <Col style={muiColMd2} md="2">
-              <NavLink style={logoA} to="/">SC</NavLink>
+              <Button style={logoBtn} variant="raised" color="primary">
+                <NavLink style={logoA} to="/">SC</NavLink>
+              </Button>
             </Col>
             <Col md="2" md-offset="4">
               <NavLink
