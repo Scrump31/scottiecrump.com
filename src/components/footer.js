@@ -4,13 +4,12 @@ import Container from 'muicss/lib/react/container';
 import Row from 'muicss/lib/react/row';
 import Col from 'muicss/lib/react/col';
 import { white, orange, boxShadow } from './componentStyles/colors';
+import '../sass/footer.scss';
 
 
 const styles = {
   appbar: {
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
+    height: 186,
   },
   row: {
     textAlign: 'center',
@@ -83,7 +82,7 @@ export default function Footer() {
             </Col>
           </Row>
           <Row>
-            <Col md="12"><h4 style={h4}>© 2017 CodeMeUpScottie.com</h4></Col>
+            <Col xs="12" md="12"><p style={h4}>© 2017 CodeMeUpScottie.com</p></Col>
           </Row>
         </Container>
       </Appbar>

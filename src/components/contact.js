@@ -3,9 +3,8 @@ import Container from 'muicss/lib/react/container';
 import Row from 'muicss/lib/react/row';
 import Col from 'muicss/lib/react/col';
 import Button from 'muicss/lib/react/button';
-import NavBar from './navbar';
-import Footer from './footer';
-import { orange, logoBG } from './componentStyles/colors';
+import { orange, logoBG, white } from './componentStyles/colors';
+import '../sass/contact.scss';
 
 const styles = {
   row: {
@@ -18,10 +17,9 @@ const styles = {
   },
   a: {
     color: orange,
-    fontSize: '2.5rem',
   },
   h1: {
-    color: logoBG,
+    color: white,
   },
 };
 
@@ -29,7 +27,6 @@ const { row, btn, a, h1 } = styles;
 export default function Contact() {
   return (
     <div>
-      <NavBar />
       <Container>
         <Row style={row}>
           <Col md="12">
@@ -40,7 +37,6 @@ export default function Contact() {
           </Col>
         </Row>
       </Container>
-      <Footer />
     </div>
   );
 }

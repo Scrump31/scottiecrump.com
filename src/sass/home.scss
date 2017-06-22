@@ -1,0 +1,12 @@
+.mui-container {
+  height: 100vh;
+  margin-bottom: -185px;
+
+  @media (min-width: 320px) and (orientation: landscape) {
+    margin-bottom: 0;
+  }
+  @media (min-width: 1025px) {
+    margin-bottom: -185px;
+  }
+
+}

@@ -5,7 +5,7 @@ import Container from 'muicss/lib/react/container';
 import Row from 'muicss/lib/react/row';
 import Col from 'muicss/lib/react/col';
 import Button from 'muicss/lib/react/button';
-import { white, orange, logoBG } from './componentStyles/colors';
+import { white, orange, gray, logoBG } from './componentStyles/colors';
 import '../sass/navbar.scss';
 
 const styles = {
@@ -20,6 +20,7 @@ const styles = {
   a: {
     textDecoration: 'none',
     color: white,
+    fontSize: '2rem',
   },
   logoA: {
     color: orange,
@@ -32,6 +33,7 @@ const styles = {
     margin: 0,
     height: 48,
     padding: 0,
+    borderLeft: `3px solid ${gray}`,
   },
   active: {
     fontWeight: 'bold',
@@ -46,22 +48,22 @@ export default function NavBar() {
       <Appbar>
         <Container fluid>
           <Row style={row}>
-            <Col style={muiColMd2} md="2">
+            <Col style={muiColMd2} xs="12" md="2">
               <Button style={logoBtn} variant="raised" color="primary">
                 <NavLink style={logoA} to="/">SC</NavLink>
               </Button>
             </Col>
-            <Col md="2" md-offset="4">
+            <Col xs="4" md="2" md-offset="4">
               <NavLink
                 style={a}
                 to="/about"
                 activeStyle={active}
               >About</NavLink>
             </Col>
-            <Col md="2">
+            <Col xs="4" md="2">
               <NavLink style={a} to="/projects" activeStyle={active}>Projects</NavLink>
             </Col>
-            <Col md="2">
+            <Col xs="4" md="2">
               <NavLink style={a} to="/contact"activeStyle={active}>Contact</NavLink>
             </Col>
           </Row>
