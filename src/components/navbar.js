@@ -12,10 +12,13 @@ const styles = {
   row: {
     textAlign: 'center',
     fontSize: '3rem',
-    paddingTop: 4,
+    paddingTop: '4px',
   },
-  muiColMd2: {
-    marginTop: 3,
+  logoCol: {
+    marginTop: '3px',
+  },
+  linkCol: {
+    marginTop: '5px',
   },
   a: {
     textDecoration: 'none',
@@ -24,23 +27,27 @@ const styles = {
   },
   logoA: {
     color: orange,
-    padding: 23,
+    padding: '23px',
     background: logoBG,
     textDecoration: 'none',
-    fontSize: 30,
+    fontSize: '30px',
   },
   logoBtn: {
     margin: 0,
-    height: 48,
+    height: '48px',
     padding: 0,
     borderLeft: `3px solid ${gray}`,
+  },
+  logoSpan: {
+    marginLeft: '7px',
+    fontSize: '1.5rem',
   },
   active: {
     fontWeight: 'bold',
     color: orange,
   },
 };
-const { row, a, logoA, logoBtn, active, muiColMd2 } = styles;
+const { row, a, logoA, logoBtn, logoCol, logoSpan, linkCol, active } = styles;
 
 export default function NavBar() {
   return (
@@ -48,22 +55,23 @@ export default function NavBar() {
       <Appbar>
         <Container fluid>
           <Row style={row}>
-            <Col style={muiColMd2} xs="12" md="2">
+            <Col style={logoCol} xs="12" md="4">
               <Button style={logoBtn} variant="raised" color="primary">
                 <NavLink style={logoA} to="/">SC</NavLink>
               </Button>
+              <span style={logoSpan}>Web Developer</span>
             </Col>
-            <Col xs="4" md="2" md-offset="4">
+            <Col style={linkCol} xs="4" md="2" md-offset="2">
               <NavLink
                 style={a}
                 to="/about"
                 activeStyle={active}
               >About</NavLink>
             </Col>
-            <Col xs="4" md="2">
+            <Col style={linkCol} xs="4" md="2">
               <NavLink style={a} to="/projects" activeStyle={active}>Projects</NavLink>
             </Col>
-            <Col xs="4" md="2">
+            <Col style={linkCol} xs="4" md="2">
               <NavLink style={a} to="/contact"activeStyle={active}>Contact</NavLink>
             </Col>
           </Row>

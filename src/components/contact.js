@@ -20,6 +20,7 @@ const styles = {
   },
   h1: {
     color: white,
+    fontSize: '4rem',
   },
 };
 
@@ -27,7 +28,7 @@ const { row, btn, a, h1 } = styles;
 export default function Contact() {
   return (
     <div>
-      <Container>
+      <Container className="view-height-fix">
         <Row style={row}>
           <Col md="12">
             <h1 style={h1}>Feel free to contact me below by email.</h1>

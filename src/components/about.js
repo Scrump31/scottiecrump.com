@@ -3,26 +3,59 @@ import Container from 'muicss/lib/react/container';
 import Row from 'muicss/lib/react/row';
 import Col from 'muicss/lib/react/col';
 import Panel from 'muicss/lib/react/panel';
+import about from '../images/about-me-2.jpg';
+import { gray } from './componentStyles/colors';
 
 const styles = {
   panel: {
-    marginTop: 20,
     textAlign: 'center',
+    marginTop: '10%',
   },
   img: {
-    width: '100%',
+    width: '90%',
+    marginTop: '15px',
+  },
+  marginB: {
+    marginBottom: '52%',
+  },
+  p: {
+    fontSize: '1.5em',
+    lineHeight: '1.8em',
+    marginBottom: '1.5em',
+    background: gray,
+    padding: '3px',
+    textAlign: 'left',
   },
 };
-const { panel, img } = styles;
+const { panel, img, marginB, p } = styles;
 
 export default function About() {
   return (
     <div>
-      <Container>
+      <Container style={marginB}>
         <Row>
-          <Col md="4" md-offset="4">
+          <Col md="8" md-offset="2">
             <Panel style={panel}>
-              <img style={img} src={'http://lorempixel.com/200/200/people/'} alt={'1'} />
+              <Col md="4">
+                <img style={img} src={about} alt={'scottie crump'} />
+              </Col>
+              <div style={p}>
+                <p>
+                  I am currently a Web Developer in the Charlotte, N.C. area looking
+                  for exciting new IT opportunities to further my knowledge and
+                  skill set.
+                </p>
+                <p>
+                  What I love most about software development is being
+                  apart of a passionate community full of resources and ideas
+                  to build better products for people!
+                </p>
+                <p>
+                  When I am not busy coding, you can find me spending time with
+                  my new wife Vicki or staying fit at the gym. I love gynmastic
+                  exercises especially pull-ups!
+                </p>
+              </div>
             </Panel>
           </Col>
         </Row>
