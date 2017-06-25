@@ -1,24 +1,21 @@
 {
   "name": "codemeupscottie",
   "version": "1.0.0",
-  "description": "",
+  "description": "My personal website",
   "main": "index.js",
   "scripts": {
     "serve": "webpack-dev-server --content-base dist/",
     "clean": "rimraf dist",
     "build": "npm run clean && webpack -p"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["react, webpack, muicss"],
+  "author": "Scottie Crump",
   "license": "ISC",
   "dependencies": {
     "muicss": "^0.9.16",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-player": "^0.18.0",
-    "react-router-dom": "^4.1.1",
-    "react-tap-event-plugin": "^2.0.1",
-    "react-transition-group": "^1.2.0"
+    "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

@@ -28,11 +28,11 @@ const styles = {
   logoA: {
     color: orange,
     padding: '23px',
-    background: logoBG,
     textDecoration: 'none',
     fontSize: '30px',
   },
   logoBtn: {
+    background: logoBG,
     margin: 0,
     height: '48px',
     padding: 0,
