@@ -8,12 +8,11 @@ const styles = {
   column: {
     marginBottom: '3%',
   },
-  image: {
+  imageStyle: {
     width: '100%',
   },
-  h2: {
+  p: {
     color: white,
-    fontSize: '20px',
     left: '50%',
     overflow: 'hidden',
     position: 'absolute',
@@ -28,7 +27,7 @@ const styles = {
     left: '50%',
     overflow: 'hidden',
     position: 'absolute',
-    top: '60%',
+    top: '90%',
     transform: 'translate(-50%, -50%)',
     textAlign: 'center',
     cursor: 'pointer',
@@ -40,50 +39,44 @@ const styles = {
   a: {
     color: white,
   },
-  description: {
+  descriptionStyle: {
     color: white,
     textAlign: 'center',
-    lineHeight: '1.6',
   },
 };
-const { column, image, h2, viewBtn, a, gitBtn, description } = styles;
+const { column, imageStyle, p, viewBtn, a, gitBtn, descriptionStyle } = styles;
 
-
-export default function Project() {
+export default function Project(props) {
+  const { name, description, image, link, code } = props;
   return (
     <div>
       <Col style={column} md="4">
         <div className="project">
           <div className="overlay">
             <div>
-              <h2 style={h2}>Project Name</h2>
+              <p className="project-paragraph" style={p}>{description}</p>
               <Button style={viewBtn}>
                 <a
                   style={a}
                   target="_blank"
                   rel="noreferrer noopener"
-                  href="http://www.msn.com"
+                  href={link}
                 >
                   View Project
                 </a>
               </Button>
             </div>
           </div>
-          <img style={image} src="http://lorempixel.com/305/304" alt="placeholder" />
+          <img style={imageStyle} src={image} alt={name} />
         </div>
-        <div style={description}>
-          <p>
-            Dovetail is a free, open source member management app for
-            coworking spaces I built with Vince Hodges. Over 1,070 coworking
-            spaces worldwide have created accounts.
-            Built with: React, SASS, etc.
-          </p>
+        <div style={descriptionStyle}>
+          <h3>{name}</h3>
           <Button style={gitBtn} size="small">
             <a
               style={a}
               target="_blank"
               rel="noreferrer noopener"
-              href="http://www.msn.com"
+              href={code}
             >
               <i className="fa fa-github" />
             </a>

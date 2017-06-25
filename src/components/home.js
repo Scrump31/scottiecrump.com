@@ -35,7 +35,6 @@ export default function Home() {
           <Col md="12">
             <Button size="large" style={btn}>
               <Link style={a} to="/projects">View Projects</Link>
-
             </Button>
           </Col>
         </Row>

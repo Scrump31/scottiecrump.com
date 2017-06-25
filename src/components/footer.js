@@ -6,7 +6,6 @@ import Col from 'muicss/lib/react/col';
 import { white, orange, boxShadow } from './componentStyles/colors';
 import '../sass/footer.scss';
 
-
 const styles = {
   appbar: {
     height: 186,

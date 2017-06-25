@@ -2,6 +2,7 @@ import React from 'react';
 import Container from 'muicss/lib/react/container';
 import Row from 'muicss/lib/react/row';
 import Project from './project';
+import MyProjects from '../myProjects';
 import '../sass/projectList.scss';
 
 const styles = {
@@ -15,17 +16,20 @@ const styles = {
 const { row } = styles;
 
 export default function ProjectList() {
+  const projectData = MyProjects.map(project =>
+    (<Project
+      key={project.name}
+      name={project.name}
+      image={project.image}
+      description={project.description}
+      link={project.link}
+      code={project.code}
+    />));
   return (
     <div>
       <Container className="project-list">
-        <Row style={row}>
-          <Project />
-          <Project />
-          <Project />
-          <Project />
-          <Project />
-          <Project />
-        </Row>
+        <Row style={row} />
+        {projectData}
       </Container>
     </div>
   );

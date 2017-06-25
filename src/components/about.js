@@ -3,7 +3,7 @@ import Container from 'muicss/lib/react/container';
 import Row from 'muicss/lib/react/row';
 import Col from 'muicss/lib/react/col';
 import Panel from 'muicss/lib/react/panel';
-import about from '../images/about-me-2.jpg';
+import about from '../images/about-me.jpg';
 import { contentBG } from './componentStyles/colors';
 import '../sass/about.scss';
 

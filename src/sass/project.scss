@@ -19,4 +19,22 @@
   top: 1px;
   transition: .8s ease;
   width: 100%;
+
+  .project-paragraph {
+    font-size: 1.1em;
+    margin-bottom: 25%;
+    // For I-Pad portrait view
+    @media  screen and  (min-width: 768px) and (min-height: 1024px)  {
+      font-size: 1em;
+    }
+
+    // For I-Pad Pro portrait view
+    @media  screen and  (min-width: 1024px) and (min-height: 1366px)  {
+      font-size: 1.2em;
+    }
+    // For I-Pad Pro landscape view
+    @media  screen and  (min-width: 1366px) and (min-height: 1024px)  {
+      font-size: 1.4em;
+    }
+  }
 }
