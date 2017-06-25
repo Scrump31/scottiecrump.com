@@ -1,0 +1,41 @@
+@media (min-width: 768px) {
+  .home h1 {
+    font-size: 7rem; }
+  .home h3 {
+    font-size: 3rem; } }
+.about {
+  margin-bottom: 25%; }
+  @media screen and (min-width: 1024px) and (min-height: 1366px) {
+    .about {
+      margin-bottom: 52%; } }
+.mui-row {
+  margin-top: 15px; }
+a {
+  font-size: 2.5rem; }
+  @media only screen and (max-width: 320px) {
+    a {
+      font-size: 2rem; } }
+.view-height-fix {
+  height: 100vh;
+  margin-bottom: -185px; }
+  @media (min-width: 320px) and (orientation: landscape) {
+    .view-height-fix {
+      margin-bottom: 0; } }
+  @media (min-width: 1025px) {
+    .view-height-fix {
+      margin-bottom: -185px; } }
+
+body {
+  background: #eee;
+  background-image: url(abf2f4142dd9be869bf78b56e226d1ce.png);
+  background-position: center center;
+  background-size: cover; }
+
+.mui-appbar {
+  background: #78909c;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26); }
+
+a:hover {
+  color: rgba(0, 0, 0, 0.27) !important; }
+a:hover {
+  text-decoration: none; }

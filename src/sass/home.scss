@@ -1,12 +1,11 @@
-.mui-container {
-  height: 100vh;
-  margin-bottom: -185px;
+.home {
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 7rem;
+    }
 
-  @media (min-width: 320px) and (orientation: landscape) {
-    margin-bottom: 0;
+    h3 {
+      font-size: 3rem;
+    }
   }
-  @media (min-width: 1025px) {
-    margin-bottom: -185px;
-  }
-
 }

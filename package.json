@@ -15,6 +15,7 @@
     "muicss": "^0.9.16",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-player": "^0.18.0",
     "react-router-dom": "^4.1.1",
     "react-tap-event-plugin": "^2.0.1",
     "react-transition-group": "^1.2.0"

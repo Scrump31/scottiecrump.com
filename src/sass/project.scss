@@ -1,0 +1,22 @@
+@import 'variables';
+
+.project {
+  position: relative;
+  &:hover .overlay {
+    bottom: 0;
+    height: 99%;
+    top: -1px;
+  }
+}
+
+.overlay {
+  background: $project-hover-bg;
+  bottom: 100%;
+  color: $body-bg;
+  height: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 1px;
+  transition: .8s ease;
+  width: 100%;
+}

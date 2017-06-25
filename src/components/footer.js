@@ -35,6 +35,7 @@ const styles = {
 const { appbar, row, h4, a, i } = styles;
 
 export default function Footer() {
+  const getDate = () => new Date().getFullYear();
   return (
     <div>
       <Appbar style={appbar}>
@@ -82,7 +83,7 @@ export default function Footer() {
             </Col>
           </Row>
           <Row>
-            <Col xs="12" md="12"><p style={h4}>© 2017 CodeMeUpScottie.com</p></Col>
+            <Col xs="12" md="12"><p style={h4}>© {getDate()} CodeMeUpScottie.com</p></Col>
           </Row>
         </Container>
       </Appbar>
