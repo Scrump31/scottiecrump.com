@@ -23,7 +23,7 @@ const styles = {
   a: {
     textDecoration: 'none',
     color: white,
-    fontSize: '2rem',
+    fontSize: '1.9rem',
   },
   logoA: {
     color: orange,
@@ -61,17 +61,25 @@ export default function NavBar() {
               </Button>
               <span style={logoSpan}>Web Developer</span>
             </Col>
-            <Col style={linkCol} xs="4" md="2" md-offset="2">
+            <Col style={linkCol} xs="3" md="1" md-offset="3">
               <NavLink
                 style={a}
                 to="/about"
                 activeStyle={active}
               >About</NavLink>
             </Col>
-            <Col style={linkCol} xs="4" md="2">
+            <Col style={linkCol} xs="3" md="1">
               <NavLink style={a} to="/projects" activeStyle={active}>Projects</NavLink>
             </Col>
-            <Col style={linkCol} xs="4" md="2">
+            <Col style={linkCol} xs="3" md="1">
+              <a
+                style={a}
+                target="_blank"
+                rel="noreferrer noopener"
+                href="https://medium.com/@scottiecrump"
+              >Blog</a>
+            </Col>
+            <Col style={linkCol} xs="3" md="1">
               <NavLink style={a} to="/contact"activeStyle={active}>Contact</NavLink>
             </Col>
           </Row>
