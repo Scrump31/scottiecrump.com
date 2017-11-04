@@ -1,7 +1,7 @@
 import responsiveLayout from './images/responsiveLayout.png';
 import scoreboard from './images/scoreboard.png';
 import calculator from './images/calculator.png';
-import localWeather from './images/localWeather.png';
+import hardyandkeith from './images/Hardy-and-Keith.png';
 import randomQuotes from './images/randomQuotes.png';
 import goyt from './images/goyt.png';
 
@@ -14,11 +14,11 @@ const MyProjects = [
     code: 'https://github.com/Scrump31/hersog-clone',
   },
   {
-    name: 'Scoreboard',
-    description: 'An app used to keep track of player scores. Has a countdown timer and auto updates total scores. Technologies used: Create-React-App, Redux, Reactstrap, and Lodash.',
-    image: scoreboard,
-    link: 'https://scrump31.github.io/scoreboard/',
-    code: 'https://github.com/Scrump31/scoreboard',
+    name: 'Hardy & Keith LLC',
+    description: 'An e-commerence business offering night life services. Technologies used: Wordpress, WooCommerece',
+    image: hardyandkeith,
+    link: 'https://hardyandkeith.com/',
+    code: 'https://hardyandkeith.com/',
   },
   {
     name: 'Refactored Layout',
@@ -28,18 +28,18 @@ const MyProjects = [
     code: 'https://goyt.com/signup',
   },
   {
+    name: 'Scoreboard',
+    description: 'An app used to keep track of player scores. Has a countdown timer and auto updates total scores. Technologies used: Create-React-App, Redux, Reactstrap, and Lodash.',
+    image: scoreboard,
+    link: 'https://scrump31.github.io/scoreboard/',
+    code: 'https://github.com/Scrump31/scoreboard',
+  },
+  {
     name: 'Javascript Calculator',
     description: 'A functional calculator. Technologies used: Angular, Sass, and the math.js library.',
     image: calculator,
     link: 'https://codepen.io/CrumpDev31/full/xEYbBk',
     code: 'https://github.com/Scrump31/JavascriptCalculator',
-  },
-  {
-    name: 'Local Weather App',
-    description: 'An app that displays weather based on current location. Technologies used: AngularJS and OpenWeather API.',
-    image: localWeather,
-    link: 'http://scrump31.github.io/LocalWeatherApp/',
-    code: 'https://github.com/Scrump31/LocalWeatherApp',
   },
   {
     name: 'Random Quote App',

@@ -23,7 +23,7 @@ const styles = {
   a: {
     textDecoration: 'none',
     color: white,
-    fontSize: '1.9rem',
+    fontSize: '1.5rem',
   },
   logoA: {
     color: orange,
