@@ -1,8 +1,8 @@
 import responsiveLayout from './images/responsiveLayout.png';
 import scoreboard from './images/scoreboard.png';
-import calculator from './images/calculator.png';
+import clientManager from './images/clientManager.png';
 import hardyandkeith from './images/Hardy-and-Keith.png';
-import randomQuotes from './images/randomQuotes.png';
+import mountainTravel from './images/mountainTravel.png';
 import goyt from './images/goyt.png';
 
 const MyProjects = [
@@ -35,18 +35,18 @@ const MyProjects = [
     code: 'https://github.com/Scrump31/scoreboard',
   },
   {
-    name: 'Javascript Calculator',
-    description: 'A functional calculator. Technologies used: Angular, Sass, and the math.js library.',
-    image: calculator,
-    link: 'https://codepen.io/CrumpDev31/full/xEYbBk',
-    code: 'https://github.com/Scrump31/JavascriptCalculator',
+    name: 'Client Manager',
+    description: 'A full-stack App to manage clients. Technologies used: Node, Express, Mongodb, passport-google-oauth, Mocha.',
+    image: clientManager,
+    link: 'http://murmuring-badlands-71937.herokuapp.com/',
+    code: 'https://github.com/Scrump31/ClientAddressBook',
   },
   {
-    name: 'Random Quote App',
-    description: 'An app that displays random quotes. Users can also share quotes via Twitter. Technologies used: Angular and Twitter API.',
-    image: randomQuotes,
-    link: 'https://codepen.io/CrumpDev31/full/PzoKMo',
-    code: 'https://codepen.io/CrumpDev31/pen/PzoKMo',
+    name: 'Mountain Travel Landing Page',
+    description: 'A landing page for a new business. Technologies used: SASS, flexbox, wow.js.',
+    image: mountainTravel,
+    link: 'http://military-bridge.surge.sh/',
+    code: 'https://github.com/Scrump31/landing-page',
   },
 ];
 

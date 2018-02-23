@@ -8,7 +8,9 @@
     "clean": "rimraf dist",
     "build": "npm run clean && webpack -p"
   },
-  "keywords": ["react, webpack, muicss"],
+  "keywords": [
+    "react, webpack, muicss"
+  ],
   "author": "Scottie Crump",
   "license": "ISC",
   "dependencies": {

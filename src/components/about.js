@@ -40,7 +40,7 @@ export default function About() {
               </Col>
               <div style={content}>
                 <p>
-                  I am currently a Web Developer in the Charlotte, N.C. area looking
+                  I am currently a QA Analyst and Web Developer in the Charlotte, N.C. area looking
                   for exciting new IT opportunities to further my knowledge and
                   skill set.
                 </p>
