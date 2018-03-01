@@ -82,7 +82,7 @@ export default function Footer() {
             </Col>
           </Row>
           <Row>
-            <Col xs="12" md="12"><p style={h4}>© {getDate()} CodeMeUpScottie.com</p></Col>
+            <Col xs="12" md="12"><p style={h4}>© {getDate()} ScottieCrump.com</p></Col>
           </Row>
         </Container>
       </Appbar>
