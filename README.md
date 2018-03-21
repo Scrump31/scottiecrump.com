@@ -1,4 +1,4 @@
-# CodeMeUpScottie.com
+# ScottieCrump.com
 
 My personal website.
 
