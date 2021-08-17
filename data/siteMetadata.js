@@ -1,20 +1,21 @@
 const siteMetadata = {
-  title: 'Next.js Starter Blog',
-  author: 'Tails Azimuth',
-  headerTitle: 'TailwindBlog',
-  description: 'A blog created with Next.js and Tailwind.css',
+  title: 'Scottie Crump | Senior Test Engineer',
+  author: 'Scottie Crump',
+  headerTitle: 'Scottie Crump',
+  description:
+    "Hi, I'm Scottie Crump, a Senior Test Engineer specializing in modern testing methodologies. ",
   language: 'en-us',
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
+  siteUrl: 'https://scottiecrump.com',
+  siteRepo: 'https://github.com/Scrump31/scottiecrump.com',
   siteLogo: '/static/images/logo.png',
-  image: '/static/images/avatar.png',
+  image: '/static/images/avatar.png', // About page image
   socialBanner: '/static/images/twitter-card.png',
-  email: 'address@yoursite.com',
-  github: 'https://github.com',
+  email: 'sncrump29@gmail.com',
+  github: 'https://github.com/Scrump31/',
   twitter: 'https://twitter.com/Twitter',
-  facebook: 'https://facebook.com',
-  youtube: 'https://youtube.com',
-  linkedin: 'https://www.linkedin.com',
+  facebook: 'https://www.facebook.com/scottie.crump/',
+  youtube: 'https://www.youtube.com/channel/UCNLKKASf6kkiBu5ewsv7jwQ',
+  linkedin: 'https://www.linkedin.com/in/scottiecrump/',
   locale: 'en-US',
   analytics: {
     // supports plausible, simpleAnalytics or googleAnalytics
