@@ -1,0 +1,39 @@
+---
+title: 'Quickly Deploy Static Websites with Surge'
+date: '2017-08-28'
+tags: ['deploy', 'surge', 'static website']
+draft: false
+summary: 'I recently came across a great tool to have in your tool belt. If you are a Web Developer wanting to deploy your static web projects online for the world to see, you need a way to complete this task...'
+---
+
+<div class="text-center">
+  <Image alt="man programming" src="/static/images/surgeBlog.jpg" width={437} height={434}  />
+  
+  Photo by <a href="https://unsplash.com/@jefflssantos?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Jefferson Santos</a> on <a href="https://unsplash.com/s/photos/programmer?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+  
+  
+</div>
+
+# Intro
+I recently came across a great tool to have in your tool belt. If you are a Web Developer wanting to deploy your static web projects online for the world to see, you need a way to complete this task. Remember that we’re talking about static projects, meaning projects where pages are not created dynamically by a server-side language like NodeJS or Java.
+
+You may be familiar with using Github Pages or Amazon Web Services, for example, to achieve this. However, there is an easier way. Using the command-line interface (CLI), we can use [Surge](http://surge.sh/) to deploy projects in seconds using the command-line interface (CLI).
+
+# Using Basic Surge Commands
+Here are the basic commands to deploy projects using surge:
+## Installation
+To install the surge cli use: `npm install -g surge`
+
+When you’re ready to deploy your project navigate to the directory to deploy and use: `surge` via the cli. You will be prompted to create an account with an email and password so that only you can deploy to the specific domain for your project.
+
+## Update & Re-deploy
+If you want to update and re-deploy your surge project, just use:
+`surge --domain yourProjectDomain.sh` inside the project directory.
+You can also create a **CNAME** file in the root of your project with your domain name saved in it (i.e., **myDomain.surge.sh**). Then, Surge will automatically look there to find your domain name when you run the surge command.
+
+## Deleting a project
+If you want to delete a surge project, use:
+`surge teardown yourProjectDomain.surge.sh`
+If you tend to be a visual learning like myself, here is a video illustrating the basic commands of using Surge:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-EjdMvYPSVU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+If you have a custom domain, you can use it instead of what Surge provides. There are other features of Surge that you can easily find in their [documentation](https://surge.sh/help/). So that’s it! *You’ve been Surged*.
