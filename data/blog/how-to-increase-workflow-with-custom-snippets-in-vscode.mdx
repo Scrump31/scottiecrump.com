@@ -1,0 +1,53 @@
+---
+title: 'How to Increase Workflow with Custom Snippets in Visual Studio Code'
+date: '2018-10-29'
+tags: ['vscode', 'coding', 'snippets']
+draft: false
+summary: 'As you become fluent in writing code in a particular language, you will start noticing blocks of code written over and over. Writing the same code can be tedious and take the focus away from organizing and creating your project. A solution to this problem is using snippets...'
+---
+
+<div class="text-center">
+  <Image alt="man using computer" src="/static/images/snippets.jpeg" width={437} height={434} />
+</div>
+
+# Intro
+
+As you become fluent in writing code in a particular language, you will start noticing blocks of code written over and over. Writing the same code can be tedious and take the focus away from organizing and creating your project. A solution to this problem is using snippets. Snippets are keyboard shortcuts that auto-generate lines of code. We can start using snippets in two ways: use those created by other developers or your custom-made snippets. I will mention a few popular Visual Studio Code (VSCode) extensions you can use. Still, the main focus is learning how to create your snippets.
+
+# Popular VSCode Snippet Extensions
+
+There are many popular snippet extensions to use depending on the programming language. First, search for an extension you like and install it. Then, read the documentation to learn the keyboard shortcuts to generate code snippets. For example, the following are a few popular extensions for JavaScript:
+
+- [JavaScript (ES6) Code Snippets by charlampos karypidis](https://marketplace.visualstudio.com/items?itemName=xabikos.JavaScriptSnippets)
+- [Jest Snippets by andys8](https://marketplace.visualstudio.com/items?itemName=andys8.jest-snippets)
+- [ES7 React/Redux/GraphQL/React-Native Snippets by dsznajder](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)
+- [Angular v6 snippets by John Papa](https://marketplace.visualstudio.com/items?itemName=johnpapa.Angular2)
+
+# Why Create Custom Snippets?
+
+If there are code snippet extensions already available, why bother creating your own? By creating custom snippets, they will be more personable to you. It is like using flashcards created by someone else to study for a test. Yes, those flashcards may cover most of the material and help you get a better grade. Still, they may not fill your individual needs. For example, the snippets you're using may generate functions that have another function as a callback function. You like this snippet, but you prefer the callback function to be an arrow function. You would have to edit the code generated from the snippet to have your syntax needs, thus slowing you down. Another reason to create your snippets is not having to memorize keyboard shortcuts created by others. It can be challenging to remember keywords when they are not personable to you. The solution is making your snippets. Your snippets can meet your needs, whether it's syntax or keyword-related.
+
+# Steps to Create Custom Snippets
+
+1. Consider what keywords, letters, numbers, etc., come to mind when you think of a particular block of code. For example, when thinking of the `Array.prototype.map()` method, "mapm" may come to mind. The goal is to create a mnemonic "memory aid" to help you remember the snippet name. An excellent way to know if you have chosen the correct snippet is by attempting to use the snippet at later times. If the same mnemonic comes to mind for a particular snippet, that indicates a good mnemonic.
+2. Decide if the snippet will be global for any project use or specific to one project you’re building.
+3. Write the code the snippet will produce. Going back to step 1, for a map method, you may choose to write the method like this, modeling an example from MDN docs: `.map(x => x * 2);`
+4. Create the snippet. Navigate to the [snippet generator](https://snippet-generator.app/) for an easy-to-use snippet generator created by Pawel Grzbek. In the "**_Description…_**" box, provide a brief description of what the snippet does. For example, "**_Array map method_**" could work for the map method. In the "_Tab trigger…_" box, type the memory aid you thought of in step 1. Use [snippet syntax](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax) further to customize the snippet with things like tabletops or placeholders. Assuming VSCode is your editor, make sure VSCode is highlighted in the column that displays the snippet output. Next, click the "**_Copy snippet_**" button.
+5. Add the snippet to your JSON user snippet files. Inside VSCode, click on the gear icon on the bottom left corner of the screen and select "**_User Snippets_**." Next, select "**_New Global Snippets file…_**" or "**_New Snippets file for yourProject_**" based on what you decided in step 2. Once inside the JSON snippet file, paste your created snippet inside the file.
+6. Use the snippet. Now you can type in the mnemonic while inside the editor and press the tab key to generate the code!
+
+# Conclusion
+
+To end, now you have a new way to increase your workflow. If existing snippets work for you, by all means, use them and do not reinvent the wheel. But, when needed, now you know how to create custom snippets that work for your unique needs. Bonus: Here’s a quick video I made demonstrating the process:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/w-Xe5Fv6zQA"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
+</div>
