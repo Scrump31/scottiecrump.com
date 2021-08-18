@@ -1,0 +1,80 @@
+---
+title: 'Tips to Write Cleaner Code'
+date: '2017-08-21'
+tags: ['coding', 'design', 'agile']
+draft: false
+summary: 'I recently read the book "Clean Code" and learned some great tips on writing better code to make life easier for yourself and those on your team...'
+---
+
+<div class="text-center">
+  <Image alt="man using computer" src="/static/images/cleanCode.jpg" width={437} height={434} />
+  Photo by <a href="https://unsplash.com/@kobuagency?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    KOBU Agency
+  </a> on <a href="https://unsplash.com/s/photos/clean-code?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Intro
+
+I recently read the book [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) and learned some great tips on writing better code to make life easier for yourself and those on your team. The book was released in 2008 and has information that is still applicable in today's time. The following are some of the things I learned from various chapters throughout the book.
+
+# What is Clean Code?
+
+Writing clean code means writing simple, understandable, organized, and easy to expand upon by other developers. Clean code is:
+
+- Code that reads similar to a sentence or paragraph.
+- Code that has a small number of dependencies, classes, and methods.
+- Code that is tested.
+- Code that has one way compared to multiple ways to complete a task.
+- Code that looks like a story written by a passionate author that flows from start to finish.
+
+# Clean Code has Meaningful Names
+
+When creating names for variables, classes, and methods, they should clearly explain their purpose. When creating names:
+
+- They should be meaningful, easy to pronounce and explain their use.
+- They should be changed to a better name if you have to add comments to explain them.
+- They should be short in length as shorter names are better than longer names assuming they clearly describe purpose.
+- They should not be single-letter names or numeric constants, as these are hard to find when searching through hundreds or even thousands of lines of code.
+- They should be noun or noun phrases if they are class names and should be verb or verb phrases when they are method names.
+- They should consistently use the exact phrases, nouns, and verbs throughout modules.
+  ex. `totalStudentsPerTeacher` is better than `numTeachStudents`.
+
+# Writing Clean Functions
+
+Focus on writing functions that use as few lines of code as possible and do one and only one thing very well. When writing functions:
+
+- Each line of code should lead to the next linearly.
+- Try to keep functions no more than two indentation levels deep to make them easier to read and understand.
+- Create functions where statements within it are all on the same level of abstraction.
+- Use as few arguments in functions as possible, with none being best.
+- Avoid boolean (true or false) arguments as they create functions that do more than one thing.
+
+# Writing Comments
+
+Comments serve to explain code that doesn’t present itself.
+
+- Focus on writing code clear enough that comments may not even be necessary.
+- Comments do not make up for poorly written code.
+  If your code is messy, focus on cleaning it up instead of writing lots of comments.
+- Use comments to warn other developers about the consequences associated with using certain pieces of code.
+- Use TODO comments to explain things needing to be soon completed, reminders to remove deprecated features or requests for help with problems or ideas to change variable names.
+- If a comment requires others to look elsewhere in the codebase to understand its meaning, it’s not written well.
+- If the code precisely explains its intent, there is no reason also to describe it with comments.
+- If you write a descriptive comment before writing code, try refactoring the code afterward to eliminate the comment.
+- If you find yourself writing functions with comments to keep track of numerous nested closing braces, consider writing shorter functions instead.
+- Don’t leave commented-out code in your codebase. Others aren’t likely to touch it if they don’t know precisely why it’s there.
+- Use comments to describe the code it sits near instead of describing the codebase as a whole.
+
+# Formatting Code
+
+Proper formatting of code leads to adequate communication of that code. When formatting code:
+
+- Use a style guide to govern how your code is formatted consistently.
+- Format code like an article beginning with an overview and flows down, leading the reader through the details and sections.
+- Separate the sections with spaces similar to writing new paragraphs or completing thoughts in a paper.
+- Keep related concepts closely together to keep those reading your code from searching everywhere to understand how different pieces relate to each other.
+- Declare variables as close to their usage as possible.
+
+# Conclusion
+
+To conclude, Clean Code is an excellent read for those wanting to increase the quality of code they write. I recommend having a copy on your bookshelf as a reference, especially for junior-level programmers.
