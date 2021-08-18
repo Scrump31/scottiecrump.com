@@ -1,0 +1,58 @@
+---
+title: 'Yarn vs. npm'
+date: '2017-07-31'
+tags: ['nodejs', 'npm', 'yarn', 'build tool']
+draft: false
+summary: 'So, months ago, you may have heard that Yarn was a potentially better alternative to npm to manage your project dependencies. When Yarn came out, highlights included faster download speeds, the ability to cache previously downloaded packages to enable faster downloads...'
+---
+
+<div class="text-center">
+  <Image alt="computer screen" src="/static/images/yarnOrNpm.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@reskp?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Jametlene Reskp
+  </a> on <a href="https://unsplash.com/s/photos/build-tool?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Intro
+
+So, months ago, you may have heard that [Yarn](https://yarnpkg.com/en/) was a potentially better alternative to [npm](https://www.npmjs.com/) to manage your project dependencies. When Yarn came out, highlights included faster download speeds, the ability to cache previously downloaded packages to enable faster downloads in future projects, and a `yarn.lock` file that guaranteed other developers who installed your project received the same packages as you. So, here is a video comparing the two at that time: [Yarn vs. npm](https://www.youtube.com/watch?v=OCW3Jz6F8Ek).
+
+# Basic Yarn Commands Compared to npm
+
+## Starting a new project
+
+`npm: npm init`
+
+`yarn: yarn init`
+
+## Adding a dependency
+
+`npm: npm install <package>`
+
+`yarn: yarn add <package>`
+
+## Adding a dev dependency
+
+`npm: npm install --save-dev <package>`
+
+`yarn: yarn add <package> --dev`
+
+## Removing a dependency
+
+`npm: npm uninstall <package>`
+
+`yarn: yarn remove <package>`
+
+## Install all project dependencies
+
+`npm: npm install`
+
+`yarn: yarn or yarn install`
+
+# npm Version 5
+
+You may have leaned towards Yarn as the better choice until npm recently released version 5. The newest version of npm offers faster download times and offline support for previously downloaded packages. The latest npm version also includes a **package-lock.json** file that allows other developers to receive the same packages as you, just like Yarn. When comparing download speeds, it appears that Yarn maybe still slightly faster than npm, but not by much. Here is a video that compares download speeds: [Did npm just kill yarn](https://www.youtube.com/watch?v=Pq05bTlTDPM)?
+
+# Summary
+
+In summary, npm and yarn are both excellent tools to manage your project dependencies. If you are already familiar with npm, it may not be necessary to jump ship and start using yarn with the new features of npm version 5. However, as always, it is a matter of personal choice, and using tools that help **_you_** get the job done is what it comes down to, and again, both are great choices.
