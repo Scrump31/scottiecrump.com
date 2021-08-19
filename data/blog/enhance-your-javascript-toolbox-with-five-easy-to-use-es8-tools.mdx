@@ -1,0 +1,78 @@
+---
+title: 'Enhance Your Javascript Toolbox with 5 Easy to use ES8 Tools'
+date: '2018-04-27'
+tags: ['JavaScript', 'es8', 'ECMAScript', 'programming']
+draft: false
+summary: 'The ECMA2017 (ES8) version of JavaScript consists of many new features to help you write cleaner code. The features we will go over in this article are...'
+---
+
+<div class="text-center">
+  <Image alt="computer screen" src="/static/images/es8.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@juanjodev02?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Juanjo Jaramillo
+  </a> on <a href="https://unsplash.com/s/photos/javascript?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Intro
+
+The ECMA2017 (ES8) version of JavaScript consists of many new features to help you write cleaner code. The features we will go over in this article are: `String.prototype.padStart()`, `String.prototype.padEnd()`, **async functions**, `Object.entries()`, and `Object.values()`.
+
+# Async Functions
+
+An async function is a special kind of function created using the `async` keyword. Async functions allow you to write more accessible asynchronous code. Invoking an async function returns a Promise that resolves with the returned value from the function. Inside the function, use the `await` keyword to pause code execution until the promise resolves. Once the promise resolves, the code will continue to run with the resolved value.
+
+A huge benefit to using async functions that they allow you to write asynchronous code that reads like synchronous code. Even more, they allow you to drop the need to write nested callbacks or promise chains, thus cleaning up your code. Use a try…catch statement to deal with errors as rejected promises gets handled with await. Here is an example:
+
+```js
+async function getMargarita() {
+  try {
+    const drinks = await axios('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Margarita')
+    // The next line of code will not run until the promise is resolved
+    const { strDrink, strGlass } = drinks.data.drinks[0]
+    console.log(`${strDrink}, ${strGlass}`)
+  } catch (e) {
+    console.log(e)
+  }
+}
+getMargarita() // Margarita, Cocktail glass
+```
+
+# String.prototype.padStart()
+
+Use `padStart()` when you want to place a certain character 'X' times to the left of a string. The method takes two parameters: targetLength and padString. The targetLength parameter represents the total length of the resulting string. The padString parameter is optional and represents a character to use to pad the string. `padStart()` is useful when you want strings to have the same length. Here is an example:
+
+```js
+console.log('hello world'.padStart(14, '!')) // !!!hello world
+```
+
+# String.prototype.padEnd()
+
+`padEnd()` does the opposite of `padStart()`. It pads the end of strings. Here is an example:
+
+```js
+console.log('hello world'.padEnd(14, '!')) // hello world!!!
+```
+
+# Object.entries()
+
+Use `Object.entries()` to take an object and return an array of arrays. You can then iterate over and perform actions. Here is an example:
+
+```js
+const myObj = { red: 1, blue: 2, green: 3 }
+let sample1 = Object.entries(myObj)
+console.log(sample1)
+// [ [ 'red', 1 ], [ 'blue', 2 ], [ 'green', 3 ] ]
+```
+
+# Object.values()
+
+Use Object.values() to take an object and return an array of all its values. Here is an example:
+
+```js
+let sample2 = Object.values(myObj)
+console.log(sample2) // [ 1, 2, 3 ]
+```
+
+# Conclusion
+
+Well, there you have it! Five new methods in your toolset to write cleaner code and get the job done easier. In this latest update, I like the async function feature the most.😃

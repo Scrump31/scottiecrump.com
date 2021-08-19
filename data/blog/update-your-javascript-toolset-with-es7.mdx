@@ -1,0 +1,64 @@
+---
+title: 'Update Your JavaScript Toolset with ES7'
+date: '2017-07-31'
+tags: ['JavaScript', 'es7', 'ECMAScript', 'programming']
+draft: false
+summary: 'ECMA2016, otherwise known as ES7 syntax, consists of just two new features compared to the massive number of features introduced in ES6. The new features are...'
+---
+
+<div class="text-center">
+  <Image alt="computer screen" src="/static/images/es7.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@flowforfrank?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Ferenc Almasi
+  </a> on <a href="https://unsplash.com/s/photos/javascript?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Intro
+
+ECMA2016, also known as ES7 syntax, consists of just two new features compared to the massive number of features introduced in ES6. The new features are: `Array.prototype.includes()` and the **Exponential operator** `**`.
+
+# Array.prototype.includes()
+
+This new function can be used when you want to know if specific values exist inside an array. Array.prototype.indexOf() is another previously available method to achieve this functionality, but the new ES7 Array.prototype.includes() method has a cleaner syntax. We can illustrate the differences with a few examples:
+
+## Previously Available Method
+
+```js
+const numbers = [1, 2, 3, 4, 5]
+console.log(numbers.indexOf(2) > -1) // true
+console.log(numbers.indexOf(10) > -1) // false
+```
+
+## ES7
+
+```js
+const numbers = [1, 2, 3, 4, 5]
+console.log(numbers.includes(2)) // true
+console.log(numbers.includes(10)) // false
+```
+
+It is easy to see that using the new ES7 syntax is a cleaner solution to find a specific value in an array.
+
+# Exponential operator (\*\*)
+
+This new function can be used when you want to calculate exponents. Math.pow() is another previously available method to achieve this functionality, but the new ES7 \*\* is a cleaner syntax. We can illustrate the differences with a few examples:
+
+## Previously Available Method
+
+```js
+const twoCubed = Math.pow(2, 3)
+console.log(twoCubed) // 8
+```
+
+## ES7
+
+```js
+const twoCubed = 2 ** 3
+console.log(twoCubed) // 8
+```
+
+Again, it is easy to see that using the new ES7 syntax is a cleaner solution to return the exponential value of a number.
+
+# Conclusion
+
+Well, there you have it! Two new methods in your toolset to write cleaner code and get the job done easier. 😃
