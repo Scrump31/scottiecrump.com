@@ -6,7 +6,7 @@ draft: false
 summary: 'I recently read A Mind for Numbers by Barbara Oakley, Ph.D. I learned a lot about how the brain works when learning new material and many great tips on effective and ineffective studying....'
 ---
 
-<div class="text-center">
+<div className="text-center">
   <Image alt="students in class" src="/static/images/mindForNumbers.jpg" width={600} height={434} />
 Photo by <a href="https://unsplash.com/@aaronburden?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Aaron Burden</a> on <a href="https://unsplash.com/s/photos/studying?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
     
@@ -101,4 +101,4 @@ While sleeping, your brain rehearses the material you are trying to learn over a
 In summary, the book Learning How to Learn is an excellent read to understand better how effective learning works. There is more valuable information you can gain from this book. I highly recommend picking up a copy. I will end with a TED talk Barbara did highlighting concepts from the book:
 
 <div style={{ marginBottom: '2em' }}>
-<iframe width="100%" height="515" src="https://www.youtube.com/embed/O96fE1E-rf8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<iframe width="100%" height="515" src="https://www.youtube.com/embed/O96fE1E-rf8" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>

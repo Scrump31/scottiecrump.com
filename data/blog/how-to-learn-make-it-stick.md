@@ -6,7 +6,7 @@ draft: false
 summary: 'For many people, to study means using strategies such as "rereading" chapters until it "feels like they know the material" or "cramming" the night before an exam. However, "rereading" fails more times than not....'
 ---
 
-<div class="text-center">
+<div className="text-center">
   <Image alt="students in class" src="/static/images/makeItStick.jpg" width={600} height={434} />
   Photo by <a href="https://unsplash.com/@neonbrand?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">NeONBRAND</a> on <a href="https://unsplash.com/s/photos/learning?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
   
