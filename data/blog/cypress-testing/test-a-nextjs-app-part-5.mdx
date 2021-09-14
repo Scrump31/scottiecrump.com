@@ -1,0 +1,64 @@
+---
+title: 'Test a Client Address Book: Part 5'
+date: '2020-04-17'
+tags: ['cypress', 'nextjs', 'UI testing']
+draft: false
+summary: 'In part five of the series, we will refactor our existing test to resemble user behavior by installing and using the Cypress Testing Library...'
+---
+
+<div className="text-center">
+  <Image alt="cypress tree" src="/static/images/cypress.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@mattsouya?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Yi Ma
+  </a> on <a href="https://unsplash.com/s/photos/cypress?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Writing Better Tests with Cypress Testing Library
+
+In part five of the series, we will refactor our existing test to resemble user behavior by installing and using the Cypress Testing Library.
+
+First, install Cypress Testing Library using the following command:
+
+```bash
+npm install --save-dev @testing-library/cypress
+```
+
+Next, add the following to the `support/index.js` file:
+
+```js
+import '@testing-library/cypress/add-commands'
+```
+
+The final test file will look like the following:
+
+```js
+describe('Google Search', () => {
+  it('should return search results for "Ironman"', () => {
+    cy.visit('https://www.google.com/')
+    cy.findByLabelText('Search').type('Ironman Tony Stark').type('{enter}')
+    cy.findByText('Tony Stark (Marvel Cinematic Universe) - Wikipedia').should('be.visible')
+  })
+})
+```
+
+The following video illustrates the entire process:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/a1SvfURYxTQ"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/cypress-testing/test-a-nextjs-app-part-6">
+    Part 6: Running Cypress in Multiple Browsers
+  </a>
+</h1>
+
+## The final source code can be found [here](https://github.com/Scrump31/Client-Manager/tree/cypress)

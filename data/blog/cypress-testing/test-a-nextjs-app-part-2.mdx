@@ -1,0 +1,54 @@
+---
+title: 'Test a Client Address Book: Part 2'
+date: '2020-04-14'
+tags: ['cypress', 'nextjs', 'UI testing']
+draft: false
+summary: 'In part two of the series, we will learn how to install and run Cypress against our application...'
+---
+
+<div className="text-center">
+  <Image alt="cypress tree" src="/static/images/cypress.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@mattsouya?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Yi Ma
+  </a> on <a href="https://unsplash.com/s/photos/cypress?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Install Cypress and eslint-plugin-cypress
+
+In part two of the series, first, we will learn how to install Cypress using the following command:
+
+```bash
+npm install cypress --save-dev
+```
+
+Next, we will learn how to run Cypress against our application by creating the following npm script:
+
+```bash
+"cy:open": "cypress open"
+```
+
+In addition, we will also install and configure the eslint-plugin-cypress plugin to enforce best practices while using Cypress:
+
+```bash
+npm install eslint-plugin-cypress --save-dev
+```
+
+The following video illustrates the entire process:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/dkekN7rKF1Y"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/cypress-testing/test-a-nextjs-app-part-3">Part 3: Configure Cypress.json File</a>
+</h1>
+
+## The final source code can be found [here](https://github.com/Scrump31/Client-Manager/tree/cypress)

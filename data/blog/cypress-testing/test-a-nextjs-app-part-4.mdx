@@ -1,0 +1,63 @@
+---
+title: 'Test a Client Address Book: Part 4'
+date: '2020-04-16'
+tags: ['cypress', 'nextjs', 'UI testing']
+draft: false
+summary: 'In part four of the series, we will create our first Cypress test to verify expected results for a search on Google...'
+---
+
+<div className="text-center">
+  <Image alt="cypress tree" src="/static/images/cypress.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@mattsouya?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Yi Ma
+  </a> on <a href="https://unsplash.com/s/photos/cypress?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Writing Our First Test
+
+In part four of the series, we will create our first Cypress test to verify expected results for a search on Google.
+
+The final test file will look like the following:
+
+```js
+/*
+ * Given: I am on google.com
+ * When: I enter "Ironman Tony Stark" in the input
+ * When: I press the "Enter" key
+ * Then: I see Tony Stark (Marvel Cinematic Universe) in search results
+ */
+
+describe('Google Search', () => {
+  it('should return search results for "Ironman"', () => {
+    cy.visit('https://www.google.com/')
+    // Get remaining code via Cypress selector tool while running
+    //  the test
+    cy.get('.gLFyf').type('Ironman Tony Stark').type('{enter}')
+    cy.get(
+      '[href="https://en.wikipedia.org/wiki/Tony_Stark_(Marvel_Cinematic_Universe)"] > .LC20lb'
+    ).should('be.visible')
+  })
+})
+```
+
+The following video illustrates the entire process:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/TLjFmOpGjUU"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/cypress-testing/test-a-nextjs-app-part-5">
+    Part 5: Writing Better Tests with Cypress Testing Library
+  </a>
+</h1>
+
+## The final source code can be found [here](https://github.com/Scrump31/Client-Manager/tree/cypress)

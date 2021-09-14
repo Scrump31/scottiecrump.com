@@ -1,0 +1,49 @@
+---
+title: 'Test a Client Address Book: Part 3'
+date: '2020-04-15'
+tags: ['cypress', 'nextjs', 'UI testing']
+draft: false
+summary: 'In part three of the series, we will learn how to configure the Cypress.json file to make Cypress behave based on our project needs...'
+---
+
+<div className="text-center">
+  <Image alt="cypress tree" src="/static/images/cypress.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@mattsouya?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Yi Ma
+  </a> on <a href="https://unsplash.com/s/photos/cypress?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Configure Cypress.json File
+
+In part three of the series, we will learn how to configure the Cypress.json file to make Cypress behave based on our project needs.
+
+The final Cypress.json file will look like the following:
+
+```json
+{
+  "baseUrl": "http://localhost:3000",
+  "integrationFolder": "cypress/e2e",
+  "chromeWebSecurity": false,
+  "video": false
+}
+```
+
+The following video illustrates the entire process:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/smd5UQUq5Uc"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/cypress-testing/test-a-nextjs-app-part-4">Part 4: Writing Our First Test</a>
+</h1>
+
+## The final source code can be found [here](https://github.com/Scrump31/Client-Manager/tree/cypress)

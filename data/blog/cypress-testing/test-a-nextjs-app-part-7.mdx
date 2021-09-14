@@ -1,0 +1,70 @@
+---
+title: 'Test a Client Address Book: Part 7'
+date: '2020-04-19'
+tags: ['cypress', 'nextjs', 'UI testing']
+draft: false
+summary: 'In the final part of the series, we will write a test to verify the expected user flow behavior of the client address book...'
+---
+
+<div className="text-center">
+  <Image alt="cypress tree" src="/static/images/cypress.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@mattsouya?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Yi Ma
+  </a> on <a href="https://unsplash.com/s/photos/cypress?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Testing The Client User Flow
+
+In the final part of the series, we will write a test to verify the expected user flow behavior of the client address book.
+
+The final test file will look like the following:
+
+```js
+describe('Client Flow', () => {
+  it('allows a user to add, edit, & delete a client', () => {
+    // Add client
+    cy.visit('/')
+    cy.findByText('Add').click()
+    cy.findByLabelText('Name (required)').type('Test Name')
+    cy.findByLabelText('Email (required)').type('test@mail.com')
+    cy.findByLabelText('Phone (required)').type('123456789')
+    cy.findByLabelText('Address').type('123 South Street')
+    cy.findByLabelText('Company').type('Tests R Us')
+    cy.findByLabelText('Notes').type('Test Notes')
+    cy.findByText('Add').click()
+    cy.findByText('"Test Name successfully added"').should('be.visible')
+    cy.findByText('Clients').click()
+    // Update client
+    cy.findByLabelText('edit Test Name').click()
+    cy.findByLabelText('Notes').type(' Updated')
+    cy.findByText('Update').click()
+    cy.url().should('equal', 'http://localhost:3000/')
+    cy.findByText('Test Notes Upda...').should('be.visible')
+    // Delete client
+    cy.findByLabelText('edit Test Name').click()
+    cy.findByText('Delete').click()
+    cy.url().should('equal', 'http://localhost:3000/')
+    cy.findByText('Test Notes Upda...').should('not.visible')
+  })
+})
+```
+
+The following video illustrates the entire process:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/RupBr0w-bAk"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# Summary
+
+In summary, now you know the basics of using Cypress to test user flows in applications.
+
+## The final source code can be found [here](https://github.com/Scrump31/Client-Manager/tree/cypress)
