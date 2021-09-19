@@ -1,0 +1,182 @@
+---
+title: 'ES6 TypeScript: Part 2'
+date: '2020-02-17'
+tags: ['javascript', 'TypeScript', 'es6']
+draft: false
+summary: 'In part 2 of the series, we will look at the every, some, reduce methods and template literals...'
+---
+
+<div className="text-center">
+  <Image
+    alt="JavaScript code snippets"
+    src="/static/images/es6Typescript.jpg"
+    width={600}
+    height={434}
+  />
+  Photo by <a href="https://unsplash.com/@juanjodev02?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Juanjo Jaramillo
+  </a> on <a href="https://unsplash.com/s/photos/javascript?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Part 2
+
+In part 2 of the series, we will look at the `every`, `some`, `reduce` methods and template literals.
+
+# every Method
+
+The `every` method returns `true` if all array values match the callback function criteria. Otherwise, the returned result is `false`.
+
+## Example 1
+
+```ts
+const students = [
+  {name: 'Brad',age: 19 major: 'Computer Science'}
+  {name: 'Sally',age: 20 major: 'Art'}
+  {name: 'Michelle',age: 22 major: 'Math'}
+  {name: 'Joe',age: 21 major: 'Computer Science'}
+  {name: 'Karen',age: 19 major: 'Computer Science'}
+]
+
+const isEveryStudentOver20 = students.every(function(student: {
+  name: string
+  age: number
+}): boolean {
+  return student.age > 20
+})
+
+console.log(isEveryStudentOver20) // false
+```
+
+The following video illustrates the examples:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/k7SHXqLx0v4"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/es6-typescript/part-3">Part 3</a>
+</h1>
+
+# some Method
+
+The `some` method returns `true` if at least one array value matches the callback function criteria. Otherwise, the returned result is `false`.
+
+## Example 1
+
+```ts
+const students = [
+  {name: 'Brad',age: 19 major: 'Computer Science'}
+  {name: 'Sally',age: 20 major: 'Art'}
+  {name: 'Michelle',age: 22 major: 'Math'}
+  {name: 'Joe',age: 21 major: 'Computer Science'}
+  {name: 'Karen',age: 19 major: 'Computer Science'}
+]
+
+const areSomeOver20 = students.every(function(student: {
+  name: string
+  age: number
+}): boolean {
+  return student.age > 20
+})
+
+console.log(areSomeOver20) // true
+```
+
+The following video illustrates the examples:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/DuQxPsaDKEs"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# reduce Method
+
+The `reduce` method returns a single value from an array that is reduced based on the callback function criteria.
+
+## Example 1
+
+```ts
+const studentScores = [80, 90, 85, 75, 100]
+const scoresSum = studentScores.reduce(function (total: number, currVal: number): number {
+  return total + currVal
+}, 0)
+
+console.log(scoresSum) // 430
+```
+
+## Example 2
+
+```ts
+const studentScores = [80, 90, 85, 75, 100]
+
+function getAvg(total: number, currVal: number): number {
+  return total + currVal
+}
+
+const averageScore = studentScores.reduce(getAvg) / studentScores.length
+
+console.log(scoresSum) // 86
+```
+
+The following video illustrates the examples:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/S7-HMmZvaQg"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# Template Literals
+
+Template literals (also known as template strings) are a cleaner way of creating string outputs that include embedded variable values.
+
+## Example 1
+
+```ts
+function printCurrentDate(): string {
+  const month = new Date().getMonth()
+  const date = new Date().getDate()
+  const year = new Date().getFullYear()
+  return `Current date is ${month}/${date}/${year}`
+}
+console.log(printCurrentDate)
+```
+
+The following video illustrates the examples:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/rsokU8X12mk"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/es6-typescript/part-3">Part 3</a>
+</h1>

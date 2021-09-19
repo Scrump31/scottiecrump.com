@@ -1,0 +1,209 @@
+---
+title: 'ES6 TypeScript: Part 1'
+date: '2020-02-16'
+tags: ['javascript', 'TypeScript', 'es6']
+draft: false
+summary: 'In part 1 of the series, we will look at the forEach, map, filter, and find methods...'
+---
+
+<div className="text-center">
+  <Image
+    alt="JavaScript code snippets"
+    src="/static/images/es6Typescript.jpg"
+    width={600}
+    height={434}
+  />
+  Photo by <a href="https://unsplash.com/@juanjodev02?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Juanjo Jaramillo
+  </a> on <a href="https://unsplash.com/s/photos/javascript?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Overview
+
+I created a four part video series illustrating various ways to write JavaScript using ES6 syntax. Associated code snippets and videos are linked with each blog.
+
+# Part 1
+
+In part 1 of the series, we will look at the `forEach`, `map`, `filter`, and `find` methods.
+
+# forEach Method
+
+The forEach method is a replacement for the classic `for loop`. Note that the `forEach` method does not return a value. So, for example, if you want to iterate over an array to edit the values, you need to store the new values in a separate variable.
+
+## Example 1
+
+```ts
+const numbers = [1, 2, 3, 4, 5]
+let sum = 0
+
+numbers.forEach(function (num: number): void {
+  sum += num
+})
+
+console.log(sum) // 15
+```
+
+## Example 2
+
+```ts
+const numbers = [1, 2, 3, 4, 5]
+let sum = 0
+
+function sumNums(num: number): void {
+  sum += num
+}
+
+numbers.forEach(sumNums)
+
+console.log(sum) // 15
+```
+
+The following video illustrates the examples:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/wmqmtFp7Ojk"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# map Method
+
+The `map` method allows you to iterate over an existing array and return a new array based on modifying current values via the call-back function.
+
+## Example 1
+
+```ts
+const digits = [1, 2, 3]
+const doubled = digits.map(function (digit: number): number {
+  return digit * 2
+})
+
+console.log(doubled) // [2,4,6]
+```
+
+## Example 2
+
+```ts
+const cars = [
+  { model: 'Buick', price: 'cheap' },
+  { model: 'Camaro', price: 'expensive' },
+]
+
+const prices = cars.map(function (car: { model: string; price: string }): string {
+  return cars.price
+})
+
+console.log(prices) // ['cheap', 'expensive']
+```
+
+The following video illustrates the examples:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/npm5hsVrh1U"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# filter Method
+
+The `filter` method allows you to iterate over an existing array and return a new array with filtered results matching the pattern in the callback function.
+
+## Example 1
+
+```ts
+const students = [
+  {name: 'Brad', major: 'Computer Science'}
+  {name: 'Sally', major: 'Art'}
+  {name: 'Michelle', major: 'Math'}
+  {name: 'Joe', major: 'Computer Science'}
+  {name: 'Karen', major: 'Computer Science'}
+]
+
+const CSMajors = students.filter(function(student: {
+  name: string
+  major: string
+}): boolean {
+  return student.major === 'Computer Science'
+})
+
+console.log(CSMajors)
+/*
+[
+  {name: 'Brad', major:'Computer Science'}
+  {name: 'Joe', major: 'Computer Science'}
+  {name: 'Karen', major: 'Computer Science'}
+]
+*/
+```
+
+The following video illustrates the example:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/pBJ9-8nKH38"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# find Method
+
+The `find` method allows you to iterate over an array and return the first result found that matches the pattern in the callback function.
+
+## Example 1
+
+```ts
+const students = [
+  {name: 'Brad',age: 19 major: 'Computer Science'}
+  {name: 'Sally',age: 20 major: 'Art'}
+  {name: 'Michelle',age: 22 major: 'Math'}
+  {name: 'Joe',age: 21 major: 'Computer Science'}
+  {name: 'Karen',age: 19 major: 'Computer Science'}
+]
+
+const studentOver20 = students.find(function(student: {
+  name: string
+  age: number
+}): string | undefined {
+  if(student.age > 20) {
+    return student.name
+  }
+})
+
+console.log(studentOver20) // {name: 'Michelle',age: 22 major: 'Math'}
+
+```
+
+The following video illustrates the example:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/yaEaT1ctb0E"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/es6-typescript/part-2">Part 2</a>
+</h1>

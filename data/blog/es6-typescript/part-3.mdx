@@ -1,0 +1,251 @@
+---
+title: 'ES6 TypeScript: Part 3'
+date: '2020-02-18'
+tags: ['javascript', 'TypeScript', 'es6']
+draft: false
+summary: 'In part 3 of the series, we will cover const and let variables, arrow functions, rest and spread operators, classes, and the fetch method...'
+---
+
+<div className="text-center">
+  <Image
+    alt="JavaScript code snippets"
+    src="/static/images/es6Typescript.jpg"
+    width={600}
+    height={434}
+  />
+  Photo by <a href="https://unsplash.com/@juanjodev02?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Juanjo Jaramillo
+  </a> on <a href="https://unsplash.com/s/photos/javascript?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Part 3
+
+In part 3 of the series, we will cover `const` and `let` variables, `arrow functions`, `rest` and `spread` operators, `classes`, and the `fetch method`.
+
+# Const and Let Variables
+
+`const` and `let` variables create block-scoped values. Use `const` variables for values that will not change such as social security numbers. Use `let` variables for values that can change such as a person's age.
+
+The following video illustrates example scenarios:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/l_aILr6-3ug"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# Arrow Functions
+
+`arrow functions` are an alternative to the traditional function expressions. The [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) lists the key differences and limitations of using arrow functions compared to traditional functions.
+
+## Example 1
+
+```ts
+const add = (num1: number, num2: number): number => num1 + num2
+console.log(add(2, 3)) // 5
+```
+
+## Example 2
+
+```ts
+const scores = [90, 88, 95]
+const sumScores = scores.reduce((total: number, currVal: number): number => {
+  return total + currVal
+}, 0)
+
+console.log(sumScores) // 273
+```
+
+## Example 3
+
+```ts
+const myClassroom = {
+  students: ['Sue', 'Steven', 'Maggie', 'Trent'],
+  subject: 'Math',
+  roster: function (): string[] {
+    return this.students.map((student: string): string => {
+      return `${student} is in Mr.C's ${this.subject} class`
+    })
+  },
+}
+
+console.log(myClassroom.roster())
+/*
+[
+  "Sue is in Mr.C's Math class",
+  "Steven is in Mr.C's Math class",
+  "Maggie is in Mr.C's Math class",
+  "Trent is in Mr.C's Math class",
+]
+*/
+```
+
+The following video illustrates the examples:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/Q5hIjXvfM7M"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# Rest and Spread Operators
+
+The `rest` operator allows functions to accept multiple argument values as an array. The `spread` operator allows you to "spread out" iterable data such as an array in situations where zero or more arguments are accepted.
+
+## Example 1: Rest
+
+```ts
+function getSumOfNums(...nums: number[]) {
+  return nums.reduce((sum: number, currVal: number): number => sum + currVal, 0)
+}
+
+console.log(getSumOfNums(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)) // 55
+```
+
+## Example 2: Spread
+
+```ts
+const maleStudents = ['Bob', 'Sally', 'Joe']
+const femaleStudents = ['Melisa', 'Tara', 'Trina']
+const allStudents = [...maleStudents, ...femaleStudents]
+
+console.log(allStudents)
+// ['Bob', 'Sally', 'Joe', 'Melisa', 'Tara', 'Trina']
+```
+
+## Example 3: Rest and Spread
+
+```ts
+const getHighestScore = (student: string, ...scores: number[]): string => {
+  return `${student}'s highest score is: ${Math.max(...scores)}`
+}
+
+console.log(getHighestScore('Scott', 90, 86, 79, 60, 91, 88, 85)) // Scott's highest score is: 91
+```
+
+The following video illustrates the examples:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/5R3M8SCBgAU"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# ES6 Classes
+
+Classes are blueprints for creating objects.
+
+## Example 1
+
+```ts
+class Car {
+  year: number
+  model: string
+  make: string
+  constructor(year: number, model: string, make: string) {
+    this.year = year
+    this.model = model
+    this.make = make
+  }
+
+  start(): string {
+    return 'car started'
+  }
+
+  stop(): string {
+    return 'car stopped'
+  }
+}
+
+const modelS = new Car(2020, 'S', 'Tesla')
+
+console.log(modelS.start()) // 'car started'
+```
+
+The following video illustrates the example:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/1FYGzjqIjTY"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# The Fetch Method
+
+Use the following command to install `node-fetch`:
+
+```bash
+npm install node-fetch
+```
+
+# Example 1
+
+```ts
+import fetch from 'node-fetch'
+
+fetch('https://swapi.co/api/people/1')
+  .then((result) => result.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.log(error))
+```
+
+# Example 2: Axios
+
+Use the following command to install `axios`:
+
+```bash
+npm install axios
+```
+
+```ts
+import axios from 'axios'
+
+axios
+  .get('https://swapi.co/api/people/1')
+  .then((data) => console.log(data))
+  .catch((error) => console.log(error))
+```
+
+The following video illustrates the examples:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/RsShpgaA3bQ"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+Update: node-fetch now provides its own typings so it is not longer necessary to install `@typings/node-fetch` 😄.
+
+# Summary
+
+In summary, now you know how to use many features to write code using ES6 syntax. Enjoy!
