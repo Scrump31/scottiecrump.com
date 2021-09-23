@@ -1,0 +1,138 @@
+---
+title: 'Test a Feedback Form: Parts 1 & 2'
+date: '2020-06-14'
+tags:
+  [
+    'react',
+    'Nextjs',
+    'TypeScript',
+    'react testing library',
+    'white box testing',
+    'unit testing',
+    'component testing',
+  ]
+draft: false
+summary: 'In parts 1 and 2 of the series, we will introduce the application and write our first tests...'
+---
+
+<div className="text-center mb-8">
+  <Image alt="feedback web form" src="/static/images/feedback.png" width={600} height={434} />
+</div>
+
+# Overview
+
+I created a five-part video series on writing component tests for a feedback form created with TypeScript and NextJS. React Testing Library is used to test the components, and Postman is used to test API routes.
+
+# Part 1
+
+In part 1 of the series, we get an overview of the form's functionality and how data is sent from the front-end and stored in the Mongo database.
+
+The following video illustrates part 1:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/S0_pYxccfP8"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# Part 2: Test The CommentBox
+
+In part 1 of the series, we will use React Testing Library to verify the expected behavior of the `CommentBox` component.
+
+## CommentBox Component
+
+```ts
+import React from 'react'
+type CommentBoxProps = {
+  isCommentBlank: boolean
+  value: string
+  handleChange: (event: { target: { name: string; value: string } }) => void
+}
+const CommentBox = (props: CommentBoxProps) => {
+  return (
+    <div className="text-sm sm:text-2xl">
+      <h2 className="block text-gray-700 font-bold my-4">
+        <span className="text-red-600">(required)</span> Please Comment On Your Rating
+      </h2>
+      <label className="block text-gray-700 font-bold mb-2" htmlFor="comment">
+        <textarea
+          aria-label="add comment"
+          className={`${
+            props.isCommentBlank ? 'border-b-2 border-red-600' : null
+          } shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+          rows={4}
+          name="comment"
+          id="comment"
+          placeholder="Add comments..."
+          value={props.value}
+          onChange={props.handleChange}
+        ></textarea>
+        {props.isCommentBlank && <span className="text-red-600">Please enter a comment</span>}
+      </label>
+    </div>
+  )
+}
+
+export default CommentBox
+```
+
+## CommentBox Component Test
+
+```ts
+import React from 'react'
+import { render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import CommentBox from './CommentBox'
+
+describe('<CommentBox />', () => {
+  const handleChange = jest.fn()
+
+  test('whenNoComment_thenErrorMessageIsDiplayed', () => {
+    const { getByPlaceholderText, getByText } = render(
+      <CommentBox handleChange={handleChange} isCommentBlank={true} value="" />
+    )
+    const commentBox = getByPlaceholderText('Add comments...')
+    const errorMssg = getByText('Please enter a comment')
+    expect(commentBox).toHaveClass('border-b-2 border-red-600')
+    expect(errorMssg).toBeInTheDocument()
+  })
+
+  test('whenUserEntersText_thenHandleChangeCalled', () => {
+    const testComment = 'works'
+    const { getByPlaceholderText } = render(
+      <CommentBox handleChange={handleChange} isCommentBlank={false} value={'test'} />
+    )
+    const commentBox = getByPlaceholderText('Add comments...')
+    userEvent.type(commentBox, testComment)
+    expect(commentBox).not.toHaveClass('border-b-2 border-red-600')
+    expect(handleChange).toHaveBeenCalled()
+    expect(handleChange).toHaveBeenCalledTimes(testComment.length)
+  })
+})
+```
+
+The following video illustrates part 2:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/XsispO0djmQ"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/test-a-feedback-form/parts-3-and-4">Parts 3-4</a>
+</h1>
+
+## The final source code can be found [here](https://github.com/Scrump31/testing-react-forms)

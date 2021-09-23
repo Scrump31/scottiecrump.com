@@ -1,0 +1,411 @@
+---
+title: 'Test a Feedback Form: Parts 3 & 4'
+date: '2020-06-15'
+tags:
+  [
+    'react',
+    'Nextjs',
+    'TypeScript',
+    'react testing library',
+    'white box testing',
+    'unit testing',
+    'component testing',
+  ]
+draft: false
+summary: 'In parts 3 and 4 of the series, we will test the Radio Button and do integration testing...'
+---
+
+<div className="text-center mb-8">
+  <Image alt="feedback web form" src="/static/images/feedback.png" width={600} height={434} />
+</div>
+
+# Part 3
+
+In part 3 of the series, we will test the `RadioButton` component using a Jest Snapshot.
+
+## RadioButton Component
+
+```ts
+import React from 'react'
+
+type RadioButtonProps = {
+  value: string
+  id: string
+  rating: string
+  handleChange: (event: { target: { name: string; value: string } }) => void
+  labelText: string
+}
+const RadioButton = (props: RadioButtonProps) => {
+  return (
+    <div className="text-gray-700 text-sm sm:text-2xl font-bold mb-1">
+      <input
+        type="radio"
+        value={props.value}
+        id={props.id}
+        name="rating"
+        checked={props.rating === props.value}
+        onChange={props.handleChange}
+        data-testid={`${props.id}`}
+      />
+      <label htmlFor={props.id} className="ml-2">
+        {props.labelText}
+      </label>
+    </div>
+  )
+}
+
+export default RadioButton
+```
+
+## RadioButton Component Test
+
+```ts
+import { render } from '@testing-library/react'
+import React from 'react'
+import RadioButton from './RadioButton'
+
+describe('<RadioButton />', () => {
+  const value = 'excellent'
+  const handleChange = jest.fn()
+
+  test('rendersRadioButton', () => {
+    const radioButton = render(
+      <RadioButton
+        value={value}
+        id={value}
+        rating={value}
+        labelText="Excellent"
+        handleChange={handleChange}
+      />
+    )
+    expect(radioButton.container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="text-gray-700 text-sm sm:text-2xl font-bold mb-1"
+        >
+          <input
+            checked=""
+            data-testid="excellent"
+            id="excellent"
+            name="rating"
+            type="radio"
+            value="excellent"
+          />
+          <label
+            class="ml-2"
+            for="excellent"
+          >
+            Excellent
+          </label>
+        </div>
+      </div>
+    `)
+  })
+})
+```
+
+The following video illustrates part 3:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/kYvmTu_hC5I"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# Part 4: Integration Tests
+
+In part 4 of the series, we will test to verify all application components work together as expected via an integration test.
+
+## Form Component
+
+```ts
+import Router from 'next/router'
+import React, { useState } from 'react'
+// eslint-disable-next-line no-unused-vars
+import { Event, PreventDefault } from '../interfaces/index'
+import postFeedback from '../utils/postFeedback'
+import CommentBox from './CommentBox'
+import RadioButton from './RadioButton'
+
+const Form = () => {
+  const buttonsContent = [
+    { value: 'very good', id: 'veryGood', labelText: 'Very Good' },
+    { value: 'good', id: 'good', labelText: 'Good' },
+    { value: 'bad', id: 'bad', labelText: 'Bad' },
+    { value: 'very bad', id: 'veryBad', labelText: 'Very Bad' },
+  ]
+  const initialFeedback = {
+    name: '',
+    age: '',
+    email: '',
+    phone: '',
+    rating: 'excellent',
+    comment: '',
+  }
+
+  const initialInputErrors = {
+    name: false,
+    age: false,
+    email: false,
+    rating: false,
+    comment: false,
+  }
+  const [feedback, setFeedback] = useState(initialFeedback)
+  const [inputValErrors, setInputValErrors] = useState(initialInputErrors)
+  const [errorResponse, setErrorResponse] = useState('')
+
+  const { name, age, email, comment } = feedback
+  const hasSubmitErrors = [name, age, email, comment].some((field) => !field.length)
+
+  const handleChange = (event: Event): void => {
+    const { name, value } = event.target
+    const isFieldEmpty = value.length > 0 ? false : true
+
+    setFeedback((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+
+    setInputValErrors((prevState) => ({
+      ...prevState,
+      [name]: isFieldEmpty,
+    }))
+  }
+
+  const handleSubmit = async (event: PreventDefault): Promise<void> => {
+    event.preventDefault()
+
+    const res = await postFeedback(feedback)
+
+    if (res.status === 200) {
+      Router.push('/thanks')
+    } else if (res.status === 409) {
+      const resData = await res.json()
+      const message = JSON.stringify(resData.message)
+      setErrorResponse(message)
+    }
+  }
+
+  return (
+    <main className="w-full max-w-screen-lg m-auto sm:text-2xl">
+      <h1 className="text-center m-4 font-mono font-bold">Website Rating Form</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-t-8 border-purple-500 text-sm sm:text-2xl"
+      >
+        <div className="flex flex-wrap">
+          <label
+            htmlFor="name"
+            className="block text-gray-700 font-bold mb-2 w-full sm:mr-3 sm:flex-1"
+          >
+            <span className="text-red-600">(required)</span>
+            Name
+            <input
+              className={`${
+                inputValErrors.name ? 'border-b-2 border-red-600' : null
+              } shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+              type="text"
+              name="name"
+              id="name"
+              value={feedback.name}
+              onChange={handleChange}
+              placeholder="Name"
+              formNoValidate
+            />
+            {inputValErrors.name && <span className="text-red-600">Please enter a name</span>}
+          </label>
+
+          <label htmlFor="age" className="block text-gray-700 font-bold mb-2 w-full sm:flex-1">
+            <span className="text-red-600">(required)</span>Age
+            <input
+              className={`${
+                inputValErrors.age ? 'border-b-2 border-red-600' : null
+              } shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+              type="number"
+              name="age"
+              id="age"
+              placeholder="Age"
+              value={feedback.age}
+              onChange={handleChange}
+              formNoValidate
+            />
+            {inputValErrors.age && <span className="text-red-600">Please enter an age</span>}
+          </label>
+        </div>
+        <div className="flex flex-wrap">
+          <label
+            htmlFor="email"
+            className="block text-gray-700 font-bold mb-2 w-full sm:mr-3 sm:flex-1"
+          >
+            <span className="text-red-600">(required)</span>Email
+            <input
+              className={`${
+                inputValErrors.email ? 'border-b-2 border-red-600' : null
+              } shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+              type="email"
+              name="email"
+              id="email"
+              placeholder="name@mail.com"
+              value={feedback.email}
+              onChange={handleChange}
+              formNoValidate
+            />
+            {inputValErrors.email && <span className="text-red-600">Please enter an email</span>}
+          </label>
+
+          <label className="block text-gray-700 font-bold mb-2 w-full sm:flex-1" htmlFor="phone">
+            <span>Phone</span>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="tel"
+              name="phone"
+              id="phone"
+              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              placeholder="123-456-7890"
+              value={feedback.phone}
+              onChange={handleChange}
+            />
+          </label>
+        </div>
+        <div className="grade-type">
+          <h2 className="text-center m-4 font-bold font-mono">
+            Rate Your Experience With Our Site!
+          </h2>
+          {buttonsContent.map((content) => {
+            return (
+              <RadioButton
+                key={content.id}
+                value={content.value}
+                id={content.id}
+                labelText={content.labelText}
+                rating={feedback.rating}
+                handleChange={handleChange}
+              />
+            )
+          })}
+
+          <CommentBox
+            isCommentBlank={inputValErrors.comment}
+            value={feedback.comment}
+            handleChange={handleChange}
+          />
+          <button
+            type="submit"
+            className={`${
+              hasSubmitErrors ? 'opacity-50 cursor-not-allowed' : null
+            } w-full shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded`}
+            disabled={hasSubmitErrors}
+          >
+            Submit
+          </button>
+          {errorResponse && (
+            <span className="text-red-600 inline-block">Submission Error: {errorResponse}</span>
+          )}
+        </div>
+      </form>
+    </main>
+  )
+}
+
+export default Form
+```
+
+## Integration Test
+
+```ts
+import { render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import React from 'react'
+import { mocked } from 'ts-jest/utils'
+import postFeedback from '../utils/postFeedback'
+import Form from './Form'
+
+jest.mock('../utils/postFeedback', () => {
+  return jest.fn()
+})
+
+describe('<Form />', () => {
+  test('whenRequiredFieldsBlank_thenSubmitBtnDisabled', () => {
+    const { getByText } = render(<Form />)
+    const submitBtn = getByText('Submit')
+    expect(submitBtn).toHaveClass('opacity-50 cursor-not-allowed')
+  })
+
+  test('whenRequiredFieldsCompleted_thenSubmitBtnEnabled', () => {
+    const { getByText, getByPlaceholderText } = render(<Form />)
+    const nameInput = getByPlaceholderText('Name')
+    userEvent.type(nameInput, 'john')
+    expect(nameInput).toHaveValue('john')
+
+    const ageInput = getByPlaceholderText('Age')
+    userEvent.type(ageInput, '33')
+    expect(ageInput).toHaveValue(33)
+
+    const emailInput = getByPlaceholderText('name@mail.com')
+    userEvent.type(emailInput, 'test@mail.com')
+    expect(emailInput).toHaveValue('test@mail.com')
+
+    const commentInput = getByPlaceholderText('Add comments...')
+    userEvent.type(commentInput, 'test comment')
+    expect(commentInput).toHaveValue('test comment')
+
+    const submitBtn = getByText('Submit')
+    expect(submitBtn).not.toHaveClass('opacity-50 cursor-not-allowed')
+
+    mocked(postFeedback).mockImplementation(
+      (): Promise<any> => {
+        return Promise.resolve({
+          json() {
+            return Promise.resolve()
+          },
+        })
+      }
+    )
+
+    userEvent.click(submitBtn)
+    expect(mocked(postFeedback).mock.calls.length).toBe(1)
+  })
+
+  test('whenUserEntersSpecialCharacters_thenValuesNotAccepted', () => {
+    const { getByPlaceholderText } = render(<Form />)
+    const nameInput = getByPlaceholderText('Age')
+    userEvent.type(nameInput, '!@#$%^&*()_+')
+
+    expect(nameInput).toBeEmpty()
+  })
+
+  test('whenUserEntersPhone_thenValueAccepted', () => {
+    const { getByPlaceholderText } = render(<Form />)
+    const phoneInput = getByPlaceholderText('123-456-7890')
+    userEvent.type(phoneInput, '1112223333')
+
+    expect(phoneInput).toHaveValue('1112223333')
+  })
+})
+```
+
+The following video illustrates part 4:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/O0RzKpXXQ2I"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/test-a-feedback-form/part-5">Part 5</a>
+</h1>
+
+## The final source code can be found [here](https://github.com/Scrump31/testing-react-forms)

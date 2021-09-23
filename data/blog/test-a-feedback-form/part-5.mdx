@@ -1,0 +1,165 @@
+---
+title: 'Test a Feedback Form: Part 5'
+date: '2020-06-16'
+tags:
+  [
+    'react',
+    'Nextjs',
+    'TypeScript',
+    'react testing library',
+    'white box testing',
+    'unit testing',
+    'component testing',
+  ]
+draft: false
+summary: 'In the part 5 finale of the series, we will use Postman to test API routes for the feedback form...'
+---
+
+<div className="text-center mb-8">
+  <Image alt="feedback web form" src="/static/images/feedback.png" width={600} height={434} />
+</div>
+
+# Part 5
+
+In part 5 of the series, we will use Postman to test API routes for the feedback form.
+
+## Postman API Tests
+
+### POST /api/add-feedback Route
+
+#### Request Body
+
+```json
+{
+  "name": "Tom Jones",
+  "age": "33",
+  "email": "t344j@mail.com",
+  "rating": "excellent",
+  "comment": "Sample comment"
+}
+```
+
+#### New Entry Response Body
+
+```bash
+status 200
+```
+
+```json
+{
+  "message": "feedback for Tom Jones successfully added!"
+}
+```
+
+#### Duplicate Entry Response Body
+
+```bash
+status 409
+```
+
+```json
+{
+  "message": "feedback for t344j@mail.com already received"
+}
+```
+
+### POST /api/add-feedback Route Missing Data Response
+
+#### Request Body
+
+```json
+{
+  "name": "Tom Jones",
+  "age": "33",
+  "rating": "excellent",
+  "comment": "Sample comment"
+}
+```
+
+#### Response Body
+
+```bash
+status 422
+```
+
+```json
+{
+  "message": "Missing 1 or more required fields and/or valid phone number"
+}
+```
+
+The following video illustrates part 5:
+
+<div style={{ marginBottom: '2em' }}>
+  <iframe
+    width="100%"
+    height="515"
+    src="https://www.youtube.com/embed/_jrWt6_STPo"
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+
+# Summary
+
+In summary, we wrote several tests to verify the functionality of the feedback form. We wrote component tests using React Testing Library and API tests using Postman. As a bonus, a Cypress test not illustrated in video form is included below to verify expected behavior via the UI:
+
+## Test Data Utility File
+
+```ts
+import faker from 'faker'
+
+const cyRatings = ['excellent', 'veryGood', 'good', 'bad', 'veryBad']
+const ratings = ['excellent', 'veryGood', 'good', 'bad', 'veryBad']
+
+export default {
+  name: faker.name.findName(),
+  age: faker.random.number(99),
+  email: faker.internet.email(),
+  phone: faker.phone.phoneNumberFormat(),
+  cyRating: cyRatings[Math.floor(Math.random() * ratings.length)],
+  rating: ratings[Math.floor(Math.random() * ratings.length)],
+  comment: faker.random.words(10),
+}
+```
+
+## Cypress Feedback Flow Test
+
+```ts
+import testData from '../../utils/testData'
+
+describe('Add Feedback Form', () => {
+  it('When required fields submitted then feedback is added', () => {
+    cy.visit('/')
+    cy.findByLabelText(/name/i).type(testData.name).clear()
+    cy.findByText(/Please enter a name/i).should('be.visible')
+    cy.findByLabelText(/name/i).type(testData.name)
+
+    cy.findByLabelText(/age/i).type(testData.age).clear()
+    cy.findByText(/Please enter an age/i).should('be.visible')
+    cy.findByLabelText(/age/i).type(testData.age)
+
+    cy.findByLabelText(/email/i).type(testData.email).clear()
+    cy.findByText(/Please enter an email/i).should('be.visible')
+    cy.findByLabelText(/email/i).type(testData.email)
+
+    cy.findByLabelText(/phone/i).type(testData.phone)
+    cy.findByTestId(testData.cyRating).click()
+
+    cy.findByLabelText(/comment/i)
+      .type(testData.comment)
+      .clear()
+    cy.findByText(/Please enter a comment/i).should('be.visible')
+    cy.findByLabelText(/comment/i).type(testData.comment)
+
+    cy.findByText(/submit/i).click()
+    cy.url().should('contain', 'thanks')
+    cy.findByText(/go home/i).click()
+    cy.findByText(/Website Raiting Form/i).should('be.visible')
+  })
+})
+```
+
+## The final source code can be found [here](https://github.com/Scrump31/testing-react-forms)
