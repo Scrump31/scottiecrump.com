@@ -1,0 +1,164 @@
+---
+title: 'Black-Box Testing Techniques'
+date: '2020-11-27'
+tags:
+  [
+    'test design techniques',
+    'black box testing',
+    'equivalence partitioning',
+    'boundary-value analysis',
+    'decision table',
+    'state transition',
+    'use case',
+  ]
+draft: false
+summary: 'Black-box testing is one of the most common methods of testing...'
+---
+
+<div className="text-center">
+  <Image alt="students in class" src="/static/images/black-box.png" width={600} height={434} />
+  Image by <a href="https://pixabay.com/users/35393-35393/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=250082">
+    Don Cloud
+  </a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=250082">Pixabay</a>
+</div>
+
+# Intro
+
+Black-box testing is one of the most common methods of testing. When planning black-box test cases, the tester does not need to know the implementation details of the code and views the software as a "black box." Test cases focus on scenarios where the result should be an expected _Y_ output for a given _X_ input. Black-box test cases can be executed manually or automated at all test levels by any team member.
+
+Black-box testing techniques allow you to systematically identify test cases that are most likely to find defects. Black-box testing techniques save time and achieve good test coverage since testing every possible scenario is not worthwhile. In the following sections, we will cover five black-box testing techniques.
+
+# Equivalence Partitioning
+
+Equivalence Partitioning (EP) is a technique used to test scenarios where we divide inputs to the system under test (SUT) into groups. By testing one value from each group, we can achieve 100% test coverage. Also, since selecting any value within a group returns similar behavior, whether invalid or valid, we can reduce the number of test cases. For example, say we have an input that accepts 70 - 79 as values for a letter grade of 'C.' We could create a table to represent the valid and invalid values:
+
+| Invalid | Valid   | Invalid |
+| ------- | ------- | ------- |
+| >= 69   | 70 - 79 | >= 80   |
+
+<div className="text-center">
+  <div>Table 1</div>
+</div>
+
+In the previous table, we have three groups representing valid and invalid values. Therefore, to achieve 100% test coverage, we could design the following test cases based on the table:
+
+- One test case for valid input data within limits (e.g., 73)
+- One test case for invalid input data below the lower limit (e.g., 55)
+- One test case for invalid input data above upper limit, e.g., any value above 91)
+
+In addition to the previous test cases, we could test for invalid values such as real numbers (e.g., 60.4) or negative numbers (e.g., -30) if applicable.
+
+# Boundary-Value Analysis
+
+Boundary-value Analysis (BVA) is a technique similar to EP but focuses on testing the boundary values of valid and invalid partitions. When using BVA, testing the lower and upper values yields higher test confidence because errors typically occur in extreme ends of input values. In the previous section on EP, we created test cases for an input that accepts values between 70 - 79. We could create a table to represent the valid and invalid boundary values:
+
+| Invalid | Valid  | Invalid |
+| ------- | ------ | ------- |
+| 69      | 70, 79 | 80      |
+
+<div className="text-center">
+  <div>Table 2</div>
+</div>
+
+In the previous table, we have three groups representing valid and invalid values based on the minimum and maximum boundaries for the input.
+Using BVA, we could design the following test cases:
+
+- One test case for the invalid value one number below the minimum value (i.e., 69)
+- One test case for the valid minimum value (i.e., 70)
+- One test case for the valid maximum value (i.e., 79)
+- One test case for the invalid value one number above the maximum value (i.e., 80)
+
+In the previous example, we used the two-boundary value approach. However, we could also use the three-boundary value approach if desired:
+
+| Invalid | Valid          | Invalid |
+| ------- | -------------- | ------- |
+| 69      | 70, 71, 78, 79 | 80      |
+
+<div className="text-center">
+  <div>Table 3</div>
+</div>
+
+In the previous table, we see the same values from the BVA table with two additional valid values: one increment above the minimum value (i.e., 71) and one value just below the maximum value (i.e., 79).
+
+## Essential EP & BVA Takeaways
+
+- Each value only belongs to one group.
+- EP & BVA applies to input and output values.
+- The two types of groups are valid & invalid.
+- Calculate EP coverage using the following formula: **number of partitions covered by test cases / the total number of partitions x 100**.
+- Calculate BVA coverage using the following formula: **number of boundaries covered by test cases / total number of boundaries x 100**.
+- Testing multiple values from the same group don't increase coverage.
+
+# Decision Table
+
+The Decision Table (DT) technique tests various condition combinations and provides better test coverage for complex business logic. For example, DT is a good test design choice when conditions depend on a yes/no response versus a range of similar inputs.
+The formula for calculating all condition/action scenarios is **2<sup>y</sup>**, where **2** represents possible condition response (i.e., yes or no) and **'y'** means the total number of conditions/questions.
+For example, a Driver's license feature allows users to earn their license by passing the written and driving exams. The 'y' questions are:
+
+- "Did the user pass the written exam?"
+- "Did the user pass the driving exam?"
+
+The outcome for both questions is always "yes" or "no," so the resulting formula is **2<sup>2</sup> = 4** total scenarios.
+
+We can create a Decision Table to plan out test scenarios:
+
+<div className="text-center">
+  <Image alt="decision table" src="/static/images/decisionTable.png" width={700} height={434} />
+  <div>Image 1 - Decision Table</div>
+</div>
+
+The top columns define all possible conditions in the previous image, and the bottom columns define all possible actions/results. Green checkmarks highlight resulting scenarios based on the condition combinations. The table image returned four conditions for which we can use to plan test cases.
+
+We can create test cases for all four scenarios or decide to reduce test cases to two or three based on our testing goals. For example, the conditions (**written=T, driving=F**) and (**written=F, driving=T**) do not provide a significant difference and result in the same action/result so that one can be excluded. Note: in large tables with outputs such as **1000**, for example, it would not be worthwhile to write test cases for all scenarios but instead select at least one test case that yields each action/result.
+
+## Tips to Reduce Big Decision Tables (e.g., 8+ column table)
+
+- Remove scenarios that return the same results if they don't have significant differences
+- Remove scenarios that return impossible outcomes
+- Try the following formula to determine the number of needed test cases:
+  - Test Cases = **Number of actions + 1 error response (assuming there is one)**
+
+# State Transition Testing
+
+State Transition (ST) is a technique that involves designing test cases for features that yield different outputs for the same input depending on what happened in previous states. Test coverage is measured using the following formula: **number of identified states or transitions tested / the total number of identified states or transitions x 100**. For example, we can use ST to design test cases for an ATM that will eat a user's credit card after three invalid attempts to enter a PIN. We can create a state table to visualize and plan all scenarios. In the following table, we see all state transitions for a log-in feature that displays the Home page or Error page based on previous states:
+
+<div className="text-center">
+  <Image
+    alt="state transition table"
+    src="/static/images/stateTransition.png"
+    width={700}
+    height={434}
+  />
+  <div>Image 2 - State Transition Table</div>
+</div>
+
+The previous table image indicates that a user has three attempts to enter valid credentials before the Error page is displayed. We can achieve 100% test coverage by designing two test cases to cover all states and four test cases to cover all transitions:
+
+- **State test cases**
+  - given a user enters valid credentials on the first attempt, then the home page is displayed.
+  - given a user enters invalid credentials on all three attempts, then the error page is displayed.
+- **Transition test cases**
+  - given a user enters valid credentials on the first attempt, then the home page is displayed.
+  - given a user enters invalid credentials on the first attempt, then the second attempt is displayed.
+  - given a user enters invalid credentials on the second attempt, then the third attempt is displayed.
+  - given a user enters invalid credentials on the third attempt, then the error page is displayed.
+
+# Use Case Testing
+
+Use Case (UC) testing is a technique that describes real-world, end-to-end business flow interactions between actors (i.e., users) and the system (i.e., application). UC testing is helpful when designing integration-level, system-level, and acceptance test cases. UC testing utilizes high-level use case diagrams and detail-level tables outlining feature scenarios' primary, exception, and error path behaviors. UC test cases help identify defects in business process flows during real-world application use. For example, we could create a high-level use case diagram for a user flow for a login feature:
+
+<div className="text-center">
+  <Image alt="use case diagram" src="/static/images/useCaseDiagram.png" width={700} height={434} />
+  <div>Image 3 - Use Case Diagram</div>
+</div>
+
+In the previous image diagram, the actor can perform the login or Sign up business flows. Next, we can create a use case table for the detailed sign-in scenario:
+
+<div className="text-center">
+  <Image alt="use case diagram" src="/static/images/useCaseDetail.png" width={700} height={434} />
+  <div>Image 4 - Use Case Details</div>
+</div>
+
+# Summary
+
+In summary, we have covered five effective techniques for designing black-box test cases.
