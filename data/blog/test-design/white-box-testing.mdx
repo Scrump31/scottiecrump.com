@@ -1,0 +1,65 @@
+---
+title: 'White-Box Testing Techniques'
+date: '2020-11-28'
+tags: ['test design techniques', 'white box testing', 'statement coverage', 'decision coverage']
+draft: false
+summary: 'White-box testing focuses on the internal structure, design, and code implementation using tools such as Jest for JavaScript, JUnit for Java, and Pytest for Python...'
+---
+
+<div className="text-center">
+  <Image alt="students in class" src="/static/images/white-box.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@yogidan2012?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Daniele Levis Pelusi
+  </a> on <a href="https://unsplash.com/s/photos/white-box?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Intro
+
+White-box testing focuses on the internal structure, design, and code implementation (e.g., unit or component tests) using tools such as [Jest](https://jestjs.io/) for JavaScript, [JUnit](https://junit.org/junit5/) for Java, and [Pytest](https://docs.pytest.org/en/6.2.x/) for Python. Programmers typically write white-box test cases. Test Engineer (TE) team members do not necessarily need to be fluent in writing white-box test cases, but it is beneficial to understand the basics.
+
+# White-box Testing Techniques
+
+## Statement Coverage
+
+Statement coverage focuses on the number of statements (i.e., lines of code) covered by tests. Statement coverage answers the question, "Has each statement in the code been executed"? For example, take the following code snippet:
+
+```js
+let age = 21
+if (age >= 21) {
+  console.log('What would you like to drink?')
+} else {
+  console.log('You are not old enough to drink')
+}
+```
+
+In the previous code, the message _"What would you like to drink?"_ or _"You are not old enough to drink"_ is printed on the screen based on the value of age. There are six statements. The following formula measures statement coverage: **"the number of statements tested / the total number of statements x 100"**. We can use the previous formula to write two test cases to achieve 100% statement coverage in the last code snippet. For the first test case, we can set the variable age equal to 21. The first test case would execute lines 1, 2, 3, and 6, resulting in 66% statement coverage. For the second test case, we can set the value of the variable age to 20. The second test case would execute lines 1, 2, 4, and 5, resulting in 66% statement coverage. The combination of the first and second test cases would achieve 100% total statement coverage.
+
+## Decision Coverage
+
+Decision coverage (also known as branch coverage) is the most widely used white-box testing technique and focuses on the number of possible decision outcomes covered by tests. When you think of decision coverage, think of [if/else statements](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else), [for](https://www.w3schools.com/python/python_for_loops.asp) and [while](https://www.w3schools.com/python/python_while_loops.asp) loops, or [switches](https://www.w3schools.com/java/java_switch.asp). The following formula measures decision coverage: **"the number of decision outcomes tested/the total number of decisions x 100"**. There are two decision outcomes if we revisit the code snippet from the previous section related to age. The first outcome occurs when <code>age</code> is greater than or equal to 21 and prints _"What would you like to drink?"_ to the screen. The second outcome occurs when <code>age</code> is less than 21 and prints _"You are not old enough to drink"_ to the screen. We can write two test cases to achieve 100% decision coverage for the previous code snippet. For the first test case, we can set the variable <code>age</code> equal to 21. The first test case would execute the first decision outcome resulting in 50% decision coverage. For the second test case, we can set the value of the variable <code>age</code> to 20. The second test case would execute the second decision outcome resulting in 50% decision coverage. The combination of the first and second test cases would achieve 100% total decision coverage. Note that gaining 100% decision coverage equals 100% statement coverage because all statements are covered if a decision outcome is covered.
+
+## Condition Coverage
+
+Condition coverage focuses on the number of conditions tested within the decision outcomes in code for either a true or false result. For example, take the following code snippet:
+
+```js
+let age = 25
+let hasLicense = true
+if (age >= 18 && hasLicense) {
+  console.log('You are on your way!')
+} else {
+  console.log('You should not be driving!')
+}
+```
+
+In the previous code, the message _"You are on your way!"_ or _"You should not be driving!"_ is printed on the screen based on the <code>age</code> values and <code>hasLicense</code> conditions. We can write two test cases to achieve 100% condition coverage for the previous code snippet. For the first test case, we can set the value of <code>age</code> to 25 and <code>hasLicense</code> to <code>true</code>. The first test case would achieve 50% condition coverage because we have tested the <code>true</code> outcome for both conditions. For the second test case, we can set the value of the variable <code>age</code> to 17 and <code>hasLicense</code> to <code>false</code>. Again, the second test case would achieve 50% condition coverage because we have tested the false outcome for both conditions. The combination of the first and second test cases would achieve 100% total condition coverage.
+
+# Summary
+
+In summary, we have covered three white-box testing techniques. TE team members can add their testing expertise to white-box testing in many ways, such as:
+
+- Collaborating with programmers to design test cases best suited for unit-level, white-box testing
+- Asking questions about the behavior of code during code reviews (e.g., merge requests)
+- Suggesting edge case test scenarios not covered by current test cases
+- Using code coverage tools included with most unit testing frameworks to automate auditing statement, decision, and condition coverage against test objectives.
+- Writing white-box test cases when necessary to help maintain team velocity.
