@@ -1,0 +1,61 @@
+---
+title: 'Experienced-Based Testing Techniques'
+date: '2020-11-28'
+tags:
+  [
+    'test design techniques',
+    'experienced-based testing',
+    'exploratory testing',
+    'session-based testing',
+    'checklist-based testing',
+    'error guessing',
+  ]
+draft: false
+summary: "Experience-based testing is an informal testing technique based on the tester's skill, intuition, and experience with similar applications..."
+---
+
+<div className="text-center">
+  <Image alt="an explore flag" src="/static/images/explore.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@andrewtneel?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Andrew Neel
+  </a> on <a href="https://unsplash.com/s/photos/explore?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Intro
+
+Experience-based testing (EBT) is an informal testing technique based on the tester's skill, intuition, and experience with similar applications. EBT helps identify tests not easily identified by more systematic strategies. EBT does not utilize actual test cases but allows users to explore the application thoughtfully to gain insights.
+
+## Example Questions to Answer During Testing
+
+- What is most important to find out about the system? In what way may the system fail?
+- What happens if.....?
+- What should happen when.....?
+- Are customer needs, requirements, and expectations fulfilled?
+
+# Example Testing Techniques
+
+## Error Guessing
+
+Error Guessing is a technique where the testers and other team members anticipate mistakes and defects based on past knowledge of the application. For example, a tester may say, "I think the programmer made a mistake in the cart section where we add the price of the items in the cart."
+
+## Exploratory Testing (Session-based)
+
+Exploratory testing is a technique where the tester first learns about the application, designs test cases, executes cases, gathers feedback, and finally repeats the cycle. Exploratory testing is a reactive strategy since test design is not implemented before coding or running the software. Session-based exploratory testing is a common approach and is used to measure the amount of time spent testing. For example, while testing an application, you could record that each session was 60 minutes and 600 minutes to test the entire application. Although exploratory testing can be used anywhere, it is ideal when few or inadequate specifications or not enough time for more formal testing techniques.
+
+A **test charter** (i.e., a document used to write ideas or test conditions while testing) is often used in exploratory testing. The following is an example test charter created by [Elisabeth Hendrickson](https://pragprog.com/titles/ehxta/explore-it/):
+
+- Explore **"target"**
+- With **"resources"** (i.e., a particular persona, explore differences with competitive sites, old bug reports, cross-site scripting tools, etc.)
+- To discover **"information"** (i.e., what is the purpose or what we're hoping to find that would help our team?)
+
+## Checklist-based Testing
+
+Checklist-based testing is a technique where testers design, implement and execute tests to cover conditions found in a checklist. Testers can create the checklist based on experience, knowledge essential to the user, or an understanding of how and why the application fails. The following is an example of a checklist for testing an image upload feature:
+
+- Check for the image uploading path.
+- Check for image uploading.
+- Check for multiple image uploading.
+
+# Summary
+
+In summary, we have covered three effective techniques for designing experience-based test cases.
