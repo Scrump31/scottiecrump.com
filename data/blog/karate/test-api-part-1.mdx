@@ -1,0 +1,57 @@
+---
+title: 'Test an API with Karate: Part 1'
+date: '2021-11-10'
+tags: ['api', 'integration testing', 'karate dsl', 'gherkin', 'java']
+draft: false
+summary: 'In part 1, we will learn how to bootstrap a Karate project using Maven, complete a high-level overview of the project structure, and...'
+---
+
+<div className="text-center">
+  <Image alt="students in class" src="/static/images/karate.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@beta171085?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Marc Chong Seng
+  </a> on <a href="https://unsplash.com/s/photos/karate?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Overview
+
+Karate is a modern testing tool built with Java that allows for automated testing in many ways, such as API Testing, Performance Testing, and even UI Testing. In addition, Karate utilizes behavior-driven development (BDD) Gherkin syntax to write tests. Unlike many tools such as Cucumber, with Karate, you don't have to write the underlying step definition code for the Gherkin files, making it an excellent tool for all users, including those with limited coding experience.
+
+For purposes of this blog series, we will learn Karate features by writing API tests for a [Client Manager](https://github.com/Scrump31/Client-Manager/tree/rtl-component-tests) application I created with Next.js. Karate's documentation is clear and organized, so I will provide links to specific documentation when necessary instead of essentially regurgitating the same information.
+
+# Part 1
+
+For the first part of the series, we will learn how to bootstrap a Karate project using Maven, complete a high-level overview of the project structure, and install Karate Runner for VSCode.
+
+# Application Overview
+
+The application we will test allows users to display clients via a **GET** `api/clients`endpoint, add clients via a **POST** `api/add-client` endpoint, edit clients via a **POST** `api/update-client` endpoint, and delete clients via a **DELETE** `api/delete-client` endpoint. We will cover details of each endpoint, such as the expected request and response data, as we build out each test case.
+
+# Creating a Karate Project
+
+One of the easiest ways to create a Karate project is by using the [Karate Maven archetype](https://github.com/karatelabs/karate#quickstart). If you need more context, [Maven](https://maven.apache.org/what-is-maven.html) is a popular tool used to build and manage [Java](https://www.java.com/en/download/help/whatis_java.html) projects. Maven archetypes are templates you can use as starter code for projects using desired tools.
+
+You can also use the stand-alone executable via a [downloadable ZIP release](https://github.com/karatelabs/karate/wiki/ZIP-Release) as an alternative to the Karate Maven archetype. The stand-alone approach is an excellent option if you have limited experience coding in Java or when you want to create a project using the quickest method.
+
+## Reviewing the Karate Project Folder Structure
+
+The [Naming Conventions](https://github.com/karatelabs/karate#naming-conventions) section of the Karate docs highlights the resulting files and folder structure created by the Karate Maven archetype. One of the most notable things to understand is that we write Karate tests using Gherkin syntax in files with a <code>.feature</code> extension. The following is an example of a test written in Gherkin:
+
+```gherkin
+Feature: Login
+
+Scenario: A user can login with valid credentials
+  Given the login page
+   When valid credentials submitted
+   Then account page is displayed
+```
+
+## Installing The Karate Runner VSCode Extension
+
+If you are not using VSCode as your text editor, feel free to skip this section. The Karate Runner extension provides a pleasant experience using VSCode to run, debug, and view reports for your Karate tests. Install the Karate Runner extension via the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=kirkslota.karate-runner).
+
+# Part 1 Review
+
+In review, now we understand the usefulness of Karate for testing. Next, we reviewed the application we will test throughout the series. Finally, we learned how to create a starter Karate project. Next, we will learn how to configure Karate for our needs and test the **GET** `api/clients`endpoint.
+
+## The final source code can be found [here](https://github.com/Scrump31/clientAddressAPITests)
