@@ -1,0 +1,64 @@
+---
+title: 'Test an API with Karate: Part 2'
+date: '2021-11-11'
+tags: ['api', 'integration testing', 'karate dsl', 'gherkin', 'java']
+draft: false
+summary: 'For the second part of the series, we will learn how to configure the karate configuration file based on...'
+---
+
+<div className="text-center">
+  <Image alt="man performing karate" src="/static/images/karate.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@beta171085?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Marc Chong Seng
+  </a> on <a href="https://unsplash.com/s/photos/karate?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Overview
+
+For the second part of the series, we will learn how to configure the karate configuration file based on our needs and write our first tests.
+
+# Configuring Our Karate Project
+
+The [karate-config.js](https://github.com/karatelabs/karate#karate-configjs) file allows you to do things such as set a base Url for all test cases, create global variables, and configure Karate behavior for specific environments where tests will run. For our needs, we will modify the provided config file with the following:
+
+```js
+function fn() {
+  var config = {
+    baseUrl: 'http://localhost:3000/api/',
+  }
+  return config
+}
+```
+
+In the previous code snippet, we created a `baseUrl` variable and set it to `'http://localhost:3000/api/'`, representing the URL used to access the API. Before running the test files, Karate will read the config file making the `baseUrl` variable available to our tests. We will use the variable inside our test files instead of explicitly entering the API's URL.
+
+# Testing the api/clients Endpoint
+
+We will verify that a GET request to `api/clients` returns a `200` status code and a list of users for our first test. First, let's create a feature file with the following:
+
+```gherkin
+Feature: Get Clients
+
+  Scenario: A user can retrieve all clients
+    Given url baseUrl
+    And path 'clients'
+    When method GET
+    Then status 200
+    And match each response.clients contains {name: '#string', email: '#string', address: '#string', phone: '#number', company: '#string', notes: '#string', id: '#string'}
+    And print response
+```
+
+We created a test to verify the **"A user can retrieve all clients"** scenario for the **"Get Clients"** feature in the previous code:
+
+1. We passed in our `baseUrl` as the [url](https://github.com/karatelabs/karate#url) to use in the test.
+2. We added the path `'clients'`, resulting in "http://localhost:3000/api/clients".
+3. We specify that we're using a `GET` method to call the API.
+4. After running the API request, we assert the response.
+
+First, we expect the API to return a `200` status. Then, we use [match each](https://github.com/karatelabs/karate#match-each) to iterate over each client object and verify that each client object [contains](https://github.com/karatelabs/karate#match-contains) specific properties of type **"string"** using the `#string` fuzzy matcher and type **"number"** using the `#number` fuzzy matcher. [Fuzzy matching](https://github.com/karatelabs/karate#fuzzy-matching) is a great Karate feature that allows us to assert dynamic data such as [timestamps](https://en.wikipedia.org/wiki/Timestamp) easily. Finally, we [print](https://github.com/karatelabs/karate#print) the API response. Printing the response is useful when we want to see the response data in a precise manner.
+
+# Part 2 Review
+
+In review, we added a `baseUrl` to our configuration file and became familiar with basic Karate features by writing a test for the `/api/clients` endpoint. Next, we will learn how to test the **POST** `api/add-client` route.
+
+## The final source code can be found [here](https://github.com/Scrump31/clientAddressAPITests)
