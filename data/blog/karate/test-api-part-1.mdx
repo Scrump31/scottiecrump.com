@@ -7,7 +7,7 @@ summary: 'In part 1, we will learn how to bootstrap a Karate project using Maven
 ---
 
 <div className="text-center">
-  <Image alt="students in class" src="/static/images/karate.jpg" width={600} height={434} />
+  <Image alt="man performing karate" src="/static/images/karate.jpg" width={600} height={434} />
   Photo by <a href="https://unsplash.com/@beta171085?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
     Marc Chong Seng
   </a> on <a href="https://unsplash.com/s/photos/karate?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
@@ -35,7 +35,7 @@ You can also use the stand-alone executable via a [downloadable ZIP release](htt
 
 ## Reviewing the Karate Project Folder Structure
 
-The [Naming Conventions](https://github.com/karatelabs/karate#naming-conventions) section of the Karate docs highlights the resulting files and folder structure created by the Karate Maven archetype. One of the most notable things to understand is that we write Karate tests using Gherkin syntax in files with a <code>.feature</code> extension. The following is an example of a test written in Gherkin:
+The [Naming Conventions](https://github.com/karatelabs/karate#naming-conventions) section of the Karate docs highlights the resulting files and folder structure created by the Karate Maven archetype. One of the most notable things to understand is that we write Karate tests using Gherkin syntax in files with a `.feature` extension. The following is an example of a test written in Gherkin:
 
 ```gherkin
 Feature: Login
@@ -46,12 +46,97 @@ Scenario: A user can login with valid credentials
    Then account page is displayed
 ```
 
+For our project, we will change the default folders and files to the following:
+
+<div className="text-center">
+  <Image
+    alt="project folder structure"
+    src="/static/images/updated_folder_structure.jpg"
+    width={500}
+    height={240}
+  />
+</div>
+
+In the previous screenshot, the **clientAddress** folder houses related code for all our feature folders and files. The `ClientAddressTest.java` file runs the entire test suite, meaning all feature files in sub-folders such as **clients**. The `ClientAddressTest.java` file also configures reporting after test runs. The **clients** folder holds code specific to the **"clients"** feature. Inside the **clients** folder, `ClientsRunner.java` is used to run tests specific to the folder. The `ClientsRunner.java` file also allows you to customize test runs, such as filtering tests by [tags]("https://github.com/karatelabs/karate#tags").
+
 ## Installing The Karate Runner VSCode Extension
 
 If you are not using VSCode as your text editor, feel free to skip this section. The Karate Runner extension provides a pleasant experience using VSCode to run, debug, and view reports for your Karate tests. Install the Karate Runner extension via the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=kirkslota.karate-runner).
+
+## Installing Cucumber Reporting
+
+By default, Karate provides reporting out of the box:
+
+<div className="text-center">
+  <Image
+    alt="Karate HTML report"
+    src="/static/images/sample_karate_report.jpg"
+    width={900}
+    height={100}
+  />
+</div>
+
+However, for our project, we will install and generate better-looking test reports using [Cucumber Reporting](https://mvnrepository.com/artifact/net.masterthought/cucumber-reporting). We can install the latest Maven version by adding it as a dependency to our `pom.xml` file which houses our project's configuration information and details:
+
+```xml
+<!-- https://mvnrepository.com/artifact/net.masterthought/cucumber-reporting -->
+<dependency>
+    <groupId>net.masterthought</groupId>
+    <artifactId>cucumber-reporting</artifactId>
+    <version>5.6.1</version>
+</dependency>
+
+```
+
+Next, we'll update the `ClientAddressTest.java` file used to run the entire test suite, meaning all our project's feature files to use Cucumber Reporting for test results to the following:
+
+```java
+public class ClientAddressTest {
+
+  @Test
+  void testParallel() {
+    Results results = Runner.path("classpath:clientAddress").outputCucumberJson(true).parallel(5);
+    generateReport(results.getReportDir());
+    assertEquals(0, results.getFailCount(), results.getErrorMessages());
+  }
+
+  @SuppressWarnings("unchecked")
+  public static void generateReport(String karateOutputPath) {
+    @SuppressWarnings("rawtypes")
+    Collection jsonFiles = FileUtils.listFiles(new File(karateOutputPath), new String[] { "json" }, true);
+    @SuppressWarnings("rawtypes")
+    List jsonPaths = new ArrayList(jsonFiles.size());
+    jsonFiles.forEach(file -> jsonPaths.add(((File) file).getAbsolutePath()));
+
+    Configuration configuration = new Configuration(new File("target"), "Client Address App");
+    ReportBuilder reportBuilder = new ReportBuilder(jsonPaths, configuration);
+    reportBuilder.generateReports();
+  }
+
+}
+```
+
+As a high-level explanation, the test `testParallel` runs all tests in the **clientAddress** folder suite and passes the test result data to `generateReport`. The `generateReport` method will create a nice-looking visual report titled **"Client Address App"** and store it in the **target** folder.
+
+Now that Cucumber Reporter is installed and configured, we can generate reports like so:
+
+<div className="text-center">
+  <Image
+    alt="Sample Cucumber Report"
+    src="/static/images/sample_cucumber_report.jpg"
+    width={900}
+    height={450}
+  />
+</div>
+
+The previous screenshot shows a pie chart and a table displaying detailed information about the latest test run. We can also select the feature link to get more details about what happened during each step of the test run.
 
 # Part 1 Review
 
 In review, now we understand the usefulness of Karate for testing. Next, we reviewed the application we will test throughout the series. Finally, we learned how to create a starter Karate project. Next, we will learn how to configure Karate for our needs and test the **GET** `api/clients`endpoint.
 
 ## The final source code can be found [here](https://github.com/Scrump31/clientAddressAPITests)
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/karate/test-api-part-2">Part 2</a>
+</h1>
