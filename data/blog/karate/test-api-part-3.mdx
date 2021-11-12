@@ -1,0 +1,139 @@
+---
+title: 'Test an API with Karate: Part 3'
+date: '2021-11-12'
+tags: ['api', 'integration testing', 'karate dsl', 'gherkin', 'java']
+draft: false
+summary: 'For the third part of the series, we will learn how to configure the karate configuration file based on...'
+---
+
+<div className="text-center">
+  <Image alt="man performing karate" src="/static/images/karate.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@beta171085?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Marc Chong Seng
+  </a> on <a href="https://unsplash.com/s/photos/karate?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Overview
+
+For the third part of the series, first, we will add a module that will generate test data. Then, we will use the generated test data to test the `api/create-client` route. The `api/create-client` route expects to receive a **POST** request with the following data structure for a submitted client in the request body:
+
+```javascript
+{
+  name: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
+  address: { type: String, required: false },
+  phone: { type: Number, required: false },
+  company: { type: String, required: false },
+  notes: { type: String, required: false }
+}
+```
+
+In the previous code snippet, note that the `name` and `email` properties are the only required values and that the `name` property must be unique from other submitted client data objects. Once the request is submitted and successfully saved to the database, the API responds with a `200` status code and a message: **"(name) sucessfully added"**. If there is an error with the request, the API sends back a `400` status code and the associated error. Lastly, if a duplicate client is submitted, the API sends back a `409` status with the message: **"(name) is already in use"**.
+
+# Generating Dynamic Test Data
+
+Instead of hard-coding test data, we will install and use [javafaker](https://mvnrepository.com/artifact/com.github.javafaker/javafaker) to automatically create test data for use before each test run. We can install the latest Maven version by adding it as a dependency to our `pom.xml`:
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.javafaker/javafaker -->
+<dependency>
+    <groupId>com.github.javafaker</groupId>
+    <artifactId>javafaker</artifactId>
+    <version>1.0.2</version>
+</dependency>
+```
+
+Next, we'll configure the module in our `karate-config.js` file:
+
+```javascript
+function fn() {
+  var fakerClass = Java.type('com.github.javafaker.Faker')
+  var faker = new fakerClass()
+  var fakeUser = {
+    name: faker.name().fullName(),
+    email: faker.internet().emailAddress(),
+    phone: parseInt(faker.number().digits(10), 10),
+    address: faker.address().fullAddress(),
+    company: faker.company().name(),
+    notes: faker.company().catchPhrase(),
+  }
+
+  var config = {
+    baseUrl: 'http://localhost:3000/api/',
+    fakeUser: fakeUser,
+  }
+  return config
+}
+```
+
+We created the variable `fakerClass` in the previous code and used [Java.type](https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/prog_guide/javascript.html#A1147187) to access the Java module in our JavaScript file. Then, we used `fakerfaker` methods to auto-generate data for each object property. Finally, we added the `fakeUser` variable to our `config` object, making it available to any of our feature test files.
+
+# Testing the api/add-client Endpoint
+
+We will verify that a POST request to `api/add-client` returns a `200` status code and the message, **"(name) successfully added"**. The "**(name)"** will display the `name` property for the submitted client object. First, let's create a feature file with the following:
+
+```gherkin
+Feature: Create Client
+
+  Scenario: A user can create a client
+    Given url baseUrl
+    And path 'add-client'
+    And request fakeUser
+    When method POST
+    Then status 200
+    And assert response.message == fakeUser.name + " successfully added"
+```
+
+In the previous code, we created a test that submitted a **POST** request to `api/add-client` using the `fakeUser` data generator. Then, we verified the submission was successful with a `200` status and message **"(name) successfully added"** returned from the API. Notice how we could access the `message` property off the response body using the unique `response` variable from Karate. The `response` variable is another valuable feature in Karate to have when creating test cases. Finally, when we run the test, we receive a report indicating the test passed as expected:
+
+<div className="text-center">
+  <Image
+    alt="Add Create Cucumber Report"
+    src="/static/images/create_client_report.png"
+    width={900}
+    height={400}
+  />
+</div>
+
+Note that in the previous screenshot, we are viewing a detailed page of the Cucumber Report that displays the outcome for each test step.
+
+## Verify Duplicate Clients Cannot Be Submitted
+
+For our next test, we will verify that duplicate clients cannot be created:
+
+```gherkin
+Feature: Create Client
+  Background:
+    * def getClients = call read('get-clients.feature')
+    * def clientList = getClients.response.clients
+    * def getLastClient = clientList[clientList.length - 1]
+
+  Scenario: A user cannot create a duplicate client
+    Given url baseUrl
+    And path 'add-client'
+    And request getLastClient
+    When method POST
+    Then status 409
+    And assert response.message == getLastClient.name + " is already in use"
+```
+
+In the previous code, first, we used `Background` to create variables to use in the test `Scenario`. Then, the `getClients` variable uses the Karate [call](https://github.com/karatelabs/karate#call) and [read](https://github.com/karatelabs/karate#reading-files) actions to run the `get-clients.feature` and store the response result. In other words, we call one API and use the result to set up a call to another API. Karate makes it a breeze to use the response from one API call to another one. Next, we store the `clients` array from the previous API call in the `clientList` variable. Then, we store the last client object in the array in the variable `getLastClient`.
+
+Inside the scenario, we attempt to create a new client using the `getLastClient` data and expect a `409` status code and message **"(client) is already in use"**. When we run the test, we get the following report indicating the test passed as expected:
+
+<div className="text-center">
+  <Image
+    alt="Duplicate Client Cucumber Report"
+    src="/static/images/duplicate_client_report.png"
+    width={900}
+    height={500}
+  />
+</div>
+
+In the previous screenshot, we see that the test `duplicate-client.feature` passes.
+
+# Part 3 Review
+
+In review, we updated our framework by including a module to auto-generate test data. Next, we created a `POST` request to verify the `api/add-client` route. Finally, we learned how to use the response from one API call to setup and call another API. Next, we will learn how to test the **POST** `api/update-client` and `api/get-client` routes.
+
+## The final source code can be found [here](https://github.com/Scrump31/clientAddressAPITests)
