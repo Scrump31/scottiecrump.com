@@ -1,0 +1,156 @@
+---
+title: 'Test an API with Karate: Part 4'
+date: '2021-11-13'
+tags: ['api', 'integration testing', 'karate dsl', 'gherkin', 'java']
+draft: false
+summary: 'In the fourth part of the series, we will test the api/get-client and api/update-client routes and learn how to create feature files that accept dynamic data...'
+---
+
+<div className="text-center">
+  <Image alt="man performing karate" src="/static/images/karate.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@beta171085?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Marc Chong Seng
+  </a> on <a href="https://unsplash.com/s/photos/karate?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Overview
+
+In the fourth part of the series, we will test the `api/get-client` and `api/update-client` routes and learn how to create feature files that accept dynamic data.
+
+# Testing the api/get-client Endpoint
+
+We will verfiy that a **GET** request to `api/get-client` with a user's `id` returns a `200` status. We can create a feature file with the following:
+
+```gherkin
+Feature: Get Client
+
+  Background:
+    * def getClients = call read('get-clients.feature')
+    * def clientList = getClients.response.clients
+    * def getLastClient = clientList[clientList.length - 1]
+
+  Scenario: A user can get a single client
+    Given url baseUrl
+    And path 'get-client'
+    And param id = getLastClient.id
+    When method GET
+    Then status 200
+```
+
+We stored the last client in the variable `getLastClient` via a call to `api/clients` in the previous code, similar to what we did in Part 3. Inside the `Scenario`, we used the Karate [param](https://github.com/karatelabs/karate#param) keyword to pass an `id` parameter equal to the `id` of the object stored in `getLastClient`. When we run the test, we receive a report indicating the test passed:
+
+<div className="text-center">
+  <Image
+    alt="Get Client Cucumber Report"
+    src="/static/images/get_client_report.png"
+    width={900}
+    height={550}
+  />
+</div>
+
+In the previous screenshot, we see that the test `get-client.feature` passes as expected.
+
+# Testing the api/update-client Endpoint
+
+For our next test, we will verify that a **POST** request to `api/update-client` returns a `201` status and the message **"(client) successfully updated"**. We will create a feature file with the following:
+
+```gherkin
+Feature: Update Client
+
+  Background:
+    * def getClients = call read('get-clients.feature')
+    * def clientList = getClients.response.clients
+    * def getLastClient = clientList[clientList.length - 1]
+    * def newEmail = fakeUser.email
+
+  Scenario: A user can update client data
+    Given url baseUrl
+    And path 'update-client'
+    And getLastClient.email = newEmail
+    And request getLastClient
+    When method POST
+    Then status 201
+    And response.message == getLastClient.name + " successfully updated"
+    And path 'get-client'
+    And param id = getLastClient.id
+    When method GET
+    Then response.email == newEmail
+```
+
+In the previous code, inside `Background`, we created variables similar to the last test in this blog. In addition, we created a `newEmail` variable and set it equal to the `email` property of our `fakeUser` data generator. We will use this variable to update the `email` property of the `getLastClient` data object. Inside the `Scenario`, we make a **POST** request to `update-client` with the `email` from `getLastClient` updated to our new `email` value. Once the request is made, we assert that the `response` `status` and `message` values are correct.
+
+Finally, we make a **GET** request to `get-client` using the `id` and access the response body to verify that the `email` property is equal to the value used to update the client data object. When we run the test, we receive a report indicating the test passed:
+
+<div className="text-center">
+  <Image
+    alt="Update Client Cucumber Report"
+    src="/static/images/update_client_report.png"
+    width={900}
+    height={600}
+  />
+</div>
+
+In the previous screenshot, we see that the test `update-client.feature` passes.
+
+# Another Option to Test api/update-client
+
+Notice in the previous test that we explicitly called `get-client` to verify the `email` property was updated as expected. We could have cleaned up our code a bit by changing the way the **"get-client"** feature file accepts an `id` and using the [call](https://github.com/karatelabs/karate#call) and [read](https://github.com/karatelabs/karate#reading-files) actions to make the request and receive the `response` in the **"update-client"** feature file. To illustrate, first, we will modify the **"Get Client"** feature file to the following:
+
+```gherkin
+Feature: Get Client
+
+Background:
+  * def getClients = call read('get-clients.feature')
+  * def clientList = getClients.response.clients
+  * def getLastClient = clientList[clientList.length - 1]
+Scenario: A user can get a single client
+  Given url baseUrl
+  And path 'get-client'
+  And params {id: #(id)}
+  When method GET
+  Then status 200
+```
+
+In the previous code, we updated [param](https://github.com/karatelabs/karate#param) to "params" and passed in an object representing the query `id` and associated value to use in the request. The Karate [params](https://github.com/karatelabs/karate#params) allow us to pass multiple query parameters to a request, including dynamic query parameters. Next, we will modify the **"Update Client"** feature:
+
+```gherkin
+Feature: Update Client
+
+  Background:
+    * def getClients = call read('get-clients.feature')
+    * def clientList = getClients.response.clients
+    * def getLastClient = clientList[clientList.length - 1]
+    * def newEmail = fakeUser.email
+
+  Scenario: A user can update client data
+    Given url baseUrl
+    And path 'update-client'
+    And getLastClient.email = newEmail
+    And request getLastClient
+    When method POST
+    Then status 201
+    And response.message == getLastClient.name + " successfully updated"
+    * def id = getLastClient.id
+    And call read('get-client.feature') {id: #(id)}
+    Then response.email == newEmail
+```
+
+In the previous code, first, we created an `id` variable set to the `id` of the `getLastClient` client object. Then we run the **"Get Client"** feature and pass in a dynamic `id` parameter for the feature to consume. When we run the test, we receive a report indicating the test passed:
+
+<div className="text-center">
+  <Image
+    alt="Dynamic Update Client Cucumber Report"
+    src="/static/images/dynamic_update_client_report.png"
+    width={900}
+    height={700}
+  />
+</div>
+
+In the previous screenshot, we see that the test `update-client.feature` continues to pass. Essentially, we updated the feature to chain multiple API tests including **"Get Clients"**, **"Update Client"** and **"Get Client"**.
+
+# Part 4 Review
+
+In review, we tested the `api/get-client` and `api/update-client` routes. We also learned how to create dynamic feature files by passing data to feature files.
+Next, we will learn how to test the **DELETE** `api/delete-client` route.
+
+## The final source code can be found [here](https://github.com/Scrump31/clientAddressAPITests)
