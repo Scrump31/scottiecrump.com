@@ -1,0 +1,60 @@
+---
+title: 'Test an API with Karate: Part 5'
+date: '2021-11-14'
+tags: ['api', 'integration testing', 'karate dsl', 'gherkin', 'java']
+draft: false
+summary: 'In the fifth part of the series, we will test the "DELETE" api/delete-client route...'
+---
+
+<div className="text-center">
+  <Image alt="man performing karate" src="/static/images/karate.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@beta171085?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Marc Chong Seng
+  </a> on <a href="https://unsplash.com/s/photos/karate?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Overview
+
+In the fifth part of the series, we will test the **DELETE** `api/delete-client` route.
+
+# Testing the api/delete-client Endpoint
+
+We will verify that a **DELETE** request to `api/delete-client` with a user's `id` and `name` returns a `200` status and the message **"(name) successfully deleted".** We can create a feature file with the following:
+
+```gherkin
+Feature: Delete Client
+
+  Background:
+    * def getClients = call read('get-clients.feature')
+    * def clientList = getClients.response.clients
+    * def getLastClient = clientList[clientList.length - 1]
+    * def userId = getLastClient.id
+    * def userName = getLastClient.name
+
+  Scenario: A user can delete a client
+    Given url baseUrl
+    And path 'delete-client'
+    And request { id: "#(userId)", name: "#(userName)" }
+    When method DELETE
+    Then status 200
+    And response.message == getLastClient.name + " successfully deleted"
+```
+
+In the previous code, we created a `userId` and `userName` variable along with variables we've seen in previous tests in the series to access the last client in the database. Inside the `Scenario`, we pass in the `userId` variable as the value for `id` and `userName` variable as the value for `name`. When we run the test, we receive a report indicating the test passed:
+
+<div className="text-center">
+  <Image
+    alt="Delete Client Cucumber Report"
+    src="/static/images/delete_client_report.png"
+    width={900}
+    height={500}
+  />
+</div>
+
+The previous screenshot indicates that the test passed with the correct status code and response message.
+
+# Part 5 Review
+
+In review, we tested the `api/delete-client` by accessing the last client added to the database via the **"Get Clients"** feature, passed in the `id` and `name` properties from the data object. Finally, we verified the API returned the correct status code and message.
+
+## The final source code can be found [here](https://github.com/Scrump31/clientAddressAPITests)
