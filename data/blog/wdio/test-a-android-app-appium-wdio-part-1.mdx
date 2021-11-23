@@ -108,7 +108,7 @@ export const config: WebdriverIO.Config = {
 }
 ```
 
-In the previous code, we created several base configurations. First, `timeStamp` generates the current date and time to label each report after test runs. Then, inside the `config` object, `specs` is a placeholder array to be overwritten by specific config files. The `logLevel` key is set to the default value `'info'`. The `bail` key is set to 0, meaning all tests will run even if other tests fail. The `baseUrl` key is set to an empty string since we're testing on a native app. The `waitforTimeout` key is set to the default value 10000 to wait for any `waitFor*` commands. The `connectionRetryTimeout` key, used for browser driver responses such as hiding or showing the keyboard, is set to the default value 12000.
+In the previous code, we created several base configurations. First, `timeStamp` generates the current date and time to label each report after test runs. Then, inside the `config` object, `specs` is a placeholder array to be overwritten by specific config files. The `logLevel` key is set to the default value `'info'`. The `bail` key is set to 0, meaning all tests will run even if other tests fail. The `baseUrl` key is set to an empty string since we're testing on a native app. The `waitforTimeout` key is set to the default value `10000` to wait for any `waitFor*` commands. The `connectionRetryTimeout` key, used for browser driver responses such as hiding or showing the keyboard, is set to the default value `12000`.
 
 The `connectionRetryCount` key, used to retry connections to the Selenium server, is set to the default value 3. The `services` key is assigned to an empty array to be overridden by specific config files. The `framework` key, which defines the test framework to be used by the Webdriver test runner, is set to `mocha`, the option we selected in the WebdriverIO CLI tool. The `reporters` key is set to an array that includes the `junit` and `allure` values we selected and the respective folders where reports will go. Finally, the `mochaOptions. timeout` key, used to throw an error to avoid endless running tests, is set to 3 mins.
 
@@ -172,3 +172,7 @@ In the previous code, first, we import the shared config file. Next, the `servic
 # Part 1 Review
 
 In review, we looked at the app we will test. Next, we installed all necessary dependencies to run Appium on our machine, complete with options for Android emulators. Finally, we created a starter WebdriverIO project and created custom configuration files based on our needs. Now that we have all the setup taken care of, we will finally test the app in the next part!
+
+<h1 style={{ marginTop: '2em' }}>
+  <a href="/blog/wdio/test-a-android-app-appium-wdio-part-2">Part 2</a>
+</h1>
