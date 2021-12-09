@@ -1,0 +1,115 @@
+---
+title: 'Creating Automated API Tests with Postman: Part 1'
+date: '2021-12-8'
+tags: ['postman', 'docker', 'api']
+draft: false
+summary: 'In part 1, we will learn about the API endpoints and run it in a Docker container...'
+---
+
+<div className="text-center">
+  <Image alt="space man" src="/static/images/postman/space-man.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@philhearing?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Phil Hearing
+  </a> on <a href="https://unsplash.com/s/photos/rocket-man?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Overview
+
+[Postman](https://www.postman.com/) is a popular tool to test APIs. Many people use Postman to test various endpoints quickly, but we can also create fully automated test suites. The application we will test in this blog series is a [Client Manager](https://github.com/Scrump31/Client-Manager) built with [Next.js](https://nextjs.org/). We will use a containerized version [scottiecrump/client-address-next](https://hub.docker.com/r/scottiecrump/client-address-next) to get the application up and running quickly on our machine. Next, we will set up the application and review the API to test in the following sections.
+
+# Running the API Application with Docker
+
+We will use [Docker](https://www.docker.com/), a popular tool that bundles your application with all the libraries and services it depends on into a container package. The container is like a shipping container because you can run it on any machine long as it uses Docker. Docker handles problems such as, "It works on my machine, why not yours?" or "I want to run your application, but not have to install all the dependencies on my machine."
+
+Use the ["get started"](https://www.docker.com/get-started) instructions to install Docker on your machine. In addition, if you are using VSCode, consider installing the [Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker). Once Docker is installed, create a new [npm project](https://docs.npmjs.com/cli/v8/commands/npm-init) and add a `docker-compose.yml` file in the root of the project with the following code:
+
+```yaml:docker-compose.yml
+version: '3.8'
+
+services:
+  api:
+    image: scottiecrump/client-address-next
+    environment:
+      - MONGO_URI="mongodb://mongo:27017/addressbook"
+    depends_on:
+      - mongo
+    ports:
+      - 3000:3000
+    restart: always
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+    restart: always
+volumes:
+  mongo-data:
+    driver: local
+  mongo-config:
+    driver: local
+```
+
+In the previous code, first, we specified the version of [Docker Compose](https://docs.docker.com/compose/) `version: '3.8'` to use. Next, we use `services` to identify the names of the containers we want to be built (i.e., `api` and `mongo`) and instructions.
+
+For the `api` service:
+
+```yaml
+api:
+  image: scottiecrump/client-address-next
+  environment:
+    - MONGO_URI="mongodb://mongo:27017/addressbook"
+  depends_on:
+    - mongo
+  ports:
+    - 3000:3000
+  restart: always
+```
+
+we use the [scottiecrump/client-address-next](https://hub.docker.com/r/scottiecrump/client-address-next) image, the API application itself. Next, we set the value for `MONGO_URL` to connect to the Mongo database for `environment`. Note the use of `mongo` in the URL. Using "mongo" connects `api` to the MongoDB service by its name. Next, we specify `ports` to `3000:3000`. The `port` specifies the port you want to expose in colon-separated values where the first port is your local machine and the second is the port specified inside the container. Then, we set `restart` to `always` to always restart the container if it crashes for some reason.
+
+For the `mongo` service:
+
+```yaml
+mongo:
+  image: mongo
+  ports:
+    - 27017:27017
+  volumes:
+    - mongo-data:/data/db
+    - mongo-config:/data/configdb
+  restart: always
+```
+
+first, we set `image` to `mongo` to use the MongoDB Docker image. Next, we make the service available to the `api` service by setting `ports` to `27107:27107`. Next, we use `volumes` to persist data saved to the database. For example, if we don't use `volumes`, any data stored in the database will be lost if we stop and restart the container. However, when we use `volumes`, we can stop and restart the container, and that data persists. The `volume` paths are prepended with the labels `mongo-data` and `mongo-config`, allowing them to be easily identified among other volumes that may be running on our machine. Next, we set `restart` to `always` to handle crashes. Finally, we specify all the named `volumes` sharable with other services using the default `local` `driver`.
+
+Start the containers using the following command:
+
+```sh
+docker-compose up -d
+```
+
+Stop the containers using the following command:
+
+```sh
+docker-compose down
+```
+
+# API Endpoint Overview
+
+The API has five endpoints:
+
+- **POST** `/api/add-client` used to create new clients
+- **GET** `/api/clients` to retrieve all current clients
+- **GET** `/api/get-client?id` to retrieve a single client
+- **POST** `/api/update-client` to update a single client
+- **DELETE** `/api/delete-client` to delete a single client
+
+Detailed API documentation can be found [here](https://documenter.getpostman.com/view/3521978/UVJkBZ2Q), including example requests with responses.
+
+# Part 1 Review
+
+In review, we learned how to start the API to test using Docker and looked at the documentation for the API. In the next section, we will start testing the API using Postman.
+
+## The final source code can be found [here](https://github.com/Scrump31/client-next-postman)
