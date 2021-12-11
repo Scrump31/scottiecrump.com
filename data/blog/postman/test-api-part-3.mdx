@@ -1,0 +1,138 @@
+---
+title: 'Creating Automated API Tests with Postman: Part 3'
+date: '2021-12-10'
+tags: ['postman', 'docker', 'api']
+draft: false
+summary: 'In part 3, we will test the POST Update Client and DELETE Client endpoints...'
+---
+
+<div className="text-center">
+  <Image alt="space man" src="/static/images/postman/space-man.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@philhearing?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Phil Hearing
+  </a> on <a href="https://unsplash.com/s/photos/rocket-man?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Testing The POST Update Client Endpoint
+
+The POST Update Client endpoint allows users to update data for an existing user. For the request, we will use the `lastAddedClientID` and `randomFullName` collection variables created in previous sections of the blog series:
+
+<div className="text-center">
+  <Image
+    alt="post update client postman request"
+    src="/static/images/postman/post-update-client.png"
+    width={800}
+    height={500}
+  />
+</div>
+
+In the previous screenshot, we make a **POST** request inside the Postman application to `/api/update-client`, passing in the `"id"` and `"name"` and updating `"notes"` with the string **"Updated Notes"**. We can also see the response indicating the data for user **"Erika Krajcik"** was successfully updated and a `201` response status. Next, we will write test cases.
+
+## Writing the Test Cases
+
+We will write three tests to verify the status code, response message, and schema. The test cases will look similar to ones in previous sections of this blog series, so we will briefly cover the code:
+
+```javascript
+pm.test('given valid POST request, returns 201 status', () => {
+  pm.response.to.have.status(201)
+})
+
+pm.test('given POST client, returns client updated message', () => {
+  const response = pm.response.json()
+  const name = pm.collectionVariables.get('randomFullName')
+
+  pm.expect(response.message).to.eql(`${name} successfully updated`)
+})
+
+const schema = {
+  type: 'object',
+  properties: {
+    message: {
+      type: 'string',
+    },
+  },
+  required: ['message'],
+}
+
+pm.test('given valid POST request, response matches schema', () => {
+  pm.response.to.have.jsonSchema(schema)
+})
+```
+
+In the previous code, the tests `"given valid POST request, returns 201 status"`, `"given POST client, returns client updated message"`, and `"given valid POST request, response matches schema"` verify the expected output. The following illustrates the final result inside the Postman application:
+
+<div className="text-center">
+  <Image
+    alt="post update client postman tests"
+    src="/static/images/postman/post-update-client-tests.png"
+    width={800}
+    height={500}
+  />
+</div>
+
+The previous screenshot shows the response status, response message, and schema test cases and results at the bottom of the screen `Test Results (3/3)`, indicating all test cases passed.
+
+# Testing The DELETE Client Endpoint
+
+The DELETE Client endpoint allows users to remove an existing user. For the request, we will use the `lastAddedClientID` and `randomFullName` collection variables, similar to the previous request for **POST Update Client**:
+
+<div className="text-center">
+  <Image
+    alt="post delete client postman request"
+    src="/static/images/postman/post-delete-client.png"
+    width={800}
+    height={500}
+  />
+</div>
+
+In the previous screenshot, we make a **DELETE** request inside the Postman application to `/api/delete-client`, passing in the `"id"` and `"name"` as the request body data. We can also see the response indicating user **"Erika Krajcik"** was successfully deleted and a `200` response status. Next, we will write test cases.
+
+## Writing the Test Cases
+
+We will write three tests to verify the status code, response message, and schema. The test cases will look similar to ones in previous section, _"Testing The POST Update Client Endpoint"_, so we will briefly cover the code:
+
+```javascript
+pm.test('given valid DELETE request, returns 200 status', () => {
+  pm.response.to.have.status(200)
+})
+
+pm.test('given deleted client, returns client deleted message', () => {
+  const response = pm.response.json()
+  const name = pm.collectionVariables.get('randomFullName')
+
+  pm.expect(response.message).to.eql(`${name} successfully deleted`)
+})
+
+const schema = {
+  type: 'object',
+  properties: {
+    message: {
+      type: 'string',
+    },
+  },
+  required: ['message'],
+}
+
+pm.test('given valid DELETE request, response matches schema', () => {
+  pm.response.to.have.jsonSchema(schema)
+})
+```
+
+In the previous code, the tests `"given valid DELETE request, returns 200 status"`, `"given deleted client, returns client deleted message"`, and `"given valid DELETE request, response matches schema"` verify the expected output. The following illustrates the final result inside the Postman application:
+
+<div className="text-center">
+  <Image
+    alt="post delete client postman tests"
+    src="/static/images/postman/post-delete-client-tests.png"
+    width={800}
+    height={500}
+  />
+</div>
+
+The previous screenshot shows the response status, response message, and schema test cases and results at the bottom of the screen `Test Results (3/3)`, indicating all test cases passed.
+
+# Part 2 Review
+
+In review, we used our collections variables to help test the **POST Update Client** and **DELETE Client** endpoints, verifying the response status, body, and schemas. Next, we will learn how to generate HTML reports and run our tests in Continuous Integration (CI) environments.
+
+## The final source code can be found [here](https://github.com/Scrump31/client-next-postman)
