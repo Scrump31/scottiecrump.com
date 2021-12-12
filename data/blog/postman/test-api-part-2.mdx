@@ -28,7 +28,7 @@ In part two, we will start using [Postman](https://www.postman.com/) to test the
 
 In the previous screenshot, we see the collection with all the individually created request endpoints.
 
-# Testing The POST Add New Client Endpoint
+# Testing the POST Add New Client Endpoint
 
 The POST Add New Client endpoint allows users to create a new client. To get started, first, will use the [Pre-request Script](https://learning.postman.com/docs/writing-scripts/pre-request-scripts/) tab in Postman to make a few collection variables that will run before our request:
 
@@ -130,7 +130,7 @@ The following screenshot illustrates the final result inside the Postman applica
 
 The previous screenshot shows all test cases and results at the bottom of the screen `Test Results (3/3)`, indicating all test cases passed.
 
-# Testing The GET Clients Endpoint
+# Testing the GET Clients Endpoint
 
 The **GET** Clients endpoint allows users to retrieve all current clients stored in the database. To test the endpoint, we make a **GET** request to `/api/clients` and verify the response.
 
@@ -215,7 +215,7 @@ The following screenshot illustrates the final result inside the Postman applica
 
 The previous screenshot shows the schema test case and results at the bottom of the screen `Test Results (2/2)`, indicating all test cases passed. We can also briefly see the response data. (Note: Please see the final source code to view all test cases including the response status code test case)
 
-# Testing The GET Client Endpoint
+# Testing the GET Client Endpoint
 
 The **GET** Client endpoint allows users to retrieve data for a single client. To test the endpoint, we need to make a GET request to `/api/get-client?id={id}`, passing in the client id as a query parameter using the [Params](https://learning.postman.com/docs/sending-requests/requests/) tab in Postman. We will dynamically pass in the `lastAddedClientID` collection variable as the `id` when we make the request:
 
