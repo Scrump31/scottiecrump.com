@@ -1,0 +1,161 @@
+---
+title: 'Creating Automated API Tests with Postman: Part 4'
+date: '2021-12-15'
+tags: ['postman', 'docker', 'api', 'newman', 'github actions']
+draft: false
+summary: 'In part 4, we will generate HTML Reports and run tests via GitHub Actions...'
+---
+
+<div className="text-center">
+  <Image alt="space man" src="/static/images/postman/space-man.jpg" width={600} height={434} />
+  Photo by <a href="https://unsplash.com/@philhearing?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
+    Phil Hearing
+  </a> on <a href="https://unsplash.com/s/photos/rocket-man?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
+# Generating HTML Reports
+
+We can use [Newman](https://github.com/postmanlabs/newman), a command-line collection runner for Postman combined with [Newman HTML Reporter](https://github.com/postmanlabs/newman-reporter-html), to generate HTML reports after test runs. The easiest method to get up and running with Newman and Newman HTML Reporter is to install both tools globally:
+
+```sh
+npm install -g newman newman-reporter-htmlextra
+```
+
+We used the Node Package Manager (npm) to install the tools globally in the previous code snippet. The next step is to export our [Postman collection](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#exporting-collections) and [Postman Environment](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#exporting-environments) JSON files and save them to our repository. The final step is to add a script in our `package.json` file to run the collection and generate a report:
+
+```json
+    "test": "newman run postman_collection.json -e postman_environment.json --reporters=cli,htmlextra"
+```
+
+In the previous code snippet, we created a `"test"` script that tells Newman to run our collection with the environment data and generate a report in the terminal with `cli` option and HTML report with `htmlextra` option. When we execute the script, we should see a `newman` folder in the root of the project with an HTML file inside:
+
+<div className="text-center">
+  <Image
+    alt="newman report"
+    src="/static/images/postman/newman-report.png"
+    width={800}
+    height={600}
+  />
+</div>
+
+The previous screenshot shows a report providing data on how many times the collection ran, the number of assertions, failed tests, skipped tests, etc.
+
+# Running Postman in CI Environments
+
+When using [GitHub](https://github.com/) to store our repository, we can use [GitHub Actions](https://github.com/features/actions) to run Postman tests. First, we can create a `.github` directory with `workflows` as a sub-folder. Next, we'll create a YAML file `api-test.yml` with instructions on starting our Docker containers and running the Postman collections.
+
+Inside the file, first, we will specify a [name](https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#name) for our workflow and a GitHub event to trigger the workflow:
+
+```yaml:api-test.yml
+name: postman-api-tests
+on: push
+```
+
+In the previous code, the name of our workflow is `postman-api-tests` and will run anytime code is pushed to the repository in GitHub. Next, we will create `jobs` to run in the workflow. We will have one job, `test-client-address-api` that will execute several steps. The first step is to specify the machine to run the job on and start our Docker containers, similar to how we did in our Docker-compose file in Part 1. Since we are using Docker, we need to use Ubuntu as the machine:
+
+```yaml
+jobs:
+  test-client-address-api:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+      client-address-app:
+        image: scottiecrump/client-address-next:latest
+        ports:
+          - 3000:3000
+        env:
+          MONGO_URI: 'mongodb://mongo:27017/addressbook'
+```
+
+Then, we will specify a sequence of tasks (i.e., steps) to run. We'll use [actions/checkout@v2](https://github.com/actions/checkout) to checkout our repository so the workflow can access it. Then, we will use [actions/setup-node@v1](https://github.com/actions/setup-node) to set up our workflow with Node version 14:
+
+```yaml
+steps:
+  - uses: actions/checkout@v2
+  - name: Use Node.js
+    uses: actions/setup-node@v1
+    with:
+      node-version: '14.x'
+```
+
+Then, we will install Newman and Newman HTML Reporter, run the tests, and save the generated report as an artifact using [actions/upload-artifact@v2](https://github.com/actions/upload-artifact). Finally, we specify to keep the test report artifact (downloadable from GitHub) for five days:
+
+```yaml
+- name: Install newman dependencies
+  run: npm install -g newman newman-reporter-htmlextra
+- run: npm test
+- name: 'Upload Artifact'
+  uses: actions/upload-artifact@v2
+  with:
+    name: newman-report
+    path: newman
+    retention-days: 5
+```
+
+Here is the complete file:
+
+```yaml:api-test.yml
+name: postman-api-tests
+on: push
+
+jobs:
+  test-client-address-api:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo
+        ports:
+           - 27017:27017
+      client-address-app:
+        image: scottiecrump/client-address-next:latest
+        ports:
+           - 3000:3000
+        env:
+          MONGO_URI: "mongodb://mongo:27017/addressbook"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+    - name: Install newman dependencies
+      run: npm install -g newman newman-reporter-htmlextra
+    - run: npm test
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: newman-report
+        path: newman
+        retention-days: 5
+```
+
+We can see the results of the job run by navigating to the "[Actions](https://github.blog/changelog/2019-09-26-the-actions-tab-gets-a-new-look/)" tab in our GitHub repository:
+
+<div className="text-center">
+  <Image
+    alt="github actions tab"
+    src="/static/images/postman/github-actions-job.png"
+    width={800}
+    height={400}
+  />
+</div>
+
+We can access the artifact by clicking **"Summary"**:
+
+<div className="text-center">
+  <Image
+    alt="github actions artifacts"
+    src="/static/images/postman/actions-artifacts.png"
+    width={800}
+    height={500}
+  />
+</div>
+
+# Part 4 Review
+
+In review, we learned how to generate HTML reports using Newman and Newman HTML Report. In addition, we utilized GitHub Actions features to run our test each time we push code to our GitHub repository.
+
+## The final source code can be found [here](https://github.com/Scrump31/client-next-postman)
