@@ -1,9 +1,9 @@
 const siteMetadata = {
-  title: 'Scottie Crump | Senior Test Engineer',
+  title: 'Scottie Crump | Lead Test Engineer',
   author: 'Scottie Crump',
   headerTitle: 'Scottie Crump',
   description:
-    "Hi, I'm Scottie Crump, a Senior Test Engineer specializing in modern testing methodologies. ",
+    "Hi, I'm Scottie Crump, a Lead Test Engineer specializing in modern testing methodologies. ",
   language: 'en-us',
   siteUrl: 'https://scottiecrump.com',
   siteRepo: 'https://github.com/Scrump31/scottiecrump.com',
