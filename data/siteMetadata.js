@@ -12,7 +12,7 @@ const siteMetadata = {
   socialBanner: '/static/images/socialBanner.jpg',
   email: 'sncrump29@gmail.com',
   github: 'https://github.com/Scrump31/',
-  twitter: 'https://twitter.com/Twitter',
+  twitter: 'https://twitter.com/ScottieCrump',
   facebook: 'https://www.facebook.com/scottie.crump/',
   youtube: 'https://www.youtube.com/channel/UCNLKKASf6kkiBu5ewsv7jwQ',
   linkedin: 'https://www.linkedin.com/in/scottiecrump/',
