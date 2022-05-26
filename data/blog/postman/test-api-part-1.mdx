@@ -67,7 +67,7 @@ api:
   restart: always
 ```
 
-we use the [scottiecrump/client-address-next](https://hub.docker.com/r/scottiecrump/client-address-next) image, the API application itself. Next, we set the value for `MONGO_URL` to connect to the Mongo database for `environment`. Note the use of `mongo` in the URL. Using "mongo" connects `api` to the MongoDB service by its name. Next, we specify `ports` to `3000:3000`. The `port` specifies the port you want to expose in colon-separated values where the first port is your local machine and the second is the port specified inside the container. Then, we set `restart` to `always` to always restart the container if it crashes for some reason.
+we use the [scottiecrump/client-address-next](https://hub.docker.com/r/scottiecrump/client-address-next) image, the API application itself. Next, we set the value for `MONGO_URI` to connect to the Mongo database for `environment`. Note the use of `mongo` in the URL. Using "mongo" connects `api` to the MongoDB service by its name. Next, we specify `ports` to `3000:3000`. The `port` specifies the port you want to expose in colon-separated values where the first port is your local machine and the second is the port specified inside the container. Then, we set `restart` to `always` to always restart the container if it crashes for some reason.
 
 For the `mongo` service:
 
