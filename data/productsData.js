@@ -1,6 +1,6 @@
 const productsData = [
   {
-    title: 'My new book! Simplify Testing with React Testing Library',
+    title: 'Simplify Testing with React Testing Library',
     description: `React Testing Library (RTL) is a lightweight and easy-to-use tool
      for testing the document object model (DOM) output of components. 
      This book will show you how to use this modern, user-friendly tool 
