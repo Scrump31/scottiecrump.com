@@ -14,6 +14,7 @@ const siteMetadata = {
   github: 'https://github.com/Scrump31/',
   twitter: 'https://twitter.com/ScottieCrump',
   facebook: 'https://www.facebook.com/scottie.crump/',
+  instagram: 'https://instagram.com/scottie.crump',
   youtube: 'https://www.youtube.com/channel/UCNLKKASf6kkiBu5ewsv7jwQ',
   linkedin: 'https://www.linkedin.com/in/scottiecrump/',
   locale: 'en-US',
