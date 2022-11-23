@@ -22,6 +22,20 @@ const productsData = [
     imgSrc: '/static/images/udemy-agile-att.jpeg',
     href: '/blog/istqb-agile-technical-tester',
   },
+  {
+    title: 'Become an ISTQB® Certified Mobile Tester!',
+    description: `
+    If you're looking to become a leader in mobile application testing, 
+    then this is the course for you! Earning the ISTQB mobile certification 
+    is the perfect way to increase your skills and knowledge in the field.
+    In this course, you'll learn business and technology drivers for mobile apps,
+    how to identify and apply common test types and processes specific to mobile applications,
+    and how to automate test execution. Plus, you'll get real-life scenarios from our years of
+    experience testing mobile applications.
+    `,
+    imgSrc: '/static/images/udemy-mobile-tester.jpg',
+    href: '/blog/istqb-mobile-tester',
+  },
 ]
 
 export default productsData
