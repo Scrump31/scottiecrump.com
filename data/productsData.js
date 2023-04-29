@@ -36,6 +36,14 @@ const productsData = [
     imgSrc: '/static/images/udemy-mobile-tester.jpg',
     href: '/blog/istqb-mobile-tester',
   },
+  {
+    title: 'Boost Your Testing Career with Postman and WebdriverIO',
+    description: `
+    Are you a test engineer or an aspiring professional looking to level up your software testing skills in today's fast-paced agile environments? Look no further! In this blog post, we will introduce you to an exciting course that will empower you with the essential skills required to excel in test engineering and other roles that involve testing activities. Get ready to turbocharge your career with Postman for API testing and WebdriverIO for browser and mobile testing!
+    `,
+    imgSrc: '/static/images/postman-wdio-educative.png',
+    href: '/blog/postman-wdio-educative-course',
+  },
 ]
 
 export default productsData
