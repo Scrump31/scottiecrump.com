@@ -7,10 +7,11 @@ const PlausibleScript = () => {
     <>
       <Script
         strategy="lazyOnload"
+        id="plausible-script"
         data-domain={siteMetadata.analytics.plausibleDataDomain}
         src="https://plausible.io/js/plausible.js"
       />
-      <Script strategy="lazyOnload">
+      <Script strategy="lazyOnload" id="plausible-script">
         {`
             window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
         `}
