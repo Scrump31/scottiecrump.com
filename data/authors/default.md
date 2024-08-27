@@ -1,7 +1,7 @@
 ---
 name: Scottie Crump
 avatar: /static/images/avatar.png
-occupation: Author and Lead Test Engineer
+occupation: Author and Staff Test Engineer
 email: sncrump29@gmail.com
 twitter: https://twitter.com/ScottieCrump
 linkedin: https://www.linkedin.com/in/scottiecrump/
