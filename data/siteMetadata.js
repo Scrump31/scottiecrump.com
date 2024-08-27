@@ -1,9 +1,9 @@
 const siteMetadata = {
-  title: 'Scottie Crump | Lead Test Engineer',
+  title: 'Scottie Crump | Staff Test Engineer',
   author: 'Scottie Crump',
   headerTitle: 'Scottie Crump',
   description:
-    "Hi, I'm Scottie Crump, a Lead Test Engineer specializing in modern testing methodologies. ",
+    "Hi, I'm Scottie Crump, a Staff Test Engineer specializing in modern testing methodologies. ",
   language: 'en-us',
   siteUrl: 'https://scottiecrump.com',
   siteRepo: 'https://github.com/Scrump31/scottiecrump.com',
@@ -19,10 +19,10 @@ const siteMetadata = {
   linkedin: 'https://www.linkedin.com/in/scottiecrump/',
   locale: 'en-US',
   analytics: {
-    // supports plausible, simpleAnalytics or googleAnalytics
-    plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
+    // supports plausible, simpleAnalytics or Google Analytics
+    plausibleDataDomain: '', // for example, tailwind-nextjs-starter-blog.vercel.app
     simpleAnalytics: true, // true or false
-    googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
+    googleAnalyticsId: '', // for example UA-000000-2 or G-XXXXXXX
   },
 }
 
