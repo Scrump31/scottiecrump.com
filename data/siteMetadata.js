@@ -19,10 +19,7 @@ const siteMetadata = {
   linkedin: 'https://www.linkedin.com/in/scottiecrump/',
   locale: 'en-US',
   analytics: {
-    // supports plausible, simpleAnalytics or Google Analytics
-    plausibleDataDomain: '', // for example, tailwind-nextjs-starter-blog.vercel.app
-    simpleAnalytics: true, // true or false
-    googleAnalyticsId: '', // for example UA-000000-2 or G-XXXXXXX
+    simpleAnalytics: true,
   },
 }
 

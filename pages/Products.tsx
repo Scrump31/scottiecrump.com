@@ -1,6 +1,6 @@
 import Card from '@/components/Card'
 import { PageSEO } from '@/components/SEO'
-import productsData from '@/data/productsData'
+import productList, { Product } from '@/data/products'
 import siteMetadata from '@/data/siteMetadata'
 
 export default function Products() {
@@ -15,13 +15,13 @@ export default function Products() {
         </div>
         <div className="container py-12">
           <div className="flex flex-wrap -m-4">
-            {productsData.map((d) => (
+            {productList.map((product: Product) => (
               <Card
-                key={d.title}
-                title={d.title}
-                description={d.description}
-                imgSrc={d.imgSrc}
-                href={d.href}
+                key={product.title}
+                title={product.title}
+                description={product.description}
+                imgSrc={product.imgSrc}
+                href={product.href}
               />
             ))}
           </div>
