@@ -6,8 +6,13 @@ import Youtube from './youtube.svg'
 import Linkedin from './linkedin.svg'
 import Twitter from './twitter.svg'
 
-// Icons taken from: https://simpleicons.org/
+type SocialIconProps = {
+  kind: keyof typeof components
+  href: string | null
+  size?: number
+}
 
+// Free SVG Icons from: https://simpleicons.org/
 const components = {
   mail: Mail,
   github: Github,
@@ -18,7 +23,7 @@ const components = {
   twitter: Twitter,
 }
 
-const SocialIcon = ({ kind, href, size = 8 }) => {
+const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
   if (!href) return null
 
   const SocialSvg = components[kind]
@@ -29,6 +34,7 @@ const SocialIcon = ({ kind, href, size = 8 }) => {
       target="_blank"
       rel="noopener noreferrer"
       href={href}
+      aria-label={`Visit ${kind} profile`}
     >
       <span className="sr-only">{kind}</span>
       <SocialSvg
