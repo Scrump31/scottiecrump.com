@@ -11,7 +11,15 @@ export async function getStaticProps() {
   return { props: { tags } }
 }
 
-export default function Tags({ tags }) {
+/**
+ * This function renders a list of blog tags and their respective counts.
+ * It takes a single parameter, `tags`, which is an object mapping tag names to their counts.
+ * The function sorts the tags by count in descending order and renders them in a list format.
+ *
+ * @param tags - An object mapping tag names to their counts.
+ * @returns A React component displaying the list of tags and their counts.
+ */
+export default function Tags({ tags }: { tags: Record<string, number> }) {
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])
   return (
     <>
