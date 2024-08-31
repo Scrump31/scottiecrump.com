@@ -3,12 +3,19 @@ import { getFileBySlug } from '@/lib/mdx'
 
 const DEFAULT_LAYOUT = 'AuthorLayout'
 
+type AuthorDetails = {
+  mdxSource: string
+  frontMatter: {
+    layout?: string
+  }
+}
+
 export async function getStaticProps() {
   const authorDetails = await getFileBySlug('authors', ['default'])
   return { props: { authorDetails } }
 }
 
-export default function About({ authorDetails }) {
+export default function About({ authorDetails }: { authorDetails: AuthorDetails }) {
   const { mdxSource, frontMatter } = authorDetails
 
   return (
