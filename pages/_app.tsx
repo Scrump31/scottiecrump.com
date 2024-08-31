@@ -11,7 +11,7 @@ import LayoutWrapper from '@/components/LayoutWrapper'
 export default function App({ Component, pageProps }: AppProps) {
   return (
     // @ts-ignore
-    <ThemeProvider>
+    <ThemeProvider attribute="class">
       <Head>
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
