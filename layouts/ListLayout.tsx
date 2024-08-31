@@ -1,13 +1,27 @@
+import { ChangeEvent } from 'react'
+
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
 import { useState } from 'react'
 import Pagination from '@/components/Pagination'
 import formatDate from '@/lib/utils/formatDate'
+import { FrontMatterProps } from '@/pages/blog'
 
-export default function ListLayout({ posts, title, initialDisplayPosts = [], pagination }) {
-  const [searchValue, setSearchValue] = useState('')
-  const filteredBlogPosts = posts.filter((frontMatter) => {
+type ListLayoutProps = {
+  posts: Array<FrontMatterProps>
+  title: string
+  initialDisplayPosts?: Array<FrontMatterProps>
+  pagination?: { currentPage: number; totalPages: number }
+}
+
+export default function ListLayout({
+  posts,
+  title,
+  initialDisplayPosts = [],
+  pagination,
+}: ListLayoutProps) {
+  const [searchValue, setSearchValue] = useState<string>('')
+  const filteredBlogPosts = posts.filter((frontMatter: FrontMatterProps) => {
     const searchContent = frontMatter.title + frontMatter.summary + frontMatter.tags.join(' ')
     return searchContent.toLowerCase().includes(searchValue.toLowerCase())
   })
@@ -27,7 +41,9 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
             <input
               aria-label="Search articles"
               type="text"
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setSearchValue(event.target.value)
+              }
               placeholder="Search articles"
               className="block w-full px-4 py-2 text-gray-900 bg-white border border-gray-300 rounded-md dark:border-gray-900 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-800 dark:text-gray-100"
             />
@@ -49,7 +65,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
         </div>
         <ul>
           {!filteredBlogPosts.length && 'No posts found.'}
-          {displayPosts.map((frontMatter) => {
+          {displayPosts.map((frontMatter: FrontMatterProps) => {
             const { slug, date, title, summary, tags } = frontMatter
             return (
               <li key={slug} className="py-4">
