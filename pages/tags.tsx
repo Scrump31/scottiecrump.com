@@ -20,7 +20,7 @@ export async function getStaticProps() {
  * @param tags - An object mapping tag names to their counts.
  * @returns A React component displaying the list of tags and their counts.
  */
-export default function Tags({ tags }: TagProps) {
+export default function Tags({ tags }: Readonly<TagProps>) {
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])
   return (
     <>

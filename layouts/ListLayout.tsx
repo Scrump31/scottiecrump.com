@@ -12,7 +12,7 @@ export default function ListLayout({
   title,
   initialDisplayPosts = [],
   pagination,
-}: BlogLayoutProps) {
+}: Readonly<BlogLayoutProps>) {
   const [searchValue, setSearchValue] = useState<string>('')
   const filteredBlogPosts = posts.filter((frontMatter: FrontMatterProps) => {
     const searchContent =
