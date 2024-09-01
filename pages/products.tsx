@@ -1,7 +1,8 @@
 import Card from '@/components/Card'
 import { PageSEO } from '@/components/SEO'
-import productList, { Product } from '@/data/productList'
+import productList from '@/data/productList'
 import siteMetadata from '@/data/siteMetadata'
+import { Product } from '@/types/product'
 
 export default function Products() {
   return (

@@ -5,7 +5,6 @@ import path from 'path'
 import readingTime from 'reading-time'
 import { visit } from 'unist-util-visit'
 import getAllFilesRecursively from './utils/files'
-// Remark packages
 import remarkSlug from 'remark-slug'
 import remarkAutolinkHeadings from 'remark-autolink-headings'
 import remarkGfm from 'remark-gfm'
@@ -14,9 +13,9 @@ import remarkMath from 'remark-math'
 import remarkCodeTitles from './remark-code-title'
 import remarkTocHeadings from './remark-toc-headings'
 import remarkImgToJsx from './remark-img-to-jsx'
-// Rehype packages
 import rehypeKatex from 'rehype-katex'
 import rehypePrismPlus from 'rehype-prism-plus'
+import { FrontMatterProps } from '@/types/blog'
 
 const root = process.cwd()
 
@@ -155,19 +154,12 @@ export async function getFileBySlug(type: string, slug: string | string[]) {
   }
 }
 
-type FrontMatter = {
-  draft?: boolean
-  slug: string
-  date: string | null
-  [key: string]: any
-}
-
-export async function getAllFilesFrontMatter(folder: string): Promise<FrontMatter[]> {
+export async function getAllFilesFrontMatter(folder: string): Promise<FrontMatterProps[]> {
   const prefixPaths = path.join(root, 'data', folder)
 
   const files = getAllFilesRecursively(prefixPaths)
 
-  const allFrontMatter: FrontMatter[] = []
+  const allFrontMatter: FrontMatterProps[] = []
 
   files.forEach((file: string) => {
     // Replace is necessary to work on Windows
@@ -183,14 +175,14 @@ export async function getAllFilesFrontMatter(folder: string): Promise<FrontMatte
         ...frontmatter,
         slug: formatSlug(fileName),
         date: frontmatter.date ? new Date(frontmatter.date).toISOString() : null,
-      })
+      } as FrontMatterProps)
     }
   })
 
   return allFrontMatter.sort((a, b) => {
-    if (a.date === null && b.date === null) return 0
-    if (a.date === null) return 1
-    if (b.date === null) return -1
+    if (!a.date && !b.date) return 0
+    if (!a.date) return 1
+    if (!b.date) return -1
     return dateSortDesc(new Date(a.date), new Date(b.date))
   })
 }

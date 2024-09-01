@@ -5,24 +5,18 @@ import Tag from '@/components/Tag'
 import { useState } from 'react'
 import Pagination from '@/components/Pagination'
 import formatDate from '@/lib/utils/formatDate'
-import { FrontMatterProps } from '@/pages/blog'
-
-type ListLayoutProps = {
-  posts: Array<FrontMatterProps>
-  title: string
-  initialDisplayPosts?: Array<FrontMatterProps>
-  pagination?: { currentPage: number; totalPages: number }
-}
+import { FrontMatterProps, BlogLayoutProps } from '@/types/blog'
 
 export default function ListLayout({
   posts,
   title,
   initialDisplayPosts = [],
   pagination,
-}: ListLayoutProps) {
+}: BlogLayoutProps) {
   const [searchValue, setSearchValue] = useState<string>('')
   const filteredBlogPosts = posts.filter((frontMatter: FrontMatterProps) => {
-    const searchContent = frontMatter.title + frontMatter.summary + frontMatter.tags.join(' ')
+    const searchContent =
+      frontMatter.title + frontMatter.summary + (frontMatter.tags?.join(' ') ?? '')
     return searchContent.toLowerCase().includes(searchValue.toLowerCase())
   })
 
@@ -84,9 +78,7 @@ export default function ListLayout({
                         </Link>
                       </h3>
                       <div className="flex flex-wrap">
-                        {tags.map((tag) => (
-                          <Tag key={tag} text={tag} />
-                        ))}
+                        {tags && tags.map((tag) => <Tag key={tag} text={tag} />)}
                       </div>
                     </div>
                     <div className="prose text-gray-500 max-w-none dark:text-gray-400">

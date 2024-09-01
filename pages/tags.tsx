@@ -4,6 +4,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
+import { TagProps } from '@/types/tag'
 
 export async function getStaticProps() {
   const tags = await getAllTags('blog')
@@ -19,7 +20,7 @@ export async function getStaticProps() {
  * @param tags - An object mapping tag names to their counts.
  * @returns A React component displaying the list of tags and their counts.
  */
-export default function Tags({ tags }: { tags: Record<string, number> }) {
+export default function Tags({ tags }: TagProps) {
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])
   return (
     <>

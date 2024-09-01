@@ -3,25 +3,9 @@ import siteMetadata from '@/data/siteMetadata'
 import ListLayout from '@/layouts/ListLayout'
 import { PageSEO } from '@/components/SEO'
 import { ReactElement } from 'react'
+import { BlogLayoutProps } from '@/types/blog'
 
 export const POSTS_PER_PAGE = 5
-
-export type FrontMatterProps = {
-  slug: string
-  date: string
-  title: string
-  summary: string
-  tags: string[]
-}
-
-type BlogProps = {
-  posts: Array<FrontMatterProps>
-  initialDisplayPosts: Array<FrontMatterProps>
-  pagination: {
-    currentPage: number
-    totalPages: number
-  }
-}
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
@@ -40,17 +24,17 @@ export async function getStaticProps() {
  * This component displays a list of blog posts with pagination and SEO metadata.
  *
  * @param {Object} props - The component props
- * @param {FrontMatter[]} props.posts - An array of all blog posts
- * @param {FrontMatter[]} props.initialDisplayPosts - An array of posts to display on the initial page
+ * @param {BlogLayoutProps} props.posts - An array of all blog posts
+ * @param {BlogLayoutProps} props.initialDisplayPosts - An array of posts to display on the initial page
  * @param {Object} props.pagination - Pagination information
  *
- * @returns {ReactElement<BlogProps>} A React element representing the blog page
+ * @returns {ReactElement<BlogLayoutProps>} A React element representing the blog page
  */
 export default function Blog({
   posts,
   initialDisplayPosts,
   pagination,
-}: BlogProps): ReactElement<BlogProps> {
+}: BlogLayoutProps): ReactElement<BlogLayoutProps> {
   return (
     <>
       <PageSEO title={`Blog - ${siteMetadata.author}`} description={siteMetadata.description} />

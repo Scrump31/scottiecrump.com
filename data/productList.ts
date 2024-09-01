@@ -1,11 +1,6 @@
-export type Product = {
-  title: string
-  description: string
-  imgSrc: string
-  href: string
-}
+import { Product } from '@/types/product'
 
-const productList = [
+const productList: Product[] = [
   {
     title: 'Simplify Testing with React Testing Library',
     description: `React Testing Library (RTL) is a lightweight and easy-to-use tool

@@ -4,6 +4,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
+import { BlogLayoutProps, FrontMatterProps } from '@/types/blog'
 
 const MAX_DISPLAY = 5
 
@@ -13,7 +14,7 @@ export async function getStaticProps() {
   return { props: { posts } }
 }
 
-export default function Home({ posts }) {
+export default function Home({ posts }: BlogLayoutProps) {
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
@@ -28,7 +29,7 @@ export default function Home({ posts }) {
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
-          {posts.slice(0, MAX_DISPLAY).map((frontMatter) => {
+          {posts.slice(0, MAX_DISPLAY).map((frontMatter: FrontMatterProps) => {
             const { slug, date, title, summary, tags } = frontMatter
             return (
               <li key={slug} className="py-12">
@@ -52,9 +53,7 @@ export default function Home({ posts }) {
                             </Link>
                           </h2>
                           <div className="flex flex-wrap">
-                            {tags.map((tag) => (
-                              <Tag key={tag} text={tag} />
-                            ))}
+                            {tags && tags.map((tag) => <Tag key={tag} text={tag} />)}
                           </div>
                         </div>
                         <div className="prose text-gray-500 max-w-none dark:text-gray-400">
