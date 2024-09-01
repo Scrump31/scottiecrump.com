@@ -1,7 +1,8 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
-const colors = require('tailwindcss/colors')
+import type { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
+import colors from 'tailwindcss/colors'
 
-module.exports = {
+const config: Config = {
   content: [
     './pages/**/*.{js,jsx,ts,tsx}',
     './components/**/*.{js,jsx,ts,tsx}',
@@ -35,7 +36,7 @@ module.exports = {
           white: '#fff',
         },
       },
-      typography: (theme) => ({
+      typography: (theme: (arg: string) => string) => ({
         DEFAULT: {
           css: {
             color: theme('colors.gray.700'),
@@ -167,3 +168,5 @@ module.exports = {
   },
   plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 }
+
+export default config
