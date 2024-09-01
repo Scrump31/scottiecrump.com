@@ -4,7 +4,7 @@ export type FrontMatterProps = {
   title: string
   summary: string
   tags?: string[]
-  [key: string]: any
+  layout?: string
   draft?: boolean
 }
 
@@ -16,4 +16,29 @@ export type BlogLayoutProps = {
     currentPage: number
     totalPages: number
   }
+}
+
+type IReadTimeResults = {
+  text: string
+  time: number
+  words: number
+  minutes: number
+}
+
+export type BlogProps = {
+  post: {
+    mdxSource: string
+    toc: any
+    frontMatter: {
+      date: string | null
+      readingTime: IReadTimeResults
+      slug: string | string[] | null
+      fileName: string
+      draft?: boolean
+      layout?: string
+    }
+  }
+  authorDetails: any[]
+  prev: FrontMatterProps | null
+  next: FrontMatterProps | null
 }

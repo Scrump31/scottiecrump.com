@@ -3,6 +3,7 @@ import PageTitle from '@/components/PageTitle'
 import generateRss from '@/lib/generate-rss'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
+import { BlogProps, FrontMatterProps } from '@/types/blog'
 
 const DEFAULT_LAYOUT = 'PostLayout'
 
@@ -18,14 +19,16 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }) {
-  const allPosts = await getAllFilesFrontMatter('blog')
-  const postIndex = allPosts.findIndex((post) => formatSlug(post.slug) === params.slug.join('/'))
-  const prev = allPosts[postIndex + 1] || null
-  const next = allPosts[postIndex - 1] || null
+export async function getStaticProps({ params }: { params: { slug: string[] } }) {
+  const allPosts: FrontMatterProps[] = await getAllFilesFrontMatter('blog')
+  const postIndex: number = allPosts.findIndex(
+    (post: FrontMatterProps) => formatSlug(post.slug) === params.slug.join('/')
+  )
+  const prev: FrontMatterProps = allPosts[postIndex + 1] || null
+  const next: FrontMatterProps = allPosts[postIndex - 1] || null
   const post = await getFileBySlug('blog', params.slug.join('/'))
-  const authorList = post.frontMatter.authors || ['default']
-  const authorPromise = authorList.map(async (author) => {
+  const authorList = (post.frontMatter as any).authors || ['default']
+  const authorPromise = authorList.map(async (author: string) => {
     const authorResults = await getFileBySlug('authors', [author])
     return authorResults.frontMatter
   })
@@ -38,7 +41,7 @@ export async function getStaticProps({ params }) {
   return { props: { post, authorDetails, prev, next } }
 }
 
-export default function Blog({ post, authorDetails, prev, next }) {
+export default function Blog({ post, authorDetails, prev, next }: BlogProps) {
   const { mdxSource, toc, frontMatter } = post
 
   return (
