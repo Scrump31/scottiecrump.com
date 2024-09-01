@@ -72,6 +72,8 @@ module.exports = {
               paddingBottom: '2px',
               borderRadius: '0.25rem',
             },
+            'code::before': { content: '""' },
+            'code::after': { content: '""' },
             'code:before': {
               content: 'none',
             },
@@ -127,6 +129,9 @@ module.exports = {
             },
             'h4,h5,h6': {
               color: theme('colors.gray.100'),
+            },
+            pre: {
+              backgroundColor: theme('colors.gray.800'),
             },
             code: {
               backgroundColor: theme('colors.gray.800'),

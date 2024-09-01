@@ -92,8 +92,8 @@ export async function getFileBySlug(type: string, slug: string | string[]) {
       source,
       // mdx imports can be automatically source from the components directory
       cwd: path.join(process.cwd(), 'components'),
-      // @ts-ignore
-      xdmOptions(options: any) {
+      mdxOptions(options) {
+        // https://github.com/kentcdodds/mdx-bundler?tab=readme-ov-file#mdxoptions
         // this is the recommended way to add custom remark/rehype plugins:
         // The syntax might look weird, but it protects you in case we add/remove
         // plugins in the future.
