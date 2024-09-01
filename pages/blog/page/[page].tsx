@@ -1,8 +1,10 @@
+import { ReactElement } from 'react'
 import { PageSEO } from '@/components/SEO'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import ListLayout from '@/layouts/ListLayout'
 import { POSTS_PER_PAGE } from '../../blog'
+import { BlogLayoutProps } from '@/types/blog'
 
 export async function getStaticPaths() {
   const totalPosts = await getAllFilesFrontMatter('blog')
@@ -17,7 +19,7 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps(context: { params: { page: string } }) {
   const {
     params: { page },
   } = context
@@ -41,7 +43,20 @@ export async function getStaticProps(context) {
   }
 }
 
-export default function PostPage({ posts, initialDisplayPosts, pagination }) {
+/**
+ * Renders the main page for displaying blog posts with pagination.
+ *
+ * @param props - The props object containing blog layout properties.
+ * @param props.posts - An array of all blog posts.
+ * @param props.initialDisplayPosts - An array of blog posts to be initially displayed on the page.
+ * @param props.pagination - An object containing pagination information.
+ * @returns A React element representing the blog post page with SEO and list layout.
+ */
+export default function PostPage({
+  posts,
+  initialDisplayPosts,
+  pagination,
+}: BlogLayoutProps): ReactElement<BlogLayoutProps> {
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
