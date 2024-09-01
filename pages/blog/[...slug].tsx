@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { ReactElement } from 'react'
 import PageTitle from '@/components/PageTitle'
 import generateRss from '@/lib/generate-rss'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
@@ -41,7 +42,25 @@ export async function getStaticProps({ params }: { params: { slug: string[] } })
   return { props: { post, authorDetails, prev, next } }
 }
 
-export default function Blog({ post, authorDetails, prev, next }: BlogProps) {
+/**
+ * Renders a blog post or a placeholder for drafts.
+ *
+ * This component displays either the full blog post content using MDXLayoutRenderer
+ * or an "Under Construction" message for draft posts.
+ *
+ * @param {object} props - The component props.
+ * @param {object} props.post - The blog post object containing mdxSource, toc, and frontMatter.
+ * @param {Array<object>} props.authorDetails - An array of author information.
+ * @param {object|null} props.prev - The previous blog post object or null if there's no previous post.
+ * @param {object|null} props.next - The next blog post object or null if there's no next post.
+ * @returns {ReactElement<BlogProps>} A React element representing the rendered blog post or draft placeholder.
+ */
+export default function Blog({
+  post,
+  authorDetails,
+  prev,
+  next,
+}: BlogProps): ReactElement<BlogProps> {
   const { mdxSource, toc, frontMatter } = post
 
   return (

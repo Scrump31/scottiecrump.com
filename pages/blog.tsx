@@ -28,7 +28,7 @@ export async function getStaticProps() {
  * @param {BlogLayoutProps} props.initialDisplayPosts - An array of posts to display on the initial page
  * @param {Object} props.pagination - Pagination information
  *
- * @returns {ReactElement<BlogLayoutProps>} A React element representing the blog page
+ * @returns {ReactElement<BlogLayoutProps>} A React element representing the paginated blog page
  */
 export default function Blog({
   posts,
