@@ -1,27 +1,50 @@
 import Image from '@/components/Image'
 import Link from '@/components/Link'
+import { ReactElement } from 'react'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import { BlogSEO } from '@/components/SEO'
 import Tag from '@/components/Tag'
+import { FrontMatterProps } from '@/types/blog'
 import siteMetadata from '@/data/siteMetadata'
+import { AuthorDetails } from '@/types/author'
 
-const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
-const discussUrl = (slug) =>
-  `https://mobile.twitter.com/search?q=${encodeURIComponent(
-    `${siteMetadata.siteUrl}/blog/${slug}`
-  )}`
+interface AuthorPost extends AuthorDetails {
+  name: string
+  avatar: string
+  linkedin: string
+}
 
-const postDateTemplate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+type PostLayoutProps = {
+  frontMatter: FrontMatterProps
+  authorDetails: AuthorPost[]
+  next?: FrontMatterProps
+  prev?: FrontMatterProps
+  children: ReactElement
+}
 
-export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
-  const { slug, fileName, date, title, tags } = frontMatter
+const postDateTemplate: Intl.DateTimeFormatOptions = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}
+
+export default function PostLayout({
+  frontMatter,
+  authorDetails,
+  next,
+  prev,
+  children,
+}: PostLayoutProps) {
+  const { slug, date, title, tags } = frontMatter
 
   return (
     <SectionContainer>
       <BlogSEO
         url={`${siteMetadata.siteUrl}/blog/${slug}`}
         authorDetails={authorDetails}
+        lastmod={frontMatter.lastmod || frontMatter.date}
         {...frontMatter}
       />
       <article>
@@ -33,7 +56,10 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                   <dt className="sr-only">Published on</dt>
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                     <time dateTime={date}>
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
+                      {new Date(date || '').toLocaleDateString(
+                        siteMetadata.locale,
+                        postDateTemplate
+                      )}
                     </time>
                   </dd>
                 </div>
@@ -67,12 +93,15 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                         <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
                         <dt className="sr-only">Twitter</dt>
                         <dd>
-                          {author.twitter && (
+                          {author.linkedin && (
                             <Link
-                              href={author.twitter}
+                              href={author.linkedin}
                               className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                             >
-                              {author.twitter.replace('https://twitter.com/', '@')}
+                              {author.linkedin.replace(
+                                'https://www.linkedin.com/in/',
+                                '@linkedin/'
+                              )}
                             </Link>
                           )}
                         </dd>

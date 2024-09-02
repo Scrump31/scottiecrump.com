@@ -6,6 +6,7 @@ export type FrontMatterProps = {
   tags?: string[]
   layout?: string
   draft?: boolean
+  lastmod?: string
 }
 
 export type BlogLayoutProps = {
