@@ -3,7 +3,6 @@ import { getMDXComponent } from 'mdx-bundler/client'
 import { MDXComponents as MDXComponentsType } from 'mdx/types'
 import Image from './Image'
 import CustomLink from './Link'
-import TOCInline from './TOCInline'
 import Pre from './Pre'
 
 type LayoutProps = {
@@ -20,7 +19,6 @@ type MDXLayoutRendererProps = {
 
 export const MDXComponents = {
   Image,
-  TOCInline,
   a: CustomLink,
   pre: Pre,
   wrapper: ({ components, layout, ...rest }: LayoutProps) => {
