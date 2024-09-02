@@ -7,6 +7,7 @@ export type FrontMatterProps = {
   layout?: string
   draft?: boolean
   lastmod?: string
+  readingTime: { text: string; words: string }
 }
 
 export type BlogLayoutProps = {

@@ -66,6 +66,9 @@ export default function PostLayout({
               </dl>
               <div>
                 <PageTitle>{title}</PageTitle>
+                <div className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                  {`${frontMatter.readingTime.text} | ${frontMatter.readingTime.words} words`}
+                </div>
               </div>
             </div>
           </header>
