@@ -10,8 +10,6 @@ import remarkAutolinkHeadings from 'remark-autolink-headings'
 import remarkGfm from 'remark-gfm'
 import remarkFootnotes from 'remark-footnotes'
 import remarkMath from 'remark-math'
-import remarkCodeTitles from './remark-code-title'
-import remarkImgToJsx from './remark-img-to-jsx'
 import rehypeKatex from 'rehype-katex'
 import rehypePrismPlus from 'rehype-prism-plus'
 import { FrontMatterProps } from '@/types/blog'
@@ -101,10 +99,8 @@ export async function getFileBySlug(type: string, slug: string | string[]) {
           remarkSlug,
           remarkAutolinkHeadings,
           remarkGfm,
-          remarkCodeTitles,
           [remarkFootnotes, { inlineNotes: true }],
           remarkMath,
-          remarkImgToJsx,
         ]
         options.rehypePlugins = [
           ...(options.rehypePlugins ?? []),
