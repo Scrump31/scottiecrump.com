@@ -11,7 +11,6 @@ import remarkGfm from 'remark-gfm'
 import remarkFootnotes from 'remark-footnotes'
 import remarkMath from 'remark-math'
 import remarkCodeTitles from './remark-code-title'
-import remarkTocHeadings from './remark-toc-headings'
 import remarkImgToJsx from './remark-img-to-jsx'
 import rehypeKatex from 'rehype-katex'
 import rehypePrismPlus from 'rehype-prism-plus'
@@ -101,7 +100,6 @@ export async function getFileBySlug(type: string, slug: string | string[]) {
           ...(options.remarkPlugins ?? []),
           remarkSlug,
           remarkAutolinkHeadings,
-          [remarkTocHeadings, { exportRef: toc }],
           remarkGfm,
           remarkCodeTitles,
           [remarkFootnotes, { inlineNotes: true }],
