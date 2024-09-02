@@ -1,19 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, ReactElement } from 'react'
 import { useTheme } from 'next-themes'
 
-const ThemeSwitch = () => {
-  const [mounted, setMounted] = useState(false)
+/**
+ * A React component that toggles the theme between light and dark modes.
+ * Uses the `next-themes` library to manage the theme state.
+ *
+ * @returns {ReactElement} - The ThemeSwitch component.
+ */
+const ThemeSwitch = (): ReactElement => {
+  const [mounted, setMounted] = useState<boolean>(false)
   const { theme, setTheme, resolvedTheme } = useTheme()
 
-  // When mounted on client, now we can show the UI
+  // When mounted on the client, then show the UI
   useEffect(() => setMounted(true), [])
+
+  const handleThemeToggle = () => {
+    if (theme === 'dark' || resolvedTheme === 'dark') {
+      setTheme('light')
+    } else {
+      setTheme('dark')
+    }
+  }
 
   return (
     <button
       aria-label="Toggle Dark Mode"
       type="button"
       className="w-8 h-8 p-1 ml-1 mr-1 rounded sm:ml-4"
-      onClick={() => setTheme(theme === 'dark' || resolvedTheme === 'dark' ? 'light' : 'dark')}
+      onClick={handleThemeToggle}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
