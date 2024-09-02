@@ -1,23 +1,37 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, ReactElement, MouseEventHandler } from 'react'
 
-const Pre = (props) => {
-  const textInput = useRef(null)
-  const [hovered, setHovered] = useState(false)
-  const [copied, setCopied] = useState(false)
+type PreProps = {
+  children: ReactElement
+}
 
-  const onEnter = () => {
+/**
+ * A React component that renders a preformatted code snippet with a copy button.
+ *
+ * @param props - The props for the Pre component.
+ * @param props.children - The React element to be rendered within the preformatted text block.
+ *
+ * @returns A React element representing the Pre component.
+ */
+const Pre = (props: PreProps): ReactElement<PreProps> => {
+  const textInput = useRef<HTMLInputElement | null>(null)
+  const [hovered, setHovered] = useState<boolean>(false)
+  const [copied, setCopied] = useState<boolean>(false)
+
+  const onEnter: MouseEventHandler<HTMLDivElement> = () => {
     setHovered(true)
   }
-  const onExit = () => {
+  const onExit: MouseEventHandler<HTMLDivElement> = () => {
     setHovered(false)
     setCopied(false)
   }
-  const onCopy = () => {
-    setCopied(true)
-    navigator.clipboard.writeText(textInput.current.innerText)
-    setTimeout(() => {
-      setCopied(false)
-    }, 2000)
+  const onCopy: MouseEventHandler<HTMLButtonElement> = async () => {
+    if (textInput.current) {
+      setCopied(true)
+      await navigator.clipboard.writeText(textInput.current.innerText)
+      setTimeout(() => {
+        setCopied(false)
+      }, 2000)
+    }
   }
 
   return (
