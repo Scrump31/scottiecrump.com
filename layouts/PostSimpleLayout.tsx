@@ -16,7 +16,7 @@ type PostLayoutProps = {
   prev: FrontMatterProps | null
 }
 
-export default function PostLayout({
+export default function PostSimpleLayout({
   frontMatter,
   authorDetails,
   next,
