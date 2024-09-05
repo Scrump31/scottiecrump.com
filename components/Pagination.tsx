@@ -1,8 +1,13 @@
 import Link from '@/components/Link'
 
-export default function Pagination({ totalPages, currentPage }) {
-  const prevPage = parseInt(currentPage) - 1 > 0
-  const nextPage = parseInt(currentPage) + 1 <= parseInt(totalPages)
+type PaginationProps = {
+  totalPages: number
+  currentPage: number
+}
+
+export default function Pagination({ totalPages, currentPage }: PaginationProps) {
+  const prevPage = parseInt(currentPage.toString()) - 1 > 0
+  const nextPage = parseInt(currentPage.toString()) + 1 <= parseInt(totalPages.toString())
 
   return (
     <div className="pt-6 pb-8 space-y-2 md:space-y-5">

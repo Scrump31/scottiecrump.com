@@ -4,13 +4,36 @@ import SectionContainer from '@/components/SectionContainer'
 import { BlogSEO } from '@/components/SEO'
 import siteMetadata from '@/data/siteMetadata'
 import formatDate from '@/lib/utils/formatDate'
+import { FrontMatterProps } from '@/types/blog'
+import { ReactElement } from 'react'
+import { AuthorPost } from '@/types/post-layout'
 
-export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
+type PostLayoutProps = {
+  children: ReactElement
+  frontMatter: FrontMatterProps
+  authorDetails: AuthorPost[]
+  next: FrontMatterProps | null
+  prev: FrontMatterProps | null
+}
+
+export default function PostSimpleLayout({
+  frontMatter,
+  authorDetails,
+  next,
+  prev,
+  children,
+}: PostLayoutProps) {
   const { date, title } = frontMatter
 
   return (
     <SectionContainer>
-      <BlogSEO url={`${siteMetadata.siteUrl}/blog/${frontMatter.slug}`} {...frontMatter} />
+      <BlogSEO
+        url={`${siteMetadata.siteUrl}/blog/${frontMatter.slug}`}
+        authorDetails={authorDetails}
+        lastmod={frontMatter.lastmod || frontMatter.date}
+        {...frontMatter}
+        date={frontMatter.date || ''}
+      />
       <article>
         <div>
           <header>
