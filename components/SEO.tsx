@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import siteMetadata from '@/data/siteMetadata'
+import { BlogSEOProps, CommonSEOProps, SEOProps } from '@/types/seo'
+import { AuthorPost } from '@/types/post-layout'
 
-const CommonSEO = ({ title, description, ogType, ogImage, twImage }) => {
+const CommonSEO = ({ title, description, ogType, ogImage, twImage }: CommonSEOProps) => {
   const router = useRouter()
   return (
     <Head>
@@ -14,8 +16,8 @@ const CommonSEO = ({ title, description, ogType, ogImage, twImage }) => {
       <meta property="og:site_name" content={siteMetadata.title} />
       <meta property="og:description" content={description} />
       <meta property="og:title" content={title} />
-      {ogImage.constructor.name === 'Array' ? (
-        ogImage.map(({ url }) => <meta property="og:image" content={url} key={url} />)
+      {Array.isArray(ogImage) ? (
+        ogImage.map((url) => <meta property="og:image" content={url} key={url} />)
       ) : (
         <meta property="og:image" content={ogImage} key={ogImage} />
       )}
@@ -28,7 +30,7 @@ const CommonSEO = ({ title, description, ogType, ogImage, twImage }) => {
   )
 }
 
-export const PageSEO = ({ title, description }) => {
+export const PageSEO = ({ title, description }: SEOProps) => {
   const ogImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
   const twImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
   return (
@@ -42,7 +44,7 @@ export const PageSEO = ({ title, description }) => {
   )
 }
 
-export const TagSEO = ({ title, description }) => {
+export const TagSEO = ({ title, description }: SEOProps) => {
   const ogImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
   const twImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner
   const router = useRouter()
@@ -67,10 +69,18 @@ export const TagSEO = ({ title, description }) => {
   )
 }
 
-export const BlogSEO = ({ authorDetails, title, summary, date, lastmod, url, images = [] }) => {
+export const BlogSEO = ({
+  authorDetails,
+  title,
+  summary,
+  date,
+  lastmod,
+  url,
+  images = [],
+}: BlogSEOProps) => {
   const router = useRouter()
-  const publishedAt = new Date(date).toISOString()
-  const modifiedAt = new Date(lastmod || date).toISOString()
+  const publishedAt = date ? new Date(date).toISOString() : undefined
+  const modifiedAt = lastmod ? new Date(lastmod).toISOString() : publishedAt
   let imagesArr =
     images.length === 0
       ? [siteMetadata.socialBanner]
@@ -87,7 +97,7 @@ export const BlogSEO = ({ authorDetails, title, summary, date, lastmod, url, ima
 
   let authorList
   if (authorDetails) {
-    authorList = authorDetails.map((author) => {
+    authorList = authorDetails.map((author: AuthorPost) => {
       return {
         '@type': 'Person',
         name: author.name,
@@ -131,7 +141,7 @@ export const BlogSEO = ({ authorDetails, title, summary, date, lastmod, url, ima
         title={title}
         description={summary}
         ogType="article"
-        ogImage={featuredImages}
+        ogImage={imagesArr}
         twImage={twImageUrl}
       />
       <Head>

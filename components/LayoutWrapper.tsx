@@ -6,8 +6,16 @@ import Link from './Link'
 import MobileNav from './MobileNav'
 import SectionContainer from './SectionContainer'
 import ThemeSwitch from './ThemeSwitch'
+import { ReactElement } from 'react'
 
-const LayoutWrapper = ({ children }) => {
+/**
+ * A React functional component that serves as the layout wrapper for the entire app.
+ * It includes the header, main content area, and footer.
+ *
+ * @param children - The React elements to be rendered within the main content area.
+ * @returns A React functional component that represents the layout wrapper.
+ */
+const LayoutWrapper = ({ children }: { children: ReactElement }): ReactElement => {
   return (
     <SectionContainer>
       <div className="flex flex-col justify-between h-screen">
@@ -18,13 +26,11 @@ const LayoutWrapper = ({ children }) => {
                 <div className="mr-3">
                   <Logo />
                 </div>
-                {typeof siteMetadata.headerTitle === 'string' ? (
+                {
                   <div className="hidden h-6 text-2xl font-semibold sm:block">
                     {siteMetadata.headerTitle}
                   </div>
-                ) : (
-                  siteMetadata.headerTitle
-                )}
+                }
               </div>
             </Link>
           </div>

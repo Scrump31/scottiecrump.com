@@ -3,10 +3,10 @@ import Link from './Link'
 import headerNavLinks from '@/data/headerNavLinks'
 
 const MobileNav = () => {
-  const [navShow, setNavShow] = useState(false)
+  const [navShow, setNavShow] = useState<boolean>(false)
 
   const onToggleNav = () => {
-    setNavShow((status) => {
+    setNavShow((status: boolean) => {
       if (status) {
         document.body.style.overflow = 'auto'
       } else {
@@ -58,7 +58,7 @@ const MobileNav = () => {
           onClick={onToggleNav}
         ></button>
         <nav className="fixed h-full mt-8">
-          {headerNavLinks.map((link) => (
+          {headerNavLinks.map((link: { title: string; href: string }) => (
             <div key={link.title} className="px-12 py-4">
               <Link
                 href={link.href}
