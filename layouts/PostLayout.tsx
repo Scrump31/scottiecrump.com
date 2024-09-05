@@ -1,27 +1,11 @@
 import Image from '@/components/Image'
 import Link from '@/components/Link'
-import { ReactElement } from 'react'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import { BlogSEO } from '@/components/SEO'
 import Tag from '@/components/Tag'
-import { FrontMatterProps } from '@/types/blog'
 import siteMetadata from '@/data/siteMetadata'
-import { AuthorDetails } from '@/types/author'
-
-interface AuthorPost extends AuthorDetails {
-  name: string
-  avatar: string
-  linkedin: string
-}
-
-type PostLayoutProps = {
-  frontMatter: FrontMatterProps
-  authorDetails: AuthorPost[]
-  next?: FrontMatterProps
-  prev?: FrontMatterProps
-  children: ReactElement
-}
+import { PostLayoutProps } from '@/types/post-layout'
 
 const postDateTemplate: Intl.DateTimeFormatOptions = {
   weekday: 'long',

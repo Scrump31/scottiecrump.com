@@ -3,6 +3,7 @@ export type AuthorDetails = {
   frontMatter: {
     layout?: string
   }
+  name: string
 }
 
 export type AuthorFrontMatter = {

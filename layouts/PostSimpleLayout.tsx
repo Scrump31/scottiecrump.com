@@ -5,13 +5,13 @@ import { BlogSEO } from '@/components/SEO'
 import siteMetadata from '@/data/siteMetadata'
 import formatDate from '@/lib/utils/formatDate'
 import { FrontMatterProps } from '@/types/blog'
-import { AuthorDetails } from '@/types/author'
 import { ReactElement } from 'react'
+import { AuthorPost } from '@/types/post-layout'
 
 type PostLayoutProps = {
   children: ReactElement
   frontMatter: FrontMatterProps
-  authorDetails: AuthorDetails
+  authorDetails: AuthorPost[]
   next: FrontMatterProps | null
   prev: FrontMatterProps | null
 }
@@ -32,6 +32,7 @@ export default function PostSimpleLayout({
         authorDetails={authorDetails}
         lastmod={frontMatter.lastmod || frontMatter.date}
         {...frontMatter}
+        date={frontMatter.date || ''}
       />
       <article>
         <div>
