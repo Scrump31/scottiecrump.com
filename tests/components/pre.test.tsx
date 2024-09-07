@@ -1,16 +1,10 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import Pre from '@/components/Pre'
 import { renderWithUserEvent } from '@/test-utils'
 
 describe(`${Pre.name}`, () => {
   function CodeSnippet() {
-    return (
-      <code data-testid="snippet">
-        <span>
-          <span>console.log("test snippet")</span>
-        </span>
-      </code>
-    )
+    return <code data-testid="snippet">console.log("test snippet")</code>
   }
 
   test('when hover over code snippet, then displays copy button', async () => {
