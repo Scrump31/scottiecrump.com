@@ -1,8 +1,15 @@
 {
-  "extends": ["next/core-web-vitals", "plugin:vitest-globals/recommended", "plugin:jsx-a11y/recommended"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:vitest-globals/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:testing-library/react",
+    "plugin:jest-dom/recommended"
+  ],
   "env": {
     "vitest-globals/env": true
   },
+  "plugins": ["testing-library", "jest-dom"],
   "rules": {
     "react/no-unescaped-entities": "off"
   }
