@@ -12,7 +12,15 @@ export default defineConfig({
         'lib/**/*.{js,jsx,ts,tsx}',
         'pages/**/*.{js,jsx,ts,tsx}',
       ],
+      exclude: ['e2e/**'],
     },
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/e2e/**',
+      '**/.{idea,git,cache,output,temp}/**',
+      '**/{webpack,vite,vitest,babel,nyc,tsup,build}.config.*',
+    ],
   },
   esbuild: {
     jsx: 'automatic',
