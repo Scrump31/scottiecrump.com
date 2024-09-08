@@ -23,7 +23,6 @@ describe(`${getAllFilesRecursively.name}`, () => {
       return []
     })
     // Return the expected file type (for example, file or directory)
-
     mockStatSync.mockImplementation((filePath: string) => {
       if (filePath === `${testDir}/file1.txt` || filePath === `${testDir}/nestedDir/file2.txt`) {
         return { isFile: () => true }
@@ -39,6 +38,7 @@ describe(`${getAllFilesRecursively.name}`, () => {
 
     expect(result).toEqual([`${testDir}/file1.txt`, `${testDir}/nestedDir/file2.txt`])
   })
+
   test('when empty directory, then returns empty array', () => {
     mockReaddirSync.mockImplementation(() => [])
     mockStatSync.mockImplementation(() => ({ isFile: () => false }))
