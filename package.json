@@ -13,6 +13,7 @@
     "cov-report": "open coverage/index.html",
     "playwright": "npx playwright test",
     "playwright:interactive": "npx playwright test --ui",
+    "playwright:interactive:local": "npx playwright test --ui --config=playwright.local.config.ts",
     "playwright:update-browsers": "npx playwright install",
     "playwright:report": "npx playwright show-report",
     "serve": "next start",
