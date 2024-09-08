@@ -35,4 +35,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 .vscode
+.env
 .idea
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
