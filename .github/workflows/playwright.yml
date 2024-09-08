@@ -2,12 +2,14 @@ name: Playwright E2E Tests
 on:
   push:
     branches: [ dev ]
+    workflow_run:
+      workflows: [ Test Pipeline ]
   workflow_dispatch:
     inputs:
       url:
         description: 'Base URL for test run'
         required: false
-        default: ${{ secrets.PLAYWRIGHT_BASE_URL }}
+        default: ''
 jobs:
   e2e:
     timeout-minutes: 60
@@ -24,8 +26,12 @@ jobs:
       run: npx playwright install --with-deps
 
     - name: Set PLAYWRIGHT_BASE_URL
-      run: echo "PLAYWRIGHT_BASE_URL=${{ github.event.inputs.url}} || ${{ secrets.PLAYWRIGHT_BASE_URL }}" >> $GITHUB_ENV
-
+      run: |
+        if [ -n "${{ github.event.inputs.url }}" ]; then
+          echo "PLAYWRIGHT_BASE_URL=${{ github.event.inputs.url }}" >> $GITHUB_ENV
+        else
+          echo "PLAYWRIGHT_BASE_URL=${{ secrets.PLAYWRIGHT_BASE_URL }}" >> $GITHUB_ENV
+        fi
     - name: Run tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4
