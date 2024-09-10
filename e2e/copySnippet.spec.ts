@@ -10,5 +10,9 @@ test('should copy code snippet', async ({ page }) => {
     return await window.navigator.clipboard.readText()
   })
 
-  expect(copiedText).toMatchSnapshot()
+  expect(copiedText).toEqual(
+    `const add = (num1: number, num2: number): number => num1 + num2
+console.log(add(2, 3)) // 5
+`
+  )
 })
