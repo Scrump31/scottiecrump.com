@@ -1,0 +1,197 @@
+{
+  "uuid": "21669bc8-6d97-4ebd-a277-b2149167967a",
+  "name": "should copy code snippet",
+  "historyId": "818fe87d29771b2609290e90b6426c70:5bd835b0d6b1d4ada3b9f0db936e82c8",
+  "status": "passed",
+  "statusDetails": {},
+  "stage": "finished",
+  "steps": [
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "start": 1726261048659,
+              "name": "browserType.launch",
+              "stop": 1726261052383
+            }
+          ],
+          "attachments": [],
+          "parameters": [],
+          "start": 1726261048658,
+          "name": "fixture: browser",
+          "stop": 1726261052383
+        },
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "start": 1726261052386,
+              "name": "browser.newContext",
+              "stop": 1726261052394
+            }
+          ],
+          "attachments": [],
+          "parameters": [],
+          "start": 1726261052384,
+          "name": "fixture: context",
+          "stop": 1726261052395
+        },
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "start": 1726261052396,
+              "name": "browserContext.newPage",
+              "stop": 1726261052777
+            }
+          ],
+          "attachments": [],
+          "parameters": [],
+          "start": 1726261052396,
+          "name": "fixture: page",
+          "stop": 1726261052777
+        }
+      ],
+      "attachments": [],
+      "parameters": [],
+      "start": 1726261048654,
+      "name": "Before Hooks",
+      "stop": 1726261052777
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1726261052779,
+      "name": "page.goto(/blog/es6-typescript/part-3)",
+      "stop": 1726261054230
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1726261054231,
+      "name": "locator.hover(pre >> internal:has-text=\"const add = (num1: number,\"i)",
+      "stop": 1726261054322
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1726261054323,
+      "name": "locator.getByRole('button', { name: /copy code/i }).click",
+      "stop": 1726261054374
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1726261054375,
+      "name": "page.evaluate",
+      "stop": 1726261054378
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1726261054379,
+      "name": "expect.toEqual",
+      "stop": 1726261054380
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [],
+          "attachments": [],
+          "parameters": [],
+          "start": 1726261054380,
+          "name": "fixture: page",
+          "stop": 1726261054380
+        },
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [],
+          "attachments": [],
+          "parameters": [],
+          "start": 1726261054381,
+          "name": "fixture: context",
+          "stop": 1726261054381
+        }
+      ],
+      "attachments": [],
+      "parameters": [],
+      "start": 1726261054380,
+      "name": "After Hooks",
+      "stop": 1726261054396
+    }
+  ],
+  "attachments": [],
+  "parameters": [{ "name": "Project", "value": "chromium" }],
+  "labels": [
+    { "name": "language", "value": "javascript" },
+    { "name": "framework", "value": "playwright" },
+    { "name": "package", "value": "copySnippet.spec.ts" },
+    { "name": "titlePath", "value": " > chromium > copySnippet.spec.ts" },
+    { "name": "host", "value": "Scotties-MBP.lan" },
+    { "name": "thread", "value": "pid-39587-worker-0" },
+    { "name": "parentSuite", "value": "chromium" },
+    { "name": "suite", "value": "copySnippet.spec.ts" }
+  ],
+  "links": [],
+  "start": 1726261048649,
+  "testCaseId": "818fe87d29771b2609290e90b6426c70",
+  "fullName": "copySnippet.spec.ts:3:5",
+  "stop": 1726261050662
+}
