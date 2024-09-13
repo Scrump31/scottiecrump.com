@@ -1,11 +1,13 @@
 import { defineConfig } from 'vitest/config'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import AllureReporter from 'allure-vitest/reporter'
 
 export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./vitest.setup.ts'],
+    setupFiles: ['./vitest.setup.ts', 'allure-vitest/setup'],
+    reporters: ['default', new AllureReporter({})],
     coverage: {
       include: [
         'components/**/*.{js,jsx,ts,tsx}',
