@@ -27,3 +27,4 @@ test('Blog navigation should navigate to prev and next page', async ({ page }) =
   await prevButton.click()
   await expect(page.getByText('1 of')).toBeVisible()
 })
+// testing allure report. remove this comment after confirming results
