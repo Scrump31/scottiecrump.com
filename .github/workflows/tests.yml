@@ -57,8 +57,13 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
+      - name: Copy history data
+        run: |
+          mkdir -p allure-results/allure-results
+          cp -r gh-pages/allure-results/* allure-results/ || echo "No history to copy"
+
       - name: List history contents before report generation
-        run: ls -la gh-pages/history || echo "No history folder found"
+        run: ls -la gh-pages/allure-results || echo "No history folder found"
 
       - name: List allure-results contents
         run: ls -la allure-results
