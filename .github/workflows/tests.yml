@@ -59,7 +59,8 @@ jobs:
 
       - name: Copy history data
         run: |
-          cp -r allure-results/ gh-pages/*  || echo "No history to copy"
+          mkdir -p allure-results/
+          cp -r allure-results/ gh-pages/allure-results*  || echo "No history to copy"
 
       - name: List history contents before report generation
         run: ls -la gh-pages/allure-results || echo "No history folder found"
@@ -72,7 +73,7 @@ jobs:
         if: always()
         with:
           gh_pages: gh-pages
-          allure_history: gh-pages/history
+          allure_history: gh-pages/allure-results
           allure_results: allure-results
           allure_report: allure-report
 
