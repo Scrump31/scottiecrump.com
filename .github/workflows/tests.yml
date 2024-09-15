@@ -57,6 +57,12 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
+      - name: List history contents before report generation
+        run: ls -la gh-pages/history || echo "No history folder found"
+
+      - name: List allure-results contents
+        run: ls -la allure-results
+
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
         if: always()
