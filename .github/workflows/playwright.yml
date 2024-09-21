@@ -36,10 +36,11 @@ jobs:
       - name: Run tests
         run: npx playwright test
 
-      - name: Upload Allure results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: allure-results
-          path: allure-results/
-          retention-days: 7
+      - name: Send Metrics to InfluxDB
+        run: node scripts/send-metrics.mjs
+        env:
+          INFLUX_HOST: ${{ secrets.INFLUX_HOST }}
+          INFLUX_TOKEN: ${{ secrets.INFLUX_TOKEN }}
+          INFLUX_DATABASE: ${{ secrets.INFLUX_DATABASE }}
+          GIT_COMMIT: ${{ github.sha }}
+          GIT_BRANCH: ${{ github.ref_name }}
