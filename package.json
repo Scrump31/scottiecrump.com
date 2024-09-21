@@ -6,7 +6,7 @@
     "start": "next-remote-watch ./data",
     "dev": "next dev",
     "build": "next build",
-    "test": "vitest run --reporter=json --outputFile=vitest-results.json",
+    "test": "vitest run --reporter=json --outputFile=metrics_results/vitest-results.json",
     "test:watch": "vitest",
     "test:interative": "vitest --ui",
     "test:coverage": "vitest run --coverage",
