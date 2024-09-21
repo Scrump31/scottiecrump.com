@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "es2017",
     "types": ["vitest/globals"],
     "baseUrl": ".",
     "lib": ["dom", "dom.iterable", "esnext"],

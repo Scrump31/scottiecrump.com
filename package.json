@@ -6,7 +6,7 @@
     "start": "next-remote-watch ./data",
     "dev": "next dev",
     "build": "next build",
-    "test": "vitest run",
+    "test": "vitest run --reporter=json --outputFile=vitest-results.json",
     "test:watch": "vitest",
     "test:interative": "vitest --ui",
     "test:coverage": "vitest run --coverage",
@@ -20,9 +20,11 @@
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint --fix --dir pages --dir components --dir lib --dir layouts --dir scripts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "send-metrics": "node scripts/send-metrics.mjs"
   },
   "dependencies": {
+    "@influxdata/influxdb3-client": "^0.11.0",
     "@tailwindcss/forms": "^0.5.8",
     "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
