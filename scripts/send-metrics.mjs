@@ -10,6 +10,8 @@ dotenv.config({ path: path.resolve('.env.local') })
 const host = process.env.INFLUX_HOST ?? ""
 const token = process.env.INFLUX_TOKEN ?? ""
 const database = process.env.INFLUX_DATABASE ?? ""
+const gitCommit = process.env.GIT_COMMIT;
+const gitBranch = process.env.GIT_BRANCH;
 
 const client = new InfluxDBClient({host, token, database})
 
@@ -80,8 +82,8 @@ async function sendMetrics() {
   const vitestPoint = new Point()
     .setMeasurement("vitest_results")
     .setTag('test_type', 'unit')
-    // .setTag('commit', gitCommit)
-    // .setTag('branch', gitBranch)
+    .setTag('commit', gitCommit)
+    .setTag('branch', gitBranch)
     .setFloatField('total_tests', vitestMetrics.totalTests)
     .setFloatField('passed_tests', vitestMetrics.passedTests)
     .setFloatField('failed_tests', vitestMetrics.failedTests)
@@ -90,8 +92,8 @@ async function sendMetrics() {
   const playwrightPoint = new Point()
     .setMeasurement("playwright_results")
     .setTag('test_type', 'ui')
-    // .setTag('commit', gitCommit)
-    // .setTag('branch', gitBranch)
+    .setTag('commit', gitCommit)
+    .setTag('branch', gitBranch)
     .setFloatField('total_tests', playwrightMetrics.totalTests)
     .setFloatField('passed_tests', playwrightMetrics.passedTests)
     .setFloatField('failed_tests', playwrightMetrics.failedTests)
