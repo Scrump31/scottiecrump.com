@@ -29,7 +29,7 @@ jobs:
         run: npm run test:coverage
 
       - name: Send Metrics to InfluxDB
-        run: node scripts/send-metrics.js
+        run: node scripts/send-metrics.mjs
         env:
           INFLUX_HOST: ${{ secrets.INFLUX_HOST }}
           INFLUX_TOKEN: ${{ secrets.INFLUX_TOKEN }}
