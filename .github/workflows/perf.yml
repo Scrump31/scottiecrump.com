@@ -2,7 +2,7 @@ name: K6 Load Tests
 
 on:
   workflow_run:
-    workflows: ["Playwright Tests"]
+    workflows: ["Playwright E2E Tests"]
     types:
       - completed
   workflow_dispatch:
