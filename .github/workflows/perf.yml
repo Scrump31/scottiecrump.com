@@ -1,0 +1,35 @@
+name: K6 Load Tests
+
+on:
+  workflow_run:
+    workflows: ["Playwright Tests"]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      test_file:
+        description: 'K6 test file to run'
+        required: true
+        default: 'pref/site.pref.js'
+
+jobs:
+  k6_load_tests:
+    name: K6 Load Tests
+    runs-on: ubuntu-latest
+    # Run if triggered manually or if Playwright tests succeeded
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    container:
+      image: grafana/k6:latest
+      options: --user root
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run k6 load test
+        uses: grafana/run-k6-action@v1
+        env:
+          K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
+          K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
+          PLAYWRIGHT_BASE_URL: ${{ secrets.PLAYWRIGHT_BASE_URL }}
+        with:
+          path: ${{ github.event.inputs.test_file || 'pref/site.pref.js' }}
