@@ -26,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Run unit/component tests
-        run: npm run test:coverage
+        run: npm run test
 
       - name: Send Metrics to InfluxDB
         run: node scripts/send-metrics.mjs

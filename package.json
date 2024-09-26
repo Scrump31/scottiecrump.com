@@ -24,6 +24,7 @@
     "send-metrics": "node scripts/send-metrics.mjs"
   },
   "dependencies": {
+    "@datadog/browser-rum": "^5.27.0",
     "@influxdata/influxdb3-client": "^0.11.0",
     "@tailwindcss/forms": "^0.5.8",
     "@tailwindcss/typography": "^0.5.15",
