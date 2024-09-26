@@ -8,22 +8,25 @@ import Head from 'next/head'
 
 import Analytics from '@/components/analytics'
 import LayoutWrapper from '@/components/LayoutWrapper'
+import { useEffect } from 'react'
 
 export default function App({ Component, pageProps }: AppProps) {
-  datadogRum.init({
-    applicationId: process.env.NEXT_PUBLIC_DD_APPLICATION_ID ?? '',
-    clientToken: process.env.NEXT_PUBLIC_DD_CLIENT_TOKEN ?? '',
-    site: process.env.NEXT_PUBLIC_DD_SITE,
-    service: process.env.NEXT_PUBLIC_DD_SERVICE,
-    env: 'production',
-    version: '3.0.2',
-    sessionSampleRate: 100,
-    sessionReplaySampleRate: 20,
-    trackUserInteractions: true,
-    trackResources: true,
-    trackLongTasks: true,
-    defaultPrivacyLevel: 'mask-user-input',
-  })
+  useEffect(() => {
+    datadogRum.init({
+      applicationId: process.env.NEXT_PUBLIC_DD_APPLICATION_ID ?? '',
+      clientToken: process.env.NEXT_PUBLIC_DD_CLIENT_TOKEN ?? '',
+      site: process.env.NEXT_PUBLIC_DD_SITE,
+      service: process.env.NEXT_PUBLIC_DD_SERVICE,
+      env: process.env.NODE_ENV,
+      version: '3.0.2',
+      sessionSampleRate: 100,
+      sessionReplaySampleRate: 20,
+      trackUserInteractions: true,
+      trackResources: true,
+      trackLongTasks: true,
+      defaultPrivacyLevel: 'mask-user-input',
+    })
+  }, [])
 
   return (
     // @ts-ignore
