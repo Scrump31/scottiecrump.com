@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
     clientToken: process.env.NEXT_PUBLIC_DD_CLIENT_TOKEN ?? '',
     site: process.env.NEXT_PUBLIC_DD_SITE,
     service: process.env.NEXT_PUBLIC_DD_SERVICE,
-    env: 'prod',
+    env: 'production',
     version: '3.0.2',
     sessionSampleRate: 100,
     sessionReplaySampleRate: 20,
