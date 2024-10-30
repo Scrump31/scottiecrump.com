@@ -21,7 +21,7 @@ const productList: Product[] = [
     in today's competitive market. Even if you don't take the certification exam, you will still
     learn a lot from this course. It will help you become a better tester and increase your job prospects.
     `,
-    imgSrc: '/static/images/udemy-agile-att.jpeg',
+    imgSrc: '/static/images/agile-tester.jpg',
     href: '/blog/istqb-agile-technical-tester',
   },
   {
@@ -35,7 +35,7 @@ const productList: Product[] = [
     and how to automate test execution. Plus, you'll get real-life scenarios from our years of
     experience testing mobile applications.
     `,
-    imgSrc: '/static/images/udemy-mobile-tester.jpg',
+    imgSrc: '/static/images/mobile-tester.jpeg',
     href: '/blog/istqb-mobile-tester',
   },
   {
