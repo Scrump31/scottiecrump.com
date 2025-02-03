@@ -3,7 +3,7 @@ const siteMetadata = {
   author: 'Scottie Crump',
   headerTitle: 'Scottie Crump',
   description:
-    "Hi, I'm Scottie Crump, a Staff Test Engineer specializing in modern testing methodologies. ",
+    "Hi, I'm Scottie Crump, a Lead Software Engineer in Test specializing in modern testing methodologies. ",
   language: 'en-us',
   siteUrl: 'https://scottiecrump.com',
   siteRepo: 'https://github.com/Scrump31/scottiecrump.com',
