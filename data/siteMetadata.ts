@@ -1,5 +1,5 @@
 const siteMetadata = {
-  title: 'Scottie Crump | Staff Test Engineer',
+  title: 'Scottie Crump | Lead Software Engineer in Test',
   author: 'Scottie Crump',
   headerTitle: 'Scottie Crump',
   description:
