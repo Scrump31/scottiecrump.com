@@ -13,6 +13,16 @@ const productList: Product[] = [
     href: '/blog/rtl-book',
   },
   {
+    title: 'Enhance Your Skills by Earning the ISTQB® Test Automation Engineer v2.0 Certification!',
+    description: `
+    Are you ready to become a skilled Test Automation Engineer? This comprehensive course
+    covers everything you need to know to design, implement, and maintain robust test automation
+    solutions that drive quality and efficiency in modern software development.
+    `,
+    imgSrc: '/static/images/tae-cover.jpg',
+    href: '/blog/istqb-test-automation-engineer',
+  },
+  {
     title: 'Become an ISTQB® Certified Tester Advanced Level Agile Technical Tester!',
     description: `
     If you want to improve your Agile testing knowledge and skills, this course is for you!
