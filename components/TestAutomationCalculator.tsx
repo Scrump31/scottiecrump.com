@@ -210,13 +210,13 @@ const TestAutomationCalculator = () => {
   const getCardGradientClass = (cardClass: string): string => {
     switch (cardClass) {
       case 'automate':
-        return 'bg-gradient-to-r from-green-400 to-green-600'
+        return 'bg-gradient-to-r from-green-400 to-green-600 dark:from-green-500 dark:to-green-700'
       case 'manual':
-        return 'bg-gradient-to-r from-yellow-400 to-orange-500'
+        return 'bg-gradient-to-r from-yellow-400 to-orange-500 dark:from-yellow-500 dark:to-orange-600'
       case 'avoid':
-        return 'bg-gradient-to-r from-pink-400 to-pink-600'
+        return 'bg-gradient-to-r from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-700'
       default:
-        return 'bg-gradient-to-r from-blue-400 to-blue-600'
+        return 'bg-gradient-to-r from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700'
     }
   }
 
@@ -225,8 +225,8 @@ const TestAutomationCalculator = () => {
   }, [calculateAutomationScore])
 
   return (
-    <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
-      <div className="bg-gradient-to-r from-gray-800 to-blue-500 text-white p-8 text-center">
+    <div className="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden">
+      <div className="bg-gradient-to-r from-gray-800 to-blue-500 dark:from-gray-900 dark:to-blue-600 text-white p-8 text-center">
         <h1 className="text-4xl mb-2 font-light">🤖 Test Automation Decision Calculator</h1>
         <p className="text-lg opacity-90">
           Make data-driven decisions about what to automate based on risk, ROI, and team capacity
@@ -234,66 +234,75 @@ const TestAutomationCalculator = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 min-h-[70vh]">
-        <div className="p-10 bg-gray-50 border-r border-gray-200">
-          <h2 className="text-2xl mb-8 text-gray-800 border-b-3 border-blue-500 pb-2">
+        <div className="p-10 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
+          <h2 className="text-2xl mb-8 text-gray-800 dark:text-gray-100 border-b-3 border-blue-500 pb-2">
             Assessment Criteria
           </h2>
 
           <div className="mb-6">
-            <label htmlFor="businessImpact" className="block mb-2 font-semibold text-gray-700">
+            <label
+              htmlFor="businessImpact"
+              className="block mb-2 font-semibold text-gray-700 dark:text-gray-300"
+            >
               Business Impact if Feature Breaks
             </label>
             <select
               id="businessImpact"
               value={factors.businessImpact}
               onChange={(e) => handleFactorChange('businessImpact', parseInt(e.target.value))}
-              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="1">Low - Minor inconvenience</option>
               <option value="2">Medium - Some user frustration</option>
               <option value="3">High - Revenue/reputation impact</option>
               <option value="4">Critical - Major financial loss</option>
             </select>
-            <div className="text-sm text-gray-600 mt-1 italic">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 italic">
               Consider financial loss, user experience, and compliance risks
             </div>
           </div>
 
           <div className="mb-6">
-            <label htmlFor="executionFrequency" className="block mb-2 font-semibold text-gray-700">
+            <label
+              htmlFor="executionFrequency"
+              className="block mb-2 font-semibold text-gray-700 dark:text-gray-300"
+            >
               Expected Test Execution Frequency
             </label>
             <select
               id="executionFrequency"
               value={factors.executionFrequency}
               onChange={(e) => handleFactorChange('executionFrequency', parseInt(e.target.value))}
-              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="1">Rarely (&lt; 5 times)</option>
               <option value="2">Occasionally (5-20 times)</option>
               <option value="3">Regularly (20-50 times)</option>
               <option value="4">Very frequently (50+ times)</option>
             </select>
-            <div className="text-sm text-gray-600 mt-1 italic">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 italic">
               How often will this test run? Consider CI/CD frequency and regression needs
             </div>
           </div>
 
           <div className="mb-6">
-            <label htmlFor="testingLevel" className="block mb-2 font-semibold text-gray-700">
+            <label
+              htmlFor="testingLevel"
+              className="block mb-2 font-semibold text-gray-700 dark:text-gray-300"
+            >
               Most Appropriate Testing Level
             </label>
             <select
               id="testingLevel"
               value={factors.testingLevel}
               onChange={(e) => handleFactorChange('testingLevel', parseInt(e.target.value))}
-              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="3">Unit/Component Level</option>
               <option value="2">API/Integration Level</option>
               <option value="1">UI/End-to-End Level</option>
             </select>
-            <div className="text-sm text-gray-600 mt-1 italic">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 italic">
               <strong>Unit:</strong> Individual functions/components in isolation
               <br />
               <strong>API/Integration:</strong> Individual endpoints, single integrations & business
@@ -305,54 +314,63 @@ const TestAutomationCalculator = () => {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="featureStability" className="block mb-2 font-semibold text-gray-700">
+            <label
+              htmlFor="featureStability"
+              className="block mb-2 font-semibold text-gray-700 dark:text-gray-300"
+            >
               Feature Stability
             </label>
             <select
               id="featureStability"
               value={factors.featureStability}
               onChange={(e) => handleFactorChange('featureStability', parseInt(e.target.value))}
-              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="1">Highly volatile - frequent changes</option>
               <option value="2">Moderate - some changes expected</option>
               <option value="3">Stable - minimal changes</option>
               <option value="4">Very stable - rare changes</option>
             </select>
-            <div className="text-sm text-gray-600 mt-1 italic">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 italic">
               Volatile features require more test maintenance
             </div>
           </div>
 
           <div className="mb-6">
-            <label htmlFor="technicalComplexity" className="block mb-2 font-semibold text-gray-700">
+            <label
+              htmlFor="technicalComplexity"
+              className="block mb-2 font-semibold text-gray-700 dark:text-gray-300"
+            >
               Technical Complexity to Automate
             </label>
             <select
               id="technicalComplexity"
               value={factors.technicalComplexity}
               onChange={(e) => handleFactorChange('technicalComplexity', parseInt(e.target.value))}
-              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="4">Simple - straightforward automation</option>
               <option value="3">Moderate - some challenges</option>
               <option value="2">Complex - significant effort required</option>
               <option value="1">Very complex - major technical hurdles</option>
             </select>
-            <div className="text-sm text-gray-600 mt-1 italic">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 italic">
               Consider test data setup, environment dependencies, and technical constraints
             </div>
           </div>
 
           <div className="mb-6">
-            <label htmlFor="teamCapacity" className="block mb-2 font-semibold text-gray-700">
+            <label
+              htmlFor="teamCapacity"
+              className="block mb-2 font-semibold text-gray-700 dark:text-gray-300"
+            >
               Team Automation Capacity
             </label>
             <select
               id="teamCapacity"
               value={factors.teamCapacity}
               onChange={(e) => handleFactorChange('teamCapacity', parseInt(e.target.value))}
-              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="1">Very Limited - Team is fully committed to other priorities</option>
               <option value="2">
@@ -365,13 +383,16 @@ const TestAutomationCalculator = () => {
                 High - Significant capacity available for automation initiatives
               </option>
             </select>
-            <div className="text-sm text-gray-600 mt-1 italic">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 italic">
               Team's current availability and bandwidth for taking on automation work
             </div>
           </div>
 
           <div className="mb-6">
-            <label htmlFor="manualTestTime" className="block mb-2 font-semibold text-gray-700">
+            <label
+              htmlFor="manualTestTime"
+              className="block mb-2 font-semibold text-gray-700 dark:text-gray-300"
+            >
               Manual Test Execution Time (minutes)
             </label>
             <input
@@ -381,15 +402,15 @@ const TestAutomationCalculator = () => {
               min="1"
               max="1440"
               onChange={(e) => handleManualTimeChange(parseInt(e.target.value))}
-              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
-            <div className="text-sm text-gray-600 mt-1 italic">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 italic">
               Time to execute this test manually, including setup
             </div>
           </div>
         </div>
 
-        <div className="p-10 bg-white flex flex-col justify-center">
+        <div className="p-10 bg-white dark:bg-gray-800 flex flex-col justify-center">
           {recommendation && (
             <div
               className={`${getCardGradientClass(
@@ -406,24 +427,26 @@ const TestAutomationCalculator = () => {
             </div>
           )}
 
-          <div className="bg-gray-50 p-5 rounded-xl mb-5">
-            <h4 className="text-gray-800 mb-4 text-xl">📊 Score Breakdown</h4>
+          <div className="bg-gray-50 dark:bg-gray-700 p-5 rounded-xl mb-5">
+            <h4 className="text-gray-800 dark:text-gray-100 mb-4 text-xl">📊 Score Breakdown</h4>
             <div>
               {breakdown &&
                 Object.entries(breakdown).map(([factor, data]) => (
                   <div
-                    className="flex justify-between items-center py-2 border-b border-gray-200"
+                    className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600"
                     key={factor}
                   >
-                    <span>{factorNames[factor as keyof typeof factorNames]}</span>
-                    <span className="font-bold py-1 px-2 rounded bg-gray-200 text-gray-800">
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {factorNames[factor as keyof typeof factorNames]}
+                    </span>
+                    <span className="font-bold py-1 px-2 rounded bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200">
                       {Math.round(data.weighted)}/{data.weight}
                     </span>
                   </div>
                 ))}
               <div className="flex justify-between items-center py-2">
-                <span>Estimated Break-even Point</span>
-                <span className="font-bold py-1 px-2 rounded bg-gray-200 text-gray-800">
+                <span className="text-gray-700 dark:text-gray-300">Estimated Break-even Point</span>
+                <span className="font-bold py-1 px-2 rounded bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200">
                   {breakEvenRuns} runs
                 </span>
               </div>
@@ -431,15 +454,17 @@ const TestAutomationCalculator = () => {
           </div>
 
           {recommendation && (
-            <div className="bg-gray-50 p-5 rounded-xl">
-              <h4 className="text-gray-800 mb-4 text-xl">💡 Recommendations</h4>
+            <div className="bg-gray-50 dark:bg-gray-700 p-5 rounded-xl">
+              <h4 className="text-gray-800 dark:text-gray-100 mb-4 text-xl">💡 Recommendations</h4>
               <ul className="list-none p-0">
                 {recommendation.recommendations.map((rec) => (
                   <li
                     key={rec.id}
-                    className="py-2 border-b border-gray-200 last:border-b-0 pl-6 relative"
+                    className="py-2 border-b border-gray-200 dark:border-gray-600 last:border-b-0 pl-6 relative text-gray-700 dark:text-gray-300"
                   >
-                    <span className="absolute left-0 text-green-500 font-bold">✓</span>
+                    <span className="absolute left-0 text-green-500 dark:text-green-400 font-bold">
+                      ✓
+                    </span>
                     {rec.text}
                   </li>
                 ))}
