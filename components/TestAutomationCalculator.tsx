@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 interface Factor {
   raw: number
@@ -34,6 +34,17 @@ interface Recommendation {
   }>
 }
 
+interface ROICalculation {
+  estimatedAutomationTime: number
+  timePerRun: number
+  timeSavedPerRun: number
+  breakEvenRuns: number
+  complexityMultiplier: number
+  levelMultiplier: number
+  capacityMultiplier: number
+  baseAutomationTime: number
+}
+
 const SCORE_THRESHOLDS = {
   AUTOMATE: 75,
   CONSIDER: 50,
@@ -56,6 +67,26 @@ const ROI_MULTIPLIERS = {
   MINIMUM_EXECUTION_TIME: 0.5,
 } as const
 
+const COMPLEXITY_MULTIPLIERS = {
+  4: 1.0, // Simple
+  3: 1.5, // Moderate
+  2: 3.0, // Complex
+  1: 5.0, // Very complex
+} as const
+
+const TESTING_LEVEL_MULTIPLIERS = {
+  3: 1.0, // Unit/Component
+  2: 2.0, // API/Integration
+  1: 4.0, // UI/End-to-End
+} as const
+
+const TEAM_CAPACITY_MULTIPLIERS = {
+  4: 1.0, // High capacity
+  3: 1.3, // Moderate capacity
+  2: 2.0, // Limited capacity
+  1: 3.0, // Very limited capacity
+} as const
+
 const DEFAULT_VALUES = {
   BUSINESS_IMPACT: 3,
   EXECUTION_FREQUENCY: 3,
@@ -64,6 +95,48 @@ const DEFAULT_VALUES = {
   TECHNICAL_COMPLEXITY: 3,
   TEAM_CAPACITY: 3,
   MANUAL_TEST_TIME: 15,
+} as const
+
+const DASH_PATTERN_SEGMENTS = {
+  SHORT: 5,
+  LONG: 10,
+}
+
+const CHART_CONSTANTS = {
+  PADDING: {
+    LEFT: 55,
+    RIGHT: 40,
+    TOP: 40,
+    BOTTOM: 40,
+  },
+  AXIS: {
+    Y_LABEL_OFFSET_X: 30,
+    Y_LABEL_OFFSET_Y: -15,
+    TIME_STEPS: 5,
+    LABEL_OFFSET: 5,
+    TICK_OFFSET: 3,
+    X_LABEL_BOTTOM_OFFSET: 5,
+    X_TICK_OFFSET: 15,
+  },
+  LINE: {
+    GRID: 1,
+    AXIS: 2,
+    DATA: 3,
+  },
+  DASH_PATTERN: {
+    COST: [DASH_PATTERN_SEGMENTS.SHORT, DASH_PATTERN_SEGMENTS.SHORT],
+    BREAK_EVEN: [DASH_PATTERN_SEGMENTS.LONG, DASH_PATTERN_SEGMENTS.SHORT],
+  },
+  CIRCLE: {
+    RADIUS: 6,
+  },
+  LABEL_OFFSETS: {
+    BREAK_EVEN: 15,
+    INVESTMENT: 10,
+    SAVINGS: 10,
+    COST_Y: 5,
+  },
+  SCALE_FACTOR: 1.1,
 } as const
 
 const TestAutomationCalculator = () => {
@@ -80,16 +153,254 @@ const TestAutomationCalculator = () => {
   const [breakdown, setBreakdown] = useState<Breakdown | null>(null)
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null)
   const [breakEvenRuns, setBreakEvenRuns] = useState<number>(0)
+  const [roiCalculation, setRoiCalculation] = useState<ROICalculation | null>(null)
+  const chartRef = useRef<HTMLCanvasElement>(null)
+
+  const drawROIChart = (
+    manualTestTime: number,
+    breakEvenRuns: number,
+    automationCost: number,
+    timePerRun: number
+  ) => {
+    const canvas = chartRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const { width } = canvas
+    const height = canvas.height
+
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height)
+
+    // Calculate values
+    const timeSavedPerRun = manualTestTime - timePerRun
+    const maxRuns = Math.max(breakEvenRuns * 2, 10)
+
+    // Chart dimensions
+    const { PADDING, SCALE_FACTOR } = CHART_CONSTANTS
+    const paddingLeft = PADDING.LEFT
+    const paddingRight = PADDING.RIGHT
+    const paddingTop = PADDING.TOP
+    const paddingBottom = PADDING.BOTTOM
+    const chartWidth = width - paddingLeft - paddingRight
+    const chartHeight = height - paddingTop - paddingBottom
+
+    // Calculate max value for y-axis
+    const maxSavings = timeSavedPerRun * maxRuns
+    const maxValue = Math.max(automationCost, maxSavings) * SCALE_FACTOR
+
+    // Draw grid lines and labels
+    ctx.strokeStyle = '#e9ecef'
+    ctx.lineWidth = 1
+
+    // Horizontal grid lines with time labels
+    const { AXIS } = CHART_CONSTANTS
+    const timeSteps = AXIS.TIME_STEPS
+    for (let i = 0; i <= timeSteps; i++) {
+      const y = paddingTop + (chartHeight * i) / timeSteps
+      const timeValue = Math.round(maxValue * (1 - i / timeSteps))
+
+      ctx.beginPath()
+      ctx.moveTo(paddingLeft, y)
+      ctx.lineTo(width - paddingRight, y)
+      ctx.stroke()
+
+      // Add time labels on Y-axis
+      ctx.fillStyle = '#666'
+      ctx.font = '10px Segoe UI'
+      ctx.textAlign = 'right'
+      ctx.fillText(timeValue + 'm', paddingLeft - AXIS.LABEL_OFFSET, y + AXIS.TICK_OFFSET)
+    }
+
+    // Vertical grid lines with run count labels
+    const runSteps = Math.min(10, maxRuns)
+    const runInterval = Math.ceil(maxRuns / runSteps)
+
+    for (let i = 0; i <= runSteps; i++) {
+      const runValue = i * runInterval
+      const x = paddingLeft + (runValue / maxRuns) * chartWidth
+
+      if (x <= width - paddingRight) {
+        ctx.strokeStyle = '#e9ecef'
+        ctx.beginPath()
+        ctx.moveTo(x, paddingTop)
+        ctx.lineTo(x, height - paddingBottom)
+        ctx.stroke()
+
+        // Add run count labels on X-axis
+        ctx.fillStyle = '#666'
+        ctx.font = '10px Segoe UI'
+        ctx.textAlign = 'center'
+        ctx.fillText(
+          runValue.toString(),
+          x,
+          height - paddingBottom + CHART_CONSTANTS.AXIS.X_TICK_OFFSET
+        )
+      }
+    }
+
+    // Draw axes
+    ctx.strokeStyle = '#2c3e50'
+    ctx.lineWidth = CHART_CONSTANTS.LINE.AXIS
+    ctx.beginPath()
+    ctx.moveTo(paddingLeft, height - paddingBottom)
+    ctx.lineTo(width - paddingRight, height - paddingBottom)
+    ctx.moveTo(paddingLeft, paddingTop)
+    ctx.lineTo(paddingLeft, height - paddingBottom)
+    ctx.stroke()
+
+    // Draw investment cost line (horizontal)
+    const costY = height - paddingBottom - (automationCost / maxValue) * chartHeight
+    ctx.strokeStyle = '#e74c3c'
+    ctx.lineWidth = CHART_CONSTANTS.LINE.DATA
+    ctx.setLineDash(CHART_CONSTANTS.DASH_PATTERN.COST)
+    ctx.beginPath()
+    ctx.moveTo(paddingLeft, costY)
+    ctx.lineTo(width - paddingRight, costY)
+    ctx.stroke()
+    ctx.setLineDash([])
+
+    // Draw cumulative savings line
+    ctx.strokeStyle = '#27ae60'
+    ctx.lineWidth = CHART_CONSTANTS.LINE.DATA
+    ctx.beginPath()
+
+    for (let run = 0; run <= maxRuns; run++) {
+      const x = paddingLeft + (run / maxRuns) * chartWidth
+      const cumulativeSavings = run * timeSavedPerRun
+      const y = height - paddingBottom - (cumulativeSavings / maxValue) * chartHeight
+
+      if (run === 0) {
+        ctx.moveTo(x, y)
+      } else {
+        ctx.lineTo(x, y)
+      }
+    }
+    ctx.stroke()
+
+    // Draw break-even point with label
+    const breakEvenX = paddingLeft + (breakEvenRuns / maxRuns) * chartWidth
+    ctx.strokeStyle = '#f39c12'
+    ctx.lineWidth = CHART_CONSTANTS.LINE.DATA
+    ctx.setLineDash(CHART_CONSTANTS.DASH_PATTERN.BREAK_EVEN)
+    ctx.beginPath()
+    ctx.moveTo(breakEvenX, paddingTop)
+    ctx.lineTo(breakEvenX, height - paddingBottom)
+    ctx.stroke()
+    ctx.setLineDash([])
+
+    // Draw break-even circle
+    const breakEvenSavings = breakEvenRuns * timeSavedPerRun
+    const breakEvenY = height - paddingBottom - (breakEvenSavings / maxValue) * chartHeight
+    ctx.fillStyle = '#f39c12'
+    ctx.beginPath()
+    ctx.arc(breakEvenX, breakEvenY, CHART_CONSTANTS.CIRCLE.RADIUS, 0, 2 * Math.PI)
+    ctx.fill()
+
+    // Add break-even label
+    ctx.fillStyle = '#f39c12'
+    ctx.font = 'bold 11px Segoe UI'
+    ctx.textAlign = 'center'
+    ctx.fillText(
+      `${breakEvenRuns} runs`,
+      breakEvenX,
+      breakEvenY - CHART_CONSTANTS.LABEL_OFFSETS.BREAK_EVEN
+    )
+
+    // Add investment cost label
+    ctx.fillStyle = '#e74c3c'
+    ctx.font = '11px Segoe UI'
+    ctx.textAlign = 'left'
+    ctx.fillText(
+      `Investment: ${automationCost}m`,
+      paddingLeft + CHART_CONSTANTS.LABEL_OFFSETS.INVESTMENT,
+      costY - CHART_CONSTANTS.LABEL_OFFSETS.COST_Y
+    )
+
+    // Add final savings label
+    const finalSavings = maxRuns * timeSavedPerRun
+    const finalY = height - paddingBottom - (finalSavings / maxValue) * chartHeight
+    ctx.fillStyle = '#27ae60'
+    ctx.textAlign = 'right'
+    ctx.fillText(
+      `Total savings: ${Math.round(finalSavings)}m`,
+      width - paddingRight - CHART_CONSTANTS.LABEL_OFFSETS.SAVINGS,
+      finalY - CHART_CONSTANTS.LABEL_OFFSETS.COST_Y
+    )
+
+    // Add axis titles
+    ctx.fillStyle = '#2c3e50'
+    ctx.font = '12px Segoe UI'
+    ctx.textAlign = 'center'
+
+    // X-axis title
+    ctx.fillText(
+      'Number of Test Runs',
+      width / 2,
+      height - CHART_CONSTANTS.AXIS.X_LABEL_BOTTOM_OFFSET
+    )
+
+    // Y-axis title
+    ctx.save()
+    ctx.translate(CHART_CONSTANTS.AXIS.Y_LABEL_OFFSET_X, height / 2)
+    ctx.rotate(-Math.PI / 2)
+    ctx.fillText('Time (minutes)', 0, CHART_CONSTANTS.AXIS.Y_LABEL_OFFSET_Y)
+    ctx.restore()
+  }
 
   const calculateROI = useCallback(() => {
-    const estimatedAutomationTime = manualTestTime * ROI_MULTIPLIERS.AUTOMATION_TIME_FACTOR
-    const timePerRun = Math.max(
+    // Get multipliers based on factor values
+    const complexityMultiplier =
+      COMPLEXITY_MULTIPLIERS[factors.technicalComplexity as keyof typeof COMPLEXITY_MULTIPLIERS]
+    const levelMultiplier =
+      TESTING_LEVEL_MULTIPLIERS[factors.testingLevel as keyof typeof TESTING_LEVEL_MULTIPLIERS]
+    const capacityMultiplier =
+      TEAM_CAPACITY_MULTIPLIERS[factors.teamCapacity as keyof typeof TEAM_CAPACITY_MULTIPLIERS]
+
+    // Base automation time (in minutes)
+    const baseAutomationTime = manualTestTime * ROI_MULTIPLIERS.AUTOMATION_TIME_FACTOR
+
+    // Calculate estimated automation time with all multipliers
+    const estimatedAutomationTime = Math.round(
+      baseAutomationTime * complexityMultiplier * levelMultiplier * capacityMultiplier
+    )
+
+    // Calculate time per automated run (also affected by testing level)
+    const baseTimePerRun = Math.max(
       ROI_MULTIPLIERS.MINIMUM_EXECUTION_TIME,
       manualTestTime * ROI_MULTIPLIERS.EXECUTION_SPEED_FACTOR
     )
-    const breakEven = Math.ceil(estimatedAutomationTime / (manualTestTime - timePerRun))
+    const runTimeMultiplier =
+      TESTING_LEVEL_MULTIPLIERS[factors.testingLevel as keyof typeof TESTING_LEVEL_MULTIPLIERS] *
+      0.5
+    const timePerRun = Math.round(baseTimePerRun * runTimeMultiplier * 10) / 10 // Round to 1 decimal
+
+    // Calculate time saved per run and break-even point
+    const timeSavedPerRun = manualTestTime - timePerRun
+    const breakEven = Math.ceil(estimatedAutomationTime / timeSavedPerRun)
+
+    // Update state
     setBreakEvenRuns(breakEven)
-  }, [manualTestTime])
+    setRoiCalculation({
+      estimatedAutomationTime,
+      timePerRun,
+      timeSavedPerRun,
+      breakEvenRuns: breakEven,
+      complexityMultiplier,
+      levelMultiplier,
+      capacityMultiplier,
+      baseAutomationTime,
+    })
+
+    // Draw ROI chart after state update
+    setTimeout(() => {
+      if (chartRef.current) {
+        drawROIChart(manualTestTime, breakEven, estimatedAutomationTime, timePerRun)
+      }
+    }, 0)
+  }, [factors, manualTestTime])
 
   const updateRecommendation = useCallback((score: number) => {
     let recommendation: Recommendation
@@ -430,6 +741,32 @@ const TestAutomationCalculator = () => {
           )}
 
           <div className="bg-gray-50 dark:bg-gray-700 p-5 rounded-xl mb-5">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="text-gray-800 dark:text-gray-100 text-xl">📈 ROI Timeline</h4>
+              <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                Break-even: {breakEvenRuns} runs
+              </span>
+            </div>
+            <div className="relative w-full h-[200px] bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+              <canvas ref={chartRef} width="400" height="200" className="w-full h-full"></canvas>
+            </div>
+            <div className="flex justify-center gap-5 mt-2 text-sm">
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 rounded bg-red-500"></div>
+                <span className="text-gray-700 dark:text-gray-300">Investment Cost</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 rounded bg-green-500"></div>
+                <span className="text-gray-700 dark:text-gray-300">Cumulative Savings</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 rounded bg-yellow-500"></div>
+                <span className="text-gray-700 dark:text-gray-300">Break-even Point</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gray-50 dark:bg-gray-700 p-5 rounded-xl mb-5">
             <h4 className="text-gray-800 dark:text-gray-100 mb-4 text-xl">📊 Score Breakdown</h4>
             <div>
               {breakdown &&
@@ -446,12 +783,31 @@ const TestAutomationCalculator = () => {
                     </span>
                   </div>
                 ))}
-              <div className="flex justify-between items-center py-2">
+              <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
                 <span className="text-gray-700 dark:text-gray-300">Estimated Break-even Point</span>
                 <span className="font-bold py-1 px-2 rounded bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200">
                   {breakEvenRuns} runs
                 </span>
               </div>
+
+              {roiCalculation && (
+                <div className="mt-4 p-3 bg-gray-100 dark:bg-gray-600 rounded-lg text-sm text-gray-700 dark:text-gray-300">
+                  <strong className="block mb-1 text-center">ROI Factors Applied:</strong>
+                  <div className="text-center">
+                    Base effort: {roiCalculation.baseAutomationTime} min × Complexity (
+                    {roiCalculation.complexityMultiplier}x) × Level (
+                    {roiCalculation.levelMultiplier}x) × Capacity (
+                    {roiCalculation.capacityMultiplier}x)
+                  </div>
+                  <div className="mt-1 text-center">
+                    = <strong>{roiCalculation.estimatedAutomationTime} min investment</strong> →
+                    {/* */}
+                    <strong> {roiCalculation.timeSavedPerRun.toFixed(1)} min saved/run</strong> →
+                    {/* */}
+                    <strong> {roiCalculation.breakEvenRuns} runs to break-even</strong>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
