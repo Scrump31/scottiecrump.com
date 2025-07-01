@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 interface Factor {
   raw: number
@@ -81,49 +81,7 @@ const TestAutomationCalculator = () => {
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null)
   const [breakEvenRuns, setBreakEvenRuns] = useState<number>(0)
 
-  useEffect(() => {
-    calculateAutomationScore()
-  }, [factors, manualTestTime])
-
-  const calculateAutomationScore = () => {
-    const weights = {
-      businessImpact: WEIGHTS.HIGH_PRIORITY,
-      executionFrequency: WEIGHTS.HIGH_PRIORITY,
-      testingLevel: WEIGHTS.MEDIUM_PRIORITY,
-      featureStability: WEIGHTS.MEDIUM_PRIORITY,
-      technicalComplexity: WEIGHTS.MEDIUM_PRIORITY,
-      teamCapacity: WEIGHTS.MEDIUM_PRIORITY,
-    }
-
-    let totalScore = 0
-    const breakdown: any = {}
-
-    for (const [factor, value] of Object.entries(factors)) {
-      let weighted
-      if (factor === 'testingLevel') {
-        // 3-point scale: 3=Unit, 2=API, 1=UI
-        weighted =
-          (value / SCALE_VALUES.TESTING_LEVEL_MAX) * weights[factor as keyof typeof weights]
-      } else {
-        // 4-point scale for other factors
-        weighted =
-          (value / SCALE_VALUES.STANDARD_FACTOR_MAX) * weights[factor as keyof typeof weights]
-      }
-      totalScore += weighted
-      breakdown[factor] = {
-        raw: value,
-        weighted: weighted,
-        weight: weights[factor as keyof typeof weights],
-      }
-    }
-
-    setTotalScore(Math.round(totalScore))
-    setBreakdown(breakdown)
-    updateRecommendation(Math.round(totalScore))
-    calculateROI()
-  }
-
-  const calculateROI = () => {
+  const calculateROI = useCallback(() => {
     const estimatedAutomationTime = manualTestTime * ROI_MULTIPLIERS.AUTOMATION_TIME_FACTOR
     const timePerRun = Math.max(
       ROI_MULTIPLIERS.MINIMUM_EXECUTION_TIME,
@@ -131,9 +89,9 @@ const TestAutomationCalculator = () => {
     )
     const breakEven = Math.ceil(estimatedAutomationTime / (manualTestTime - timePerRun))
     setBreakEvenRuns(breakEven)
-  }
+  }, [manualTestTime])
 
-  const updateRecommendation = (score: number) => {
+  const updateRecommendation = useCallback((score: number) => {
     let recommendation: Recommendation
 
     if (score >= SCORE_THRESHOLDS.AUTOMATE) {
@@ -191,7 +149,43 @@ const TestAutomationCalculator = () => {
     }
 
     setRecommendation(recommendation)
-  }
+  }, [])
+
+  const calculateAutomationScore = useCallback(() => {
+    const weights = {
+      businessImpact: WEIGHTS.HIGH_PRIORITY,
+      executionFrequency: WEIGHTS.HIGH_PRIORITY,
+      testingLevel: WEIGHTS.MEDIUM_PRIORITY,
+      featureStability: WEIGHTS.MEDIUM_PRIORITY,
+      technicalComplexity: WEIGHTS.MEDIUM_PRIORITY,
+      teamCapacity: WEIGHTS.MEDIUM_PRIORITY,
+    }
+
+    let totalScore = 0
+    const breakdown: any = {}
+
+    for (const [factor, value] of Object.entries(factors)) {
+      let weighted
+      if (factor === 'testingLevel') {
+        weighted =
+          (value / SCALE_VALUES.TESTING_LEVEL_MAX) * weights[factor as keyof typeof weights]
+      } else {
+        weighted =
+          (value / SCALE_VALUES.STANDARD_FACTOR_MAX) * weights[factor as keyof typeof weights]
+      }
+      totalScore += weighted
+      breakdown[factor] = {
+        raw: value,
+        weighted: weighted,
+        weight: weights[factor as keyof typeof weights],
+      }
+    }
+
+    setTotalScore(Math.round(totalScore))
+    setBreakdown(breakdown)
+    updateRecommendation(Math.round(totalScore))
+    calculateROI()
+  }, [calculateROI, factors, updateRecommendation])
 
   const handleFactorChange = (factor: keyof Factors, value: number) => {
     setFactors((prev) => ({
@@ -225,6 +219,10 @@ const TestAutomationCalculator = () => {
         return 'bg-gradient-to-r from-blue-400 to-blue-600'
     }
   }
+
+  useEffect(() => {
+    calculateAutomationScore()
+  }, [calculateAutomationScore])
 
   return (
     <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
