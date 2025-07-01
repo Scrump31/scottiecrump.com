@@ -28,19 +28,54 @@ interface Recommendation {
   title: string
   subtitle: string
   cardClass: string
-  recommendations: string[]
+  recommendations: Array<{
+    id: string
+    text: string
+  }>
 }
+
+const SCORE_THRESHOLDS = {
+  AUTOMATE: 75,
+  CONSIDER: 50,
+  MANUAL: 25,
+} as const
+
+const SCALE_VALUES = {
+  TESTING_LEVEL_MAX: 3,
+  STANDARD_FACTOR_MAX: 4,
+} as const
+
+const WEIGHTS = {
+  HIGH_PRIORITY: 20,
+  MEDIUM_PRIORITY: 15,
+} as const
+
+const ROI_MULTIPLIERS = {
+  AUTOMATION_TIME_FACTOR: 2,
+  EXECUTION_SPEED_FACTOR: 0.1,
+  MINIMUM_EXECUTION_TIME: 0.5,
+} as const
+
+const DEFAULT_VALUES = {
+  BUSINESS_IMPACT: 3,
+  EXECUTION_FREQUENCY: 3,
+  TESTING_LEVEL: 2,
+  FEATURE_STABILITY: 3,
+  TECHNICAL_COMPLEXITY: 3,
+  TEAM_CAPACITY: 3,
+  MANUAL_TEST_TIME: 15,
+} as const
 
 const TestAutomationCalculator = () => {
   const [factors, setFactors] = useState<Factors>({
-    businessImpact: 3,
-    executionFrequency: 3,
-    testingLevel: 2,
-    featureStability: 3,
-    technicalComplexity: 3,
-    teamCapacity: 3,
+    businessImpact: DEFAULT_VALUES.BUSINESS_IMPACT,
+    executionFrequency: DEFAULT_VALUES.EXECUTION_FREQUENCY,
+    testingLevel: DEFAULT_VALUES.TESTING_LEVEL,
+    featureStability: DEFAULT_VALUES.FEATURE_STABILITY,
+    technicalComplexity: DEFAULT_VALUES.TECHNICAL_COMPLEXITY,
+    teamCapacity: DEFAULT_VALUES.TEAM_CAPACITY,
   })
-  const [manualTestTime, setManualTestTime] = useState<number>(15)
+  const [manualTestTime, setManualTestTime] = useState<number>(DEFAULT_VALUES.MANUAL_TEST_TIME)
   const [totalScore, setTotalScore] = useState<number>(0)
   const [breakdown, setBreakdown] = useState<Breakdown | null>(null)
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null)
@@ -52,12 +87,12 @@ const TestAutomationCalculator = () => {
 
   const calculateAutomationScore = () => {
     const weights = {
-      businessImpact: 20,
-      executionFrequency: 20,
-      testingLevel: 15,
-      featureStability: 15,
-      technicalComplexity: 15,
-      teamCapacity: 15,
+      businessImpact: WEIGHTS.HIGH_PRIORITY,
+      executionFrequency: WEIGHTS.HIGH_PRIORITY,
+      testingLevel: WEIGHTS.MEDIUM_PRIORITY,
+      featureStability: WEIGHTS.MEDIUM_PRIORITY,
+      technicalComplexity: WEIGHTS.MEDIUM_PRIORITY,
+      teamCapacity: WEIGHTS.MEDIUM_PRIORITY,
     }
 
     let totalScore = 0
@@ -67,10 +102,12 @@ const TestAutomationCalculator = () => {
       let weighted
       if (factor === 'testingLevel') {
         // 3-point scale: 3=Unit, 2=API, 1=UI
-        weighted = (value / 3) * weights[factor as keyof typeof weights]
+        weighted =
+          (value / SCALE_VALUES.TESTING_LEVEL_MAX) * weights[factor as keyof typeof weights]
       } else {
         // 4-point scale for other factors
-        weighted = (value / 4) * weights[factor as keyof typeof weights]
+        weighted =
+          (value / SCALE_VALUES.STANDARD_FACTOR_MAX) * weights[factor as keyof typeof weights]
       }
       totalScore += weighted
       breakdown[factor] = {
@@ -87,8 +124,11 @@ const TestAutomationCalculator = () => {
   }
 
   const calculateROI = () => {
-    const estimatedAutomationTime = manualTestTime * 2 // 2x manual time to automate
-    const timePerRun = Math.max(0.5, manualTestTime * 0.1) // Automated runs much faster
+    const estimatedAutomationTime = manualTestTime * ROI_MULTIPLIERS.AUTOMATION_TIME_FACTOR
+    const timePerRun = Math.max(
+      ROI_MULTIPLIERS.MINIMUM_EXECUTION_TIME,
+      manualTestTime * ROI_MULTIPLIERS.EXECUTION_SPEED_FACTOR
+    )
     const breakEven = Math.ceil(estimatedAutomationTime / (manualTestTime - timePerRun))
     setBreakEvenRuns(breakEven)
   }
@@ -96,43 +136,43 @@ const TestAutomationCalculator = () => {
   const updateRecommendation = (score: number) => {
     let recommendation: Recommendation
 
-    if (score >= 75) {
+    if (score >= SCORE_THRESHOLDS.AUTOMATE) {
       recommendation = {
         title: '🎯 Automate This',
         subtitle: 'High Priority Candidate',
         cardClass: 'automate',
         recommendations: [
-          'Prioritize this for automation in current sprint',
-          'Start with the lowest appropriate testing level',
-          'Include automation tasks in Definition of Done',
-          'Consider pair programming with developers',
-          'Set up CI/CD integration immediately',
+          { id: 'auto-1', text: 'Prioritize this for automation in current sprint' },
+          { id: 'auto-2', text: 'Start with the lowest appropriate testing level' },
+          { id: 'auto-3', text: 'Include automation tasks in Definition of Done' },
+          { id: 'auto-4', text: 'Consider pair programming with developers' },
+          { id: 'auto-5', text: 'Set up CI/CD integration immediately' },
         ],
       }
-    } else if (score >= 50) {
+    } else if (score >= SCORE_THRESHOLDS.CONSIDER) {
       recommendation = {
         title: '🤔 Consider Automation',
         subtitle: 'Moderate Priority',
         cardClass: 'manual',
         recommendations: [
-          'Evaluate after higher priority automation is complete',
-          'Consider automating only critical happy paths',
-          'Monitor execution frequency - automate if it increases',
-          'Look for opportunities to improve testing level',
-          'Assess if manual testing provides better ROI currently',
+          { id: 'consider-1', text: 'Evaluate after higher priority automation is complete' },
+          { id: 'consider-2', text: 'Consider automating only critical happy paths' },
+          { id: 'consider-3', text: 'Monitor execution frequency - automate if it increases' },
+          { id: 'consider-4', text: 'Look for opportunities to improve testing level' },
+          { id: 'consider-5', text: 'Assess if manual testing provides better ROI currently' },
         ],
       }
-    } else if (score >= 25) {
+    } else if (score >= SCORE_THRESHOLDS.MANUAL) {
       recommendation = {
         title: '✋ Manual Testing',
         subtitle: 'Low Automation Priority',
         cardClass: 'manual',
         recommendations: [
-          'Keep as manual testing for now',
-          'Focus automation efforts on higher-value areas',
-          'Consider exploratory testing approach',
-          'Re-evaluate if feature becomes more stable',
-          'Document manual test procedures thoroughly',
+          { id: 'manual-1', text: 'Keep as manual testing for now' },
+          { id: 'manual-2', text: 'Focus automation efforts on higher-value areas' },
+          { id: 'manual-3', text: 'Consider exploratory testing approach' },
+          { id: 'manual-4', text: 'Re-evaluate if feature becomes more stable' },
+          { id: 'manual-5', text: 'Document manual test procedures thoroughly' },
         ],
       }
     } else {
@@ -141,11 +181,11 @@ const TestAutomationCalculator = () => {
         subtitle: 'Not Recommended',
         cardClass: 'avoid',
         recommendations: [
-          'Do not automate - poor ROI expected',
-          'Stick to manual testing or consider not testing',
-          'Address underlying issues (stability, complexity) first',
-          "Focus team's automation capacity elsewhere",
-          'Re-assess if fundamental factors change',
+          { id: 'avoid-1', text: 'Do not automate - poor ROI expected' },
+          { id: 'avoid-2', text: 'Stick to manual testing or consider not testing' },
+          { id: 'avoid-3', text: 'Address underlying issues (stability, complexity) first' },
+          { id: 'avoid-4', text: "Focus team's automation capacity elsewhere" },
+          { id: 'avoid-5', text: 'Re-assess if fundamental factors change' },
         ],
       }
     }
@@ -171,6 +211,19 @@ const TestAutomationCalculator = () => {
     featureStability: 'Feature Stability',
     technicalComplexity: 'Technical Complexity',
     teamCapacity: 'Team Capacity',
+  }
+
+  const getCardGradientClass = (cardClass: string): string => {
+    switch (cardClass) {
+      case 'automate':
+        return 'bg-gradient-to-r from-green-400 to-green-600'
+      case 'manual':
+        return 'bg-gradient-to-r from-yellow-400 to-orange-500'
+      case 'avoid':
+        return 'bg-gradient-to-r from-pink-400 to-pink-600'
+      default:
+        return 'bg-gradient-to-r from-blue-400 to-blue-600'
+    }
   }
 
   return (
@@ -341,15 +394,9 @@ const TestAutomationCalculator = () => {
         <div className="p-10 bg-white flex flex-col justify-center">
           {recommendation && (
             <div
-              className={`${
-                recommendation.cardClass === 'automate'
-                  ? 'bg-gradient-to-r from-green-400 to-green-600'
-                  : recommendation.cardClass === 'manual'
-                  ? 'bg-gradient-to-r from-yellow-400 to-orange-500'
-                  : recommendation.cardClass === 'avoid'
-                  ? 'bg-gradient-to-r from-pink-400 to-pink-600'
-                  : 'bg-gradient-to-r from-blue-400 to-blue-600'
-              } text-white p-8 rounded-2xl text-center mb-8 shadow-lg`}
+              className={`${getCardGradientClass(
+                recommendation.cardClass
+              )} text-white p-8 rounded-2xl text-center mb-8 shadow-lg`}
             >
               <div className="text-3xl font-bold mb-2">{recommendation.title}</div>
               <div className="text-xl opacity-90 mb-5">{recommendation.subtitle}</div>
@@ -389,13 +436,13 @@ const TestAutomationCalculator = () => {
             <div className="bg-gray-50 p-5 rounded-xl">
               <h4 className="text-gray-800 mb-4 text-xl">💡 Recommendations</h4>
               <ul className="list-none p-0">
-                {recommendation.recommendations.map((rec, index) => (
+                {recommendation.recommendations.map((rec) => (
                   <li
-                    key={index}
+                    key={rec.id}
                     className="py-2 border-b border-gray-200 last:border-b-0 pl-6 relative"
                   >
                     <span className="absolute left-0 text-green-500 font-bold">✓</span>
-                    {rec}
+                    {rec.text}
                   </li>
                 ))}
               </ul>
