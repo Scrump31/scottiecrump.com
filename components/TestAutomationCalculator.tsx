@@ -111,7 +111,7 @@ const TestAutomationCalculator = () => {
       recommendation = {
         title: '🤔 Consider Automation',
         subtitle: 'Moderate Priority',
-        cardClass: 'manual',
+        cardClass: 'consider',
         recommendations: [
           { id: 'consider-1', text: 'Evaluate after higher priority automation is complete' },
           { id: 'consider-2', text: 'Consider automating only critical happy paths' },
@@ -211,8 +211,10 @@ const TestAutomationCalculator = () => {
     switch (cardClass) {
       case 'automate':
         return 'bg-gradient-to-r from-green-400 to-green-600 dark:from-green-500 dark:to-green-700'
-      case 'manual':
+      case 'consider':
         return 'bg-gradient-to-r from-yellow-400 to-orange-500 dark:from-yellow-500 dark:to-orange-600'
+      case 'manual':
+        return 'bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-600 dark:to-red-600'
       case 'avoid':
         return 'bg-gradient-to-r from-pink-400 to-pink-600 dark:from-pink-500 dark:to-pink-700'
       default:
