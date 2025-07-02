@@ -22,6 +22,13 @@ const CHART_COLORS = {
     width: 2,
   },
 }
+
+const CHART_DISPLAY_CONSTANTS = {
+  TICK_STEPS: 10,
+  CHART_TITLE: 'Cumulative Cost Comparison (Hours)',
+  X_AXIS_TITLE: 'Test Runs',
+  Y_AXIS_TITLE: 'Hours',
+}
 const CHART_TENSION = 0.1
 const NUMBER_GROUP_REGEX = /\B(?=(\d{3})+(?!\d))/g
 const NUMBER_GROUP_SEPARATOR = ','
@@ -56,6 +63,59 @@ const DEFAULT_TEST_CODING_TIME = 30
 const DEFAULT_AUTO_RUN_TIME = 30
 const DEFAULT_FAILURE_RATE = 5
 const DEFAULT_MAINTENANCE_TIME = 15
+
+// Scenario constants
+// Small project scenario
+const SMALL_SCENARIO = {
+  MANUAL_TIME: 3,
+  NUM_TESTS: 25,
+  NUM_RUNS: 20,
+  FRAMEWORK_TIME: 40,
+  TEST_CODING_TIME: 20,
+  AUTO_RUN_TIME: 15,
+  FAILURE_RATE: 3,
+  MAINTENANCE_TIME: 10,
+}
+
+// Medium project scenario
+const MEDIUM_SCENARIO = {
+  MANUAL_TIME: 5,
+  NUM_TESTS: 100,
+  NUM_RUNS: 50,
+  FRAMEWORK_TIME: 80,
+  TEST_CODING_TIME: 30,
+  AUTO_RUN_TIME: 30,
+  FAILURE_RATE: 5,
+  MAINTENANCE_TIME: 15,
+}
+
+// Large project scenario
+const LARGE_SCENARIO = {
+  MANUAL_TIME: 8,
+  NUM_TESTS: 500,
+  NUM_RUNS: 100,
+  FRAMEWORK_TIME: 160,
+  TEST_CODING_TIME: 45,
+  AUTO_RUN_TIME: 45,
+  FAILURE_RATE: 8,
+  MAINTENANCE_TIME: 20,
+}
+
+// API testing scenario
+const API_SCENARIO = {
+  MANUAL_TIME: 4,
+  NUM_TESTS: 150,
+  NUM_RUNS: 75,
+  FRAMEWORK_TIME: 60,
+  TEST_CODING_TIME: 15,
+  AUTO_RUN_TIME: 5,
+  FAILURE_RATE: 2,
+  MAINTENANCE_TIME: 8,
+}
+
+const ROI_DISPLAY = {
+  POOR_THRESHOLD: 2, // When break-even is more than twice the number of runs
+}
 
 const TestAutomationROICalculator = () => {
   // State for input values
@@ -101,7 +161,7 @@ const TestAutomationROICalculator = () => {
       automationCosts.push(investment)
 
       // ROI calculation
-      const roi = (savings - investment) / investment
+      const roi = investment > 0 ? (savings - investment) / investment : -1
       roiValues.push(roi)
 
       // Find break-even point
@@ -168,12 +228,9 @@ const TestAutomationROICalculator = () => {
     if (typeof window === 'undefined' || !chartRef.current) return
 
     // Dynamically import Chart.js
-    import('chart.js').then(async (ChartModule) => {
+    import('chart.js/auto').then(async (ChartModule) => {
       if (!chartRef.current) return
-      const { Chart, registerables } = ChartModule
-
-      // Register all chart components
-      Chart.register(...registerables)
+      const { default: Chart } = ChartModule
 
       // Import annotation plugin
       const annotationPlugin = await import('chartjs-plugin-annotation').then(
@@ -188,13 +245,17 @@ const TestAutomationROICalculator = () => {
       // Destroy previous chart if it exists
       if (chartInstance.current) {
         chartInstance.current.destroy()
+        chartInstance.current = null
       }
 
       const ctx = chartRef.current.getContext('2d')
       if (!ctx) return
 
+      // Create actual labels for the x-axis to ensure proper positioning
+      const labels = Array.from({ length: numRuns }, (_, i) => i + 1)
+
       const data = {
-        labels: Array.from({ length: numRuns }, (_, i) => i + 1),
+        labels: labels,
         datasets: [
           {
             label: 'Manual Testing Cost',
@@ -220,19 +281,19 @@ const TestAutomationROICalculator = () => {
               type: 'line' as const,
               xMin: breakEvenRun,
               xMax: breakEvenRun,
+              yMin: 0,
+              yMax: 'max',
               borderColor: CHART_COLORS.breakEven.border,
               borderWidth: CHART_COLORS.breakEven.width,
               label: {
-                display: true,
-                content: `Break-even: ${breakEvenRun} runs`,
-                position: 'start' as const,
+                display: false, // Hide label for better readability
               },
             },
           }
         : {}
 
-      const config = {
-        type: 'line' as const,
+      chartInstance.current = new Chart(ctx, {
+        type: 'line' as const, // Use 'as const' to tell TypeScript this is a specific literal type
         data: data,
         options: {
           responsive: true,
@@ -240,7 +301,7 @@ const TestAutomationROICalculator = () => {
           plugins: {
             title: {
               display: true,
-              text: 'Cumulative Cost Comparison (Hours)',
+              text: CHART_DISPLAY_CONSTANTS.CHART_TITLE,
             },
             annotation: {
               annotations,
@@ -251,101 +312,70 @@ const TestAutomationROICalculator = () => {
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Hours',
+                text: CHART_DISPLAY_CONSTANTS.Y_AXIS_TITLE,
               },
             },
             x: {
+              type: 'linear',
+              min: 1,
+              max: numRuns,
               title: {
                 display: true,
-                text: 'Test Runs',
+                text: CHART_DISPLAY_CONSTANTS.X_AXIS_TITLE,
+              },
+              ticks: {
+                stepSize: Math.max(1, Math.floor(numRuns / CHART_DISPLAY_CONSTANTS.TICK_STEPS)),
+                callback: (value: string | number) => Math.round(Number(value)),
               },
             },
           },
         },
-      }
-
-      chartInstance.current = new Chart(ctx, config)
+      })
     })
   }
 
   // Load scenario data
   const loadScenario = (scenario: string) => {
-    const SMALL_MANUAL_TIME = 3
-    const SMALL_NUM_TESTS = 25
-    const SMALL_NUM_RUNS = 20
-    const SMALL_FRAMEWORK_TIME = 40
-    const SMALL_TEST_CODING_TIME = 20
-    const SMALL_AUTO_RUN_TIME = 15
-    const SMALL_FAILURE_RATE = 3
-    const SMALL_MAINTENANCE_TIME = 10
-
-    const MEDIUM_MANUAL_TIME = 5
-    const MEDIUM_NUM_TESTS = 100
-    const MEDIUM_NUM_RUNS = 50
-    const MEDIUM_FRAMEWORK_TIME = 80
-    const MEDIUM_TEST_CODING_TIME = 30
-    const MEDIUM_AUTO_RUN_TIME = 30
-    const MEDIUM_FAILURE_RATE = 5
-    const MEDIUM_MAINTENANCE_TIME = 15
-
-    const LARGE_MANUAL_TIME = 8
-    const LARGE_NUM_TESTS = 500
-    const LARGE_NUM_RUNS = 100
-    const LARGE_FRAMEWORK_TIME = 160
-    const LARGE_TEST_CODING_TIME = 45
-    const LARGE_AUTO_RUN_TIME = 45
-    const LARGE_FAILURE_RATE = 8
-    const LARGE_MAINTENANCE_TIME = 20
-
-    const API_MANUAL_TIME = 4
-    const API_NUM_TESTS = 150
-    const API_NUM_RUNS = 75
-    const API_FRAMEWORK_TIME = 60
-    const API_TEST_CODING_TIME = 15
-    const API_AUTO_RUN_TIME = 5
-    const API_FAILURE_RATE = 2
-    const API_MAINTENANCE_TIME = 8
-
     const scenarios = {
       small: {
-        manualTime: SMALL_MANUAL_TIME,
-        numTests: SMALL_NUM_TESTS,
-        numRuns: SMALL_NUM_RUNS,
-        frameworkTime: SMALL_FRAMEWORK_TIME,
-        testCodingTime: SMALL_TEST_CODING_TIME,
-        autoRunTime: SMALL_AUTO_RUN_TIME,
-        failureRate: SMALL_FAILURE_RATE,
-        maintenanceTime: SMALL_MAINTENANCE_TIME,
+        manualTime: SMALL_SCENARIO.MANUAL_TIME,
+        numTests: SMALL_SCENARIO.NUM_TESTS,
+        numRuns: SMALL_SCENARIO.NUM_RUNS,
+        frameworkTime: SMALL_SCENARIO.FRAMEWORK_TIME,
+        testCodingTime: SMALL_SCENARIO.TEST_CODING_TIME,
+        autoRunTime: SMALL_SCENARIO.AUTO_RUN_TIME,
+        failureRate: SMALL_SCENARIO.FAILURE_RATE,
+        maintenanceTime: SMALL_SCENARIO.MAINTENANCE_TIME,
       },
       medium: {
-        manualTime: MEDIUM_MANUAL_TIME,
-        numTests: MEDIUM_NUM_TESTS,
-        numRuns: MEDIUM_NUM_RUNS,
-        frameworkTime: MEDIUM_FRAMEWORK_TIME,
-        testCodingTime: MEDIUM_TEST_CODING_TIME,
-        autoRunTime: MEDIUM_AUTO_RUN_TIME,
-        failureRate: MEDIUM_FAILURE_RATE,
-        maintenanceTime: MEDIUM_MAINTENANCE_TIME,
+        manualTime: MEDIUM_SCENARIO.MANUAL_TIME,
+        numTests: MEDIUM_SCENARIO.NUM_TESTS,
+        numRuns: MEDIUM_SCENARIO.NUM_RUNS,
+        frameworkTime: MEDIUM_SCENARIO.FRAMEWORK_TIME,
+        testCodingTime: MEDIUM_SCENARIO.TEST_CODING_TIME,
+        autoRunTime: MEDIUM_SCENARIO.AUTO_RUN_TIME,
+        failureRate: MEDIUM_SCENARIO.FAILURE_RATE,
+        maintenanceTime: MEDIUM_SCENARIO.MAINTENANCE_TIME,
       },
       large: {
-        manualTime: LARGE_MANUAL_TIME,
-        numTests: LARGE_NUM_TESTS,
-        numRuns: LARGE_NUM_RUNS,
-        frameworkTime: LARGE_FRAMEWORK_TIME,
-        testCodingTime: LARGE_TEST_CODING_TIME,
-        autoRunTime: LARGE_AUTO_RUN_TIME,
-        failureRate: LARGE_FAILURE_RATE,
-        maintenanceTime: LARGE_MAINTENANCE_TIME,
+        manualTime: LARGE_SCENARIO.MANUAL_TIME,
+        numTests: LARGE_SCENARIO.NUM_TESTS,
+        numRuns: LARGE_SCENARIO.NUM_RUNS,
+        frameworkTime: LARGE_SCENARIO.FRAMEWORK_TIME,
+        testCodingTime: LARGE_SCENARIO.TEST_CODING_TIME,
+        autoRunTime: LARGE_SCENARIO.AUTO_RUN_TIME,
+        failureRate: LARGE_SCENARIO.FAILURE_RATE,
+        maintenanceTime: LARGE_SCENARIO.MAINTENANCE_TIME,
       },
       api: {
-        manualTime: API_MANUAL_TIME,
-        numTests: API_NUM_TESTS,
-        numRuns: API_NUM_RUNS,
-        frameworkTime: API_FRAMEWORK_TIME,
-        testCodingTime: API_TEST_CODING_TIME,
-        autoRunTime: API_AUTO_RUN_TIME,
-        failureRate: API_FAILURE_RATE,
-        maintenanceTime: API_MAINTENANCE_TIME,
+        manualTime: API_SCENARIO.MANUAL_TIME,
+        numTests: API_SCENARIO.NUM_TESTS,
+        numRuns: API_SCENARIO.NUM_RUNS,
+        frameworkTime: API_SCENARIO.FRAMEWORK_TIME,
+        testCodingTime: API_SCENARIO.TEST_CODING_TIME,
+        autoRunTime: API_SCENARIO.AUTO_RUN_TIME,
+        failureRate: API_SCENARIO.FAILURE_RATE,
+        maintenanceTime: API_SCENARIO.MAINTENANCE_TIME,
       },
     }
 
@@ -375,6 +405,16 @@ const TestAutomationROICalculator = () => {
     failureRate,
     maintenanceTime,
   ])
+
+  // Clean up chart instance when component unmounts
+  useEffect(() => {
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy()
+        chartInstance.current = null
+      }
+    }
+  }, [])
 
   return (
     <div className="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
@@ -629,7 +669,17 @@ const TestAutomationROICalculator = () => {
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
               <p className="text-lg text-gray-600 dark:text-gray-400">Break-even Point</p>
               <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">
-                {breakEven ? `${breakEven} runs` : 'N/A'}
+                {(() => {
+                  let breakEvenText
+                  if (!breakEven) {
+                    breakEvenText = 'N/A'
+                  } else if (breakEven > numRuns * ROI_DISPLAY.POOR_THRESHOLD) {
+                    breakEvenText = 'Not reached'
+                  } else {
+                    breakEvenText = `${breakEven} runs`
+                  }
+                  return breakEvenText
+                })()}
               </p>
             </div>
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
