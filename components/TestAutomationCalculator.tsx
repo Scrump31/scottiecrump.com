@@ -73,7 +73,8 @@ interface ROICalculation {
 const SCORE_THRESHOLDS = {
   AUTOMATE: 75,
   CONSIDER: 50,
-  MANUAL: 25,
+  MANUAL: 30,
+  AVOID: 0,
 } as const
 
 const SCALE_VALUES = {
@@ -129,6 +130,10 @@ const CHART_CONSTANTS = {
   NO_BREAKEVEN_THRESHOLD: 999,
   MIN_TIME_SAVED: 0.1,
   CHART_STEPS: 10,
+  DASH_LENGTH: 5,
+  GAP_LENGTH: 5,
+  BREAKEVEN_DASH_LENGTH: 10,
+  BREAKEVEN_GAP_LENGTH: 5,
 } as const
 
 const TestAutomationCalculator = () => {
@@ -171,7 +176,7 @@ const TestAutomationCalculator = () => {
     const maxSavings = timeSavedPerRun * maxRuns
     const maxValue = Math.max(automationCost, maxSavings) * CHART_CONSTANTS.SCALE_FACTOR
 
-    // Destroy existing chart if it exists
+    // Destroy the existing chart if it exists
     if (chartInstanceRef.current) {
       chartInstanceRef.current.destroy()
       chartInstanceRef.current = null
@@ -192,7 +197,7 @@ const TestAutomationCalculator = () => {
         {
           label: 'Cumulative Savings',
           data: savingsData,
-          borderColor: '#27ae60', // Green
+          borderColor: '#27ae60',
           backgroundColor: 'rgba(39, 174, 96, 0.1)',
           borderWidth: 3,
           fill: true,
@@ -203,9 +208,9 @@ const TestAutomationCalculator = () => {
         {
           label: 'Investment Cost',
           data: labels.map(() => automationCost),
-          borderColor: '#e74c3c', // Red
+          borderColor: '#e74c3c',
           borderWidth: 2,
-          borderDash: [5, 5],
+          borderDash: [CHART_CONSTANTS.DASH_LENGTH, CHART_CONSTANTS.GAP_LENGTH],
           pointRadius: 0,
           fill: false,
         },
@@ -282,9 +287,12 @@ const TestAutomationCalculator = () => {
               type: 'line',
               xMin: breakEvenRuns,
               xMax: breakEvenRuns,
-              borderColor: '#f39c12', // Orange
+              borderColor: '#f39c12',
               borderWidth: 2,
-              borderDash: [10, 5],
+              borderDash: [
+                CHART_CONSTANTS.BREAKEVEN_DASH_LENGTH,
+                CHART_CONSTANTS.BREAKEVEN_GAP_LENGTH,
+              ],
               label: {
                 display: false, // Hide label for better readability
               },
@@ -298,7 +306,6 @@ const TestAutomationCalculator = () => {
               radius: 6,
               display: breakEvenRuns < CHART_CONSTANTS.NO_BREAKEVEN_THRESHOLD, // Don't display if no break-even point exists
             },
-            // Investment and savings labels removed for better readability
           },
         },
       },
