@@ -101,18 +101,6 @@ const LARGE_SCENARIO = {
   MAINTENANCE_TIME: 20,
 }
 
-// API testing scenario
-const API_SCENARIO = {
-  MANUAL_TIME: 4,
-  NUM_TESTS: 150,
-  NUM_RUNS: 75,
-  FRAMEWORK_TIME: 60,
-  TEST_CODING_TIME: 15,
-  AUTO_RUN_TIME: 5,
-  FAILURE_RATE: 2,
-  MAINTENANCE_TIME: 8,
-}
-
 const ROI_DISPLAY = {
   POOR_THRESHOLD: 2, // When break-even is more than twice the number of runs
 }
@@ -366,16 +354,6 @@ const TestAutomationROICalculator = () => {
         autoRunTime: LARGE_SCENARIO.AUTO_RUN_TIME,
         failureRate: LARGE_SCENARIO.FAILURE_RATE,
         maintenanceTime: LARGE_SCENARIO.MAINTENANCE_TIME,
-      },
-      api: {
-        manualTime: API_SCENARIO.MANUAL_TIME,
-        numTests: API_SCENARIO.NUM_TESTS,
-        numRuns: API_SCENARIO.NUM_RUNS,
-        frameworkTime: API_SCENARIO.FRAMEWORK_TIME,
-        testCodingTime: API_SCENARIO.TEST_CODING_TIME,
-        autoRunTime: API_SCENARIO.AUTO_RUN_TIME,
-        failureRate: API_SCENARIO.FAILURE_RATE,
-        maintenanceTime: API_SCENARIO.MAINTENANCE_TIME,
       },
     }
 
@@ -651,12 +629,6 @@ const TestAutomationROICalculator = () => {
               className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
             >
               Large Project
-            </button>
-            <button
-              onClick={() => loadScenario('api')}
-              className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
-            >
-              API Testing
             </button>
           </div>
         </div>
