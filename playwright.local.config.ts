@@ -1,7 +1,7 @@
 import { PlaywrightTestConfig } from '@playwright/test'
 import * as baseConfig from './playwright.config'
 import dotenv from 'dotenv'
-import path from 'path'
+import path from 'node:path'
 
 dotenv.config({ path: path.resolve(__dirname, '.env.local') })
 

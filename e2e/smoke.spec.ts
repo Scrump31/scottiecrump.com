@@ -20,7 +20,7 @@ test('Each page should load without error', async ({ page }) => {
 
 test('Blog navigation should navigate to prev and next page', async ({ page }) => {
   await page.goto('/blog')
-  const nextButton = page.getByRole('button', { name: 'Next' })
+  const nextButton = page.getByRole('button', { name: 'Next', exact: true })
   const prevButton = page.getByRole('button', { name: 'Previous' })
   await nextButton.click()
   await expect(page.getByText('2 of')).toBeVisible()
