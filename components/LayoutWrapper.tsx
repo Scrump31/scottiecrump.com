@@ -1,6 +1,6 @@
 import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '@/data/logo.svg'
 import siteMetadata from '@/data/siteMetadata'
+import logoUrl from '@/data/logo.svg'
 import Footer from './Footer'
 import Link from './Link'
 import MobileNav from './MobileNav'
@@ -24,7 +24,7 @@ const LayoutWrapper = ({ children }: { children: ReactElement }): ReactElement =
             <Link href="/" aria-label="Tailwind CSS Blog">
               <div className="flex items-center justify-between">
                 <div className="mr-3">
-                  <Logo />
+                  <img src={(logoUrl as unknown) as string} alt="Logo" width={60} height={60} />
                 </div>
                 {
                   <div className="hidden h-6 text-2xl font-semibold sm:block">
