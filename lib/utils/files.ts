@@ -7,12 +7,10 @@ const pipe = (
       path: fs.PathLike,
       options?:
         | {
-            // eslint-disable-next-line no-undef
             encoding: BufferEncoding | null
             withFileTypes?: false | undefined
             recursive?: boolean | undefined
           }
-        // eslint-disable-next-line no-undef
         | BufferEncoding
         | null
     ): string[]
@@ -29,7 +27,6 @@ const pipe = (
             withFileTypes?: false | undefined
             recursive?: boolean | undefined
           })
-        // eslint-disable-next-line no-undef
         | BufferEncoding
         | null
     ): string[] | Buffer[]
