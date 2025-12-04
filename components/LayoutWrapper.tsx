@@ -24,7 +24,13 @@ const LayoutWrapper = ({ children }: { children: ReactElement }): ReactElement =
             <Link href="/" aria-label="Tailwind CSS Blog">
               <div className="flex items-center justify-between">
                 <div className="mr-3">
-                  <img src={(logoUrl as unknown) as string} alt="Logo" width={60} height={60} />
+                  {(() => {
+                    const mod = (logoUrl as unknown) as any
+                    const src =
+                      typeof mod === 'string' ? mod : mod?.src || mod?.default?.src || String(mod)
+                    // eslint-disable-next-line @next/next/no-img-element
+                    return <img src={src} alt="Logo" width={60} height={60} />
+                  })()}
                 </div>
                 {
                   <div className="hidden h-6 text-2xl font-semibold sm:block">

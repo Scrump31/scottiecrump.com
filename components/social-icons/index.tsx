@@ -13,16 +13,26 @@ type SocialIconProps = {
 }
 
 // Free SVG Icons from: https://simpleicons.org/
-// Under Turbopack, importing an .svg returns a URL string (not a React component).
+// Next.js 16 may compile SVG imports into a structured object (e.g. `{ src, ... }`).
+// This helper normalizes the import into a URL string for use in <img />.
+const toUrl = (mod: unknown): string => {
+  if (typeof mod === 'string') return mod
+  // @ts-ignore – runtime safety for various module shapes
+  if (mod && typeof mod === 'object' && 'src' in (mod as any)) return (mod as any).src
+  // @ts-ignore – sometimes nested under default
+  if (mod && typeof mod === 'object' && (mod as any).default?.src) return (mod as any).default.src
+  return String(mod)
+}
+
 // Map kinds to their imported URL so we can render with <img /> consistently.
 const components = {
-  mail: (Mail as unknown) as string,
-  github: (Github as unknown) as string,
-  facebook: (Facebook as unknown) as string,
-  instagram: (Instagram as unknown) as string,
-  youtube: (Youtube as unknown) as string,
-  linkedin: (Linkedin as unknown) as string,
-  twitter: (Twitter as unknown) as string,
+  mail: toUrl(Mail as unknown),
+  github: toUrl(Github as unknown),
+  facebook: toUrl(Facebook as unknown),
+  instagram: toUrl(Instagram as unknown),
+  youtube: toUrl(Youtube as unknown),
+  linkedin: toUrl(Linkedin as unknown),
+  twitter: toUrl(Twitter as unknown),
 }
 
 const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
@@ -39,6 +49,7 @@ const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
       aria-label={`Visit ${kind} profile`}
     >
       <span className="sr-only">{kind}</span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
         alt={`${kind} icon`}
