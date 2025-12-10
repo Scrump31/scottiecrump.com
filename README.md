@@ -17,14 +17,14 @@ This website is built with Next.js and React, featuring a blog with articles abo
 
 ## Technology Stack
 
-- **Framework**: Next.js 15.x
-- **UI Library**: React 18.x
-- **Styling**: Tailwind CSS
-- **Content**: MDX for blog posts
-- **Charts**: Chart.js for data visualization
+- **Framework**: Next.js 16.0.7
+- **UI Library**: React 19.0.0
+- **Styling**: Tailwind CSS 3.4.10
+- **Content**: MDX for blog posts (via mdx-bundler)
+- **Charts**: Chart.js 4.4.1 for data visualization
 - **Testing**:
-  - Vitest for unit and component testing
-  - Playwright for end-to-end testing
+  - Vitest 4.0.15 for unit and component testing
+  - Playwright 1.56.1 for end-to-end testing
   - Allure for test reporting
 - **Analytics**: Datadog RUM, InfluxDB for metrics
 
