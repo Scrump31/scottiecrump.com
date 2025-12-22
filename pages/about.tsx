@@ -9,7 +9,7 @@ export async function getStaticProps() {
   return { props: { authorDetails } }
 }
 
-export default function About({ authorDetails }: { authorDetails: AuthorDetails }) {
+export default function About({ authorDetails }: Readonly<{ authorDetails: AuthorDetails }>) {
   const { mdxSource, frontMatter } = authorDetails
 
   return (

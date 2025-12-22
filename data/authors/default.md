@@ -21,7 +21,7 @@ the [Advanced Level Agile Technical Tester (CTAL-ATT)](https://atsqa.org/certifi
 and [Foundation Level Mobile App Tester (CTFL-MAT)](https://atsqa.org/certified-testers/profile/13fa786117484e02a22bf5603c840003)
 certifications via the [International Software Testing Qualifications Board](https://www.istqb.org).
 He is
-a [Amazon Web Services Certified Cloud Practitioner](https://www.credly.com/badges/74473b93-3746-474c-8998-1d3290732c44/public_url).
+a [Databricks Certified Data Engineer Associate](https://credentials.databricks.com/40493c6d-282a-4dd8-a3d0-f6ced7cf087c#acc.xiJmEVX2).
 He is also a certified [Professional Scrum Master I](https://www.scrum.org/user/872947).
 
 He has also worked with many students looking to break into the software industry at Coding Bootcamp settings. His
