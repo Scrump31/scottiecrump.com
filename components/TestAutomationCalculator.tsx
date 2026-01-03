@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Chart,
@@ -94,23 +96,23 @@ const ROI_MULTIPLIERS = {
 } as const
 
 const COMPLEXITY_MULTIPLIERS = {
-  4: 1.0, // Simple
+  4: 1, // Simple
   3: 1.5, // Moderate
-  2: 3.0, // Complex
-  1: 5.0, // Very complex
+  2: 3, // Complex
+  1: 5, // Very complex
 } as const
 
 const TESTING_LEVEL_MULTIPLIERS = {
-  3: 1.0, // Unit/Component
-  2: 2.0, // API/Integration
-  1: 4.0, // UI/End-to-End
+  3: 1, // Unit/Component
+  2: 2, // API/Integration
+  1: 4, // UI/End-to-End
 } as const
 
 const TEAM_CAPACITY_MULTIPLIERS = {
-  4: 1.0, // High capacity
+  4: 1, // High capacity
   3: 1.3, // Moderate capacity
-  2: 2.0, // Limited capacity
-  1: 3.0, // Very limited capacity
+  2: 2, // Limited capacity
+  1: 3, // Very limited capacity
 } as const
 
 const DEFAULT_VALUES = {
@@ -540,7 +542,9 @@ const TestAutomationCalculator = () => {
             <select
               id="businessImpact"
               value={factors.businessImpact}
-              onChange={(e) => handleFactorChange('businessImpact', parseInt(e.target.value))}
+              onChange={(e) =>
+                handleFactorChange('businessImpact', Number.parseInt(e.target.value))
+              }
               className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="1">Low - Minor inconvenience</option>
@@ -563,7 +567,9 @@ const TestAutomationCalculator = () => {
             <select
               id="executionFrequency"
               value={factors.executionFrequency}
-              onChange={(e) => handleFactorChange('executionFrequency', parseInt(e.target.value))}
+              onChange={(e) =>
+                handleFactorChange('executionFrequency', Number.parseInt(e.target.value))
+              }
               className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="1">Rarely (&lt; 5 times)</option>
@@ -586,7 +592,7 @@ const TestAutomationCalculator = () => {
             <select
               id="testingLevel"
               value={factors.testingLevel}
-              onChange={(e) => handleFactorChange('testingLevel', parseInt(e.target.value))}
+              onChange={(e) => handleFactorChange('testingLevel', Number.parseInt(e.target.value))}
               className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="3">Unit/Component Level</option>
@@ -614,7 +620,9 @@ const TestAutomationCalculator = () => {
             <select
               id="featureStability"
               value={factors.featureStability}
-              onChange={(e) => handleFactorChange('featureStability', parseInt(e.target.value))}
+              onChange={(e) =>
+                handleFactorChange('featureStability', Number.parseInt(e.target.value))
+              }
               className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="1">Highly volatile - frequent changes</option>
@@ -637,7 +645,9 @@ const TestAutomationCalculator = () => {
             <select
               id="technicalComplexity"
               value={factors.technicalComplexity}
-              onChange={(e) => handleFactorChange('technicalComplexity', parseInt(e.target.value))}
+              onChange={(e) =>
+                handleFactorChange('technicalComplexity', Number.parseInt(e.target.value))
+              }
               className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="4">Simple - straightforward automation</option>
@@ -660,7 +670,7 @@ const TestAutomationCalculator = () => {
             <select
               id="teamCapacity"
               value={factors.teamCapacity}
-              onChange={(e) => handleFactorChange('teamCapacity', parseInt(e.target.value))}
+              onChange={(e) => handleFactorChange('teamCapacity', Number.parseInt(e.target.value))}
               className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="1">Very Limited - Team is fully committed to other priorities</option>
@@ -692,7 +702,7 @@ const TestAutomationCalculator = () => {
               value={manualTestTime}
               min="1"
               max="1440"
-              onChange={(e) => handleManualTimeChange(parseInt(e.target.value))}
+              onChange={(e) => handleManualTimeChange(Number.parseInt(e.target.value))}
               className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg text-base transition-colors focus:outline-none focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
             <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 italic">

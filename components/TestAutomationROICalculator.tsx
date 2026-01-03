@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 const MINUTES_IN_HOUR = 60
@@ -176,7 +178,7 @@ const TestAutomationROICalculator = () => {
       newInterpretation = `Excellent ROI! You'll break even after just ${breakEvenRun} test runs. `
       newInterpretation += `By run ${numRuns}, you'll have saved $${calculatedTotalSavings
         .toFixed(DECIMAL_PRECISION)
-        .replace(NUMBER_GROUP_REGEX, NUMBER_GROUP_SEPARATOR)} compared to manual testing. `
+        .replaceAll(NUMBER_GROUP_REGEX, NUMBER_GROUP_SEPARATOR)} compared to manual testing. `
       newInterpretation += 'This is a strong candidate for automation.'
     } else if (breakEvenRun && breakEvenRun < numRuns * GOOD_ROI_THRESHOLD) {
       newInterpretation = `Good ROI potential. Break-even occurs at ${breakEvenRun} runs. `
@@ -213,7 +215,7 @@ const TestAutomationROICalculator = () => {
     automationCosts: number[],
     breakEvenRun: number | null
   ) => {
-    if (typeof window === 'undefined' || !chartRef.current) return
+    if (globalThis.window === undefined || !chartRef.current) return
 
     // Dynamically import Chart.js
     import('chart.js/auto').then(async (ChartModule) => {
@@ -423,7 +425,7 @@ const TestAutomationROICalculator = () => {
                 value={manualTime}
                 min={MIN_MANUAL_TIME}
                 step={MANUAL_TIME_STEP}
-                onChange={(e) => setManualTime(parseFloat(e.target.value))}
+                onChange={(e) => setManualTime(Number.parseFloat(e.target.value))}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -444,7 +446,7 @@ const TestAutomationROICalculator = () => {
                 value={numTests}
                 min={MIN_NUM_TESTS}
                 step={NUM_TESTS_STEP}
-                onChange={(e) => setNumTests(parseInt(e.target.value))}
+                onChange={(e) => setNumTests(Number.parseInt(e.target.value))}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -465,7 +467,7 @@ const TestAutomationROICalculator = () => {
                 value={numRuns}
                 min={MIN_NUM_RUNS}
                 step={NUM_RUNS_STEP}
-                onChange={(e) => setNumRuns(parseInt(e.target.value))}
+                onChange={(e) => setNumRuns(Number.parseInt(e.target.value))}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -486,7 +488,7 @@ const TestAutomationROICalculator = () => {
                 value={hourlyRate}
                 min={MIN_HOURLY_RATE}
                 step={HOURLY_RATE_STEP}
-                onChange={(e) => setHourlyRate(parseInt(e.target.value))}
+                onChange={(e) => setHourlyRate(Number.parseInt(e.target.value))}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -513,7 +515,7 @@ const TestAutomationROICalculator = () => {
                 value={frameworkTime}
                 min={MIN_FRAMEWORK_TIME}
                 step={FRAMEWORK_TIME_STEP}
-                onChange={(e) => setFrameworkTime(parseInt(e.target.value))}
+                onChange={(e) => setFrameworkTime(Number.parseInt(e.target.value))}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -534,7 +536,7 @@ const TestAutomationROICalculator = () => {
                 value={testCodingTime}
                 min={MIN_TEST_CODING_TIME}
                 step={TEST_CODING_TIME_STEP}
-                onChange={(e) => setTestCodingTime(parseInt(e.target.value))}
+                onChange={(e) => setTestCodingTime(Number.parseInt(e.target.value))}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -555,7 +557,7 @@ const TestAutomationROICalculator = () => {
                 value={autoRunTime}
                 min={MIN_AUTO_RUN_TIME}
                 step={AUTO_RUN_TIME_STEP}
-                onChange={(e) => setAutoRunTime(parseFloat(e.target.value))}
+                onChange={(e) => setAutoRunTime(Number.parseFloat(e.target.value))}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -576,7 +578,7 @@ const TestAutomationROICalculator = () => {
                 value={failureRate}
                 min={MIN_FAILURE_RATE}
                 step={FAILURE_RATE_STEP}
-                onChange={(e) => setFailureRate(parseInt(e.target.value))}
+                onChange={(e) => setFailureRate(Number.parseInt(e.target.value))}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -597,7 +599,7 @@ const TestAutomationROICalculator = () => {
                 value={maintenanceTime}
                 min={MIN_MAINTENANCE_TIME}
                 step={MAINTENANCE_TIME_STEP}
-                onChange={(e) => setMaintenanceTime(parseInt(e.target.value))}
+                onChange={(e) => setMaintenanceTime(Number.parseInt(e.target.value))}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -666,7 +668,7 @@ const TestAutomationROICalculator = () => {
                 $
                 {totalSavings
                   .toFixed(DECIMAL_PRECISION)
-                  .replace(NUMBER_GROUP_REGEX, NUMBER_GROUP_SEPARATOR)}
+                  .replaceAll(NUMBER_GROUP_REGEX, NUMBER_GROUP_SEPARATOR)}
               </p>
             </div>
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">

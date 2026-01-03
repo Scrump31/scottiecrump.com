@@ -1,7 +1,7 @@
 import { bundleMDX } from 'mdx-bundler'
-import fs from 'fs'
+import fs from 'node:fs'
 import matter from 'gray-matter'
-import path from 'path'
+import path from 'node:path'
 import readingTime from 'reading-time'
 import { visit } from 'unist-util-visit'
 import getAllFilesRecursively from './utils/files'
@@ -30,11 +30,48 @@ const tokenClassNames = {
   comment: 'text-gray-400 italic',
 }
 
+// Helper function to apply custom token class names to syntax highlighting
+function applyTokenClassNames(node: any) {
+  const [token, type] = node.properties.className || []
+  if (token === 'token' && type in tokenClassNames) {
+    node.properties.className = [tokenClassNames[type as keyof typeof tokenClassNames]]
+  }
+}
+
+// Rehype plugin to customize Prism token class names
+function rehypeCustomTokens() {
+  return (tree: any) => {
+    visit(tree, 'element', applyTokenClassNames)
+  }
+}
+
+// Configure MDX remark plugins
+function getRemarkPlugins(existingPlugins: any[] = []) {
+  return [
+    ...existingPlugins,
+    remarkSlug,
+    remarkAutolinkHeadings,
+    remarkGfm,
+    [remarkFootnotes, { inlineNotes: true }],
+    remarkMath,
+  ]
+}
+
+// Configure MDX rehype plugins
+function getRehypePlugins(existingPlugins: any[] = []) {
+  return [
+    ...existingPlugins,
+    rehypeKatex,
+    [rehypePrismPlus, { ignoreMissing: true }],
+    rehypeCustomTokens,
+  ]
+}
+
 export function getFiles(type: string): string[] {
   const prefixPaths = path.join(root, 'data', type)
   const files = getAllFilesRecursively(prefixPaths)
   // Only want to return blog/path and ignore root, replace is necessary to work on Windows
-  return files.map((file: string) => file.slice(prefixPaths.length + 1).replace(/\\/g, '/'))
+  return files.map((file: string) => file.slice(prefixPaths.length + 1).replaceAll('\\', '/'))
 }
 
 export function formatSlug(slug: string): string {
@@ -90,35 +127,8 @@ export async function getFileBySlug(type: string, slug: string | string[]) {
       // mdx imports can be automatically source from the components directory
       cwd: path.join(process.cwd(), 'components'),
       mdxOptions(options) {
-        // https://github.com/kentcdodds/mdx-bundler?tab=readme-ov-file#mdxoptions
-        // this is the recommended way to add custom remark/rehype plugins:
-        // The syntax might look weird, but it protects you in case we add/remove
-        // plugins in the future.
-        options.remarkPlugins = [
-          ...(options.remarkPlugins ?? []),
-          remarkSlug,
-          remarkAutolinkHeadings,
-          remarkGfm,
-          [remarkFootnotes, { inlineNotes: true }],
-          remarkMath,
-        ]
-        options.rehypePlugins = [
-          ...(options.rehypePlugins ?? []),
-          rehypeKatex,
-          [rehypePrismPlus, { ignoreMissing: true }],
-          () => {
-            return (tree: any) => {
-              visit(tree, 'element', (node: any) => {
-                let [token, type] = node.properties.className || []
-                if (token === 'token' && type in tokenClassNames) {
-                  node.properties.className = [
-                    tokenClassNames[type as keyof typeof tokenClassNames],
-                  ]
-                }
-              })
-            }
-          },
-        ]
+        options.remarkPlugins = getRemarkPlugins(options.remarkPlugins)
+        options.rehypePlugins = getRehypePlugins(options.rehypePlugins)
         return options
       },
       esbuildOptions: (options: any) => {
@@ -157,7 +167,7 @@ export async function getAllFilesFrontMatter(folder: string): Promise<FrontMatte
 
   files.forEach((file: string) => {
     // Replace is necessary to work on Windows
-    const fileName = file.slice(prefixPaths.length + 1).replace(/\\/g, '/')
+    const fileName = file.slice(prefixPaths.length + 1).replaceAll('\\', '/')
     // Remove Unexpected File
     if (path.extname(fileName) !== '.md' && path.extname(fileName) !== '.mdx') {
       return

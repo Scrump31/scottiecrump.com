@@ -1,8 +1,9 @@
-import { ChangeEvent } from 'react'
+'use client'
+
+import { ChangeEvent, useState } from 'react'
 
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
-import { useState } from 'react'
 import Pagination from '@/components/Pagination'
 import formatDate from '@/lib/utils/formatDate'
 import { FrontMatterProps, BlogLayoutProps } from '@/types/blog'
@@ -78,7 +79,9 @@ export default function ListLayout({
                         </Link>
                       </h3>
                       <div className="flex flex-wrap">
-                        {tags && tags.map((tag) => <Tag key={tag} text={tag} />)}
+                        {tags?.map((tag) => (
+                          <Tag key={tag} text={tag} />
+                        ))}
                       </div>
                     </div>
                     <div className="prose text-gray-500 max-w-none dark:text-gray-400">

@@ -16,10 +16,14 @@
  * kebabCase(null) // returns ''
  * ```
  */
-const kebabCase = (inputText: string): string =>
-  inputText
-    ? (inputText.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || [])
-        .map((word) => word.toLowerCase())
-        .join('-')
-    : ''
+const kebabCase = (inputText: string): string => {
+  if (!inputText) return ''
+
+  // Insert hyphens before uppercase letters and replace spaces/underscores
+  return inputText
+    .replaceAll(/([a-z\d])([A-Z])/g, '$1-$2')
+    .replaceAll(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1-$2')
+    .replaceAll(/[\s_]+/g, '-')
+    .toLowerCase()
+}
 export default kebabCase

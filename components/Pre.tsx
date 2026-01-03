@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useRef, ReactElement, MouseEventHandler } from 'react'
 
 type PreProps = {
@@ -17,25 +19,35 @@ const Pre = (props: PreProps): ReactElement<PreProps> => {
   const [hovered, setHovered] = useState<boolean>(false)
   const [copied, setCopied] = useState<boolean>(false)
 
-  const onEnter: MouseEventHandler<HTMLDivElement> = () => {
+  const onEnter = () => {
     setHovered(true)
   }
-  const onExit: MouseEventHandler<HTMLDivElement> = () => {
+  const onExit = () => {
     setHovered(false)
     setCopied(false)
   }
-  const onCopy: MouseEventHandler<HTMLButtonElement> = async () => {
+  const onCopy: MouseEventHandler<HTMLButtonElement> = () => {
     if (textInput.current) {
       setCopied(true)
-      await navigator.clipboard.writeText(textInput.current.innerText)
-      setTimeout(() => {
-        setCopied(false)
-      }, 2000)
+      navigator.clipboard.writeText(textInput.current.innerText).then(() => {
+        setTimeout(() => {
+          setCopied(false)
+        }, 2000)
+      })
     }
   }
 
   return (
-    <div ref={textInput} onMouseEnter={onEnter} onMouseLeave={onExit} className="relative">
+    <section
+      ref={textInput}
+      onMouseEnter={onEnter}
+      onMouseLeave={onExit}
+      onFocus={onEnter}
+      onBlur={onExit}
+      tabIndex={0}
+      aria-label="Code snippet"
+      className="relative"
+    >
       {hovered && (
         <button
           aria-label="Copy code"
@@ -55,30 +67,26 @@ const Pre = (props: PreProps): ReactElement<PreProps> => {
             className={copied ? 'text-green-400' : 'text-gray-300'}
           >
             {copied ? (
-              <>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                />
-              </>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+              />
             ) : (
-              <>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                />
-              </>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+              />
             )}
           </svg>
         </button>
       )}
 
       <pre>{props.children}</pre>
-    </div>
+    </section>
   )
 }
 

@@ -2,8 +2,8 @@ import { InfluxDBClient, Point } from '@influxdata/influxdb3-client'
 import 'dotenv/config'
 
 import dotenv from 'dotenv'
-import path from 'path'
-import fs from 'fs'
+import path from 'node:path'
+import fs from 'node:fs'
 
 dotenv.config({ path: path.resolve('.env.local') })
 

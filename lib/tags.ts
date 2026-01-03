@@ -1,6 +1,6 @@
-import fs from 'fs'
+import fs from 'node:fs'
 import matter from 'gray-matter'
-import path from 'path'
+import path from 'node:path'
 import { getFiles } from './mdx'
 import kebabCase from './utils/kebabCase'
 

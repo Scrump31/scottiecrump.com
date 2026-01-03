@@ -1,16 +1,10 @@
-import { AppProps } from 'next/app'
+'use client'
 
-import '@/css/tailwind.css'
 import { datadogRum } from '@datadog/browser-rum'
-
 import { ThemeProvider } from 'next-themes'
-import Head from 'next/head'
+import { ReactNode, useEffect } from 'react'
 
-import Analytics from '@/components/analytics'
-import LayoutWrapper from '@/components/LayoutWrapper'
-import { useEffect } from 'react'
-
-export default function App({ Component, pageProps }: AppProps) {
+export function Providers({ children }: Readonly<{ children: ReactNode }>) {
   useEffect(() => {
     datadogRum.init({
       applicationId: process.env.NEXT_PUBLIC_DD_APPLICATION_ID ?? '',
@@ -30,14 +24,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     // @ts-ignore
-    <ThemeProvider attribute="class">
-      <Head>
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-      </Head>
-      <Analytics />
-      <LayoutWrapper>
-        <Component {...pageProps} />
-      </LayoutWrapper>
-    </ThemeProvider>
+    <ThemeProvider attribute="class">{children}</ThemeProvider>
   )
 }
