@@ -4,10 +4,12 @@ import colors from 'tailwindcss/colors'
 
 const config: Config = {
   content: [
+    './app/**/*.{js,jsx,ts,tsx}',
     './pages/**/*.{js,jsx,ts,tsx}',
     './components/**/*.{js,jsx,ts,tsx}',
     './layouts/**/*.{js,jsx,ts,tsx}',
     './lib/**/*.{js,jsx,ts,tsx}',
+    './data/**/*.{md,mdx}',
   ],
   darkMode: 'class',
   theme: {

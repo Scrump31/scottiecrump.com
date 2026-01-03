@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 const MINUTES_IN_HOUR = 60

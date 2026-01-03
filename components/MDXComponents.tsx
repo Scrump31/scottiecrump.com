@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo } from 'react'
 import { getMDXComponent } from 'mdx-bundler/client'
 import { MDXComponents as MDXComponentsType } from 'mdx/types'

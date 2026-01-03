@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useRef, ReactElement, MouseEventHandler } from 'react'
 
 type PreProps = {
