@@ -2,7 +2,6 @@ import Image from '@/components/Image'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
-import { BlogSEO } from '@/components/SEO'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { PostLayoutProps } from '@/types/post-layout'
@@ -20,17 +19,11 @@ export default function PostLayout({
   next,
   prev,
   children,
-}: PostLayoutProps) {
-  const { slug, date, title, tags } = frontMatter
+}: Readonly<PostLayoutProps>) {
+  const { date, title, tags } = frontMatter
 
   return (
     <SectionContainer>
-      <BlogSEO
-        url={`${siteMetadata.siteUrl}/blog/${slug}`}
-        authorDetails={authorDetails}
-        lastmod={frontMatter.lastmod || frontMatter.date}
-        {...frontMatter}
-      />
       <article>
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
           <header className="pt-6 xl:pb-6">

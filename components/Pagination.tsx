@@ -5,9 +5,10 @@ type PaginationProps = {
   currentPage: number
 }
 
-export default function Pagination({ totalPages, currentPage }: PaginationProps) {
-  const prevPage = parseInt(currentPage.toString()) - 1 > 0
-  const nextPage = parseInt(currentPage.toString()) + 1 <= parseInt(totalPages.toString())
+export default function Pagination({ totalPages, currentPage }: Readonly<PaginationProps>) {
+  const prevPage = Number.parseInt(currentPage.toString()) - 1 > 0
+  const nextPage =
+    Number.parseInt(currentPage.toString()) + 1 <= Number.parseInt(totalPages.toString())
 
   return (
     <div className="pt-6 pb-8 space-y-2 md:space-y-5">

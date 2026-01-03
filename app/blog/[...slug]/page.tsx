@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 import { ReactElement } from 'react'
 import PageTitle from '@/components/PageTitle'
 import generateRss from '@/lib/generate-rss'
@@ -53,7 +53,13 @@ export default async function Blog({
 
   return (
     <>
-      {(frontMatter as any).draft !== true ? (
+      {(frontMatter as any).draft === true ? (
+        <div className="mt-24 text-center">
+          <PageTitle>
+            Under Construction <span aria-label="roadwork sign">🚧</span>
+          </PageTitle>
+        </div>
+      ) : (
         <MDXLayoutRenderer
           layout={(frontMatter as any).layout || DEFAULT_LAYOUT}
           toc={toc}
@@ -63,15 +69,6 @@ export default async function Blog({
           prev={prev}
           next={next}
         />
-      ) : (
-        <div className="mt-24 text-center">
-          <PageTitle>
-            Under Construction{' '}
-            <span role="img" aria-label="roadwork sign">
-              🚧
-            </span>
-          </PageTitle>
-        </div>
       )}
     </>
   )

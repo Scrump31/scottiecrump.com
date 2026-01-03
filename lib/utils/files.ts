@@ -1,5 +1,5 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 const pipe = (
   ...fns: {
@@ -8,8 +8,8 @@ const pipe = (
       options?:
         | {
             encoding: BufferEncoding | null
-            withFileTypes?: false | undefined
-            recursive?: boolean | undefined
+            withFileTypes: false | undefined
+            recursive: boolean | undefined
           }
         | BufferEncoding
         | null
@@ -17,22 +17,22 @@ const pipe = (
     (
       path: fs.PathLike,
       options:
-        | { encoding: 'buffer'; withFileTypes?: false | undefined; recursive?: boolean | undefined }
+        | { encoding: 'buffer'; withFileTypes: false | undefined; recursive: boolean | undefined }
         | 'buffer'
     ): Buffer[]
     (
       path: fs.PathLike,
       options?:
         | (fs.ObjectEncodingOptions & {
-            withFileTypes?: false | undefined
-            recursive?: boolean | undefined
+            withFileTypes: false | undefined
+            recursive: boolean | undefined
           })
         | BufferEncoding
         | null
     ): string[] | Buffer[]
     (
       path: fs.PathLike,
-      options: fs.ObjectEncodingOptions & { withFileTypes: true; recursive?: boolean | undefined }
+      options: fs.ObjectEncodingOptions & { withFileTypes: true; recursive: boolean | undefined }
     ): fs.Dirent[]
     (input: any): any
     (input: any): any

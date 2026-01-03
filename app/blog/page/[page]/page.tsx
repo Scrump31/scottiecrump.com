@@ -13,11 +13,9 @@ export const metadata: Metadata = {
 export async function generateStaticParams() {
   const totalPosts = await getAllFilesFrontMatter('blog')
   const totalPages = Math.ceil(totalPosts.length / POSTS_PER_PAGE)
-  const paths = Array.from({ length: totalPages }, (_, i) => ({
+  return Array.from({ length: totalPages }, (_, i) => ({
     page: (i + 1).toString(),
   }))
-
-  return paths
 }
 
 /**
@@ -34,7 +32,7 @@ export default async function PostPage({
 }): Promise<ReactElement> {
   const { page } = await params
   const posts = await getAllFilesFrontMatter('blog')
-  const pageNumber = parseInt(page)
+  const pageNumber = Number.parseInt(page)
   const initialDisplayPosts = posts.slice(
     POSTS_PER_PAGE * (pageNumber - 1),
     POSTS_PER_PAGE * pageNumber

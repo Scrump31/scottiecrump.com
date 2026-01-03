@@ -4,7 +4,7 @@ import { datadogRum } from '@datadog/browser-rum'
 import { ThemeProvider } from 'next-themes'
 import { ReactNode, useEffect } from 'react'
 
-export function Providers({ children }: { children: ReactNode }) {
+export function Providers({ children }: Readonly<{ children: ReactNode }>) {
   useEffect(() => {
     datadogRum.init({
       applicationId: process.env.NEXT_PUBLIC_DD_APPLICATION_ID ?? '',
