@@ -2,24 +2,41 @@ import Link from '@/components/Link'
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-start justify-start md:justify-center md:items-center md:flex-row md:space-x-6 md:mt-24">
-      <div className="pt-6 pb-8 space-x-2 md:space-y-5">
-        <h1 className="text-6xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 md:text-8xl md:leading-14 md:border-r-2 md:px-6">
-          404
-        </h1>
-      </div>
-      <div className="max-w-md">
-        <p className="mb-4 text-xl font-bold leading-normal md:text-2xl">
-          Sorry, we couldn't find this page.
-        </p>
-        <p className="mb-8">
-          But don't worry, you can find plenty of other things on our homepage.
-        </p>
-        <Link href="/">
-          <button className="inline px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg shadow focus:outline-none focus:shadow-outline-blue hover:bg-blue-700 dark:hover:bg-blue-500">
-            Back to homepage
-          </button>
-        </Link>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+      <div className="space-y-6 max-w-2xl px-4">
+        <div className="space-y-3">
+          <h1 className="text-8xl font-extrabold text-gray-900 dark:text-gray-100 md:text-9xl">
+            404
+          </h1>
+          <div className="h-1 w-24 bg-primary-500 mx-auto rounded-full"></div>
+        </div>
+
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 md:text-3xl">
+            Test Failed: Page Not Found
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
+            Looks like this endpoint returned a 404. The resource you're looking for doesn't exist
+            or has been moved.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+          <Link href="/">
+            <button className="px-6 py-3 text-base font-medium text-white bg-primary-500 rounded-lg hover:bg-primary-600 dark:hover:bg-primary-400 transition-colors duration-200 shadow-md hover:shadow-lg">
+              Back to Home
+            </button>
+          </Link>
+          <Link href="/blog">
+            <button className="px-6 py-3 text-base font-medium text-gray-900 dark:text-gray-100 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 shadow-md hover:shadow-lg">
+              View Blog Posts
+            </button>
+          </Link>
+        </div>
+
+        <div className="pt-8 text-sm text-gray-500 dark:text-gray-400">
+          <p>Need help? Check out my testing resources or get in touch.</p>
+        </div>
       </div>
     </div>
   )
