@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --font-outfit: 'Outfit', sans-serif;
+    --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 @layer utilities {
   .remark-code-title {
     @apply px-5 py-3 font-mono text-sm font-bold text-gray-200 bg-gray-700 rounded-t;
@@ -28,7 +39,28 @@
     content: attr(line);
   }
 
-  html {
-    scroll-behavior: smooth;
+  /* Dot grid background pattern for dark hero */
+  .bg-dot-grid {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(255, 255, 255, 0.07) 1px,
+      transparent 0
+    );
+    background-size: 28px 28px;
+  }
+
+  /* Gradient text using accent color */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600;
+  }
+
+  /* Glassmorphism card */
+  .glass-card {
+    @apply bg-white/[0.03] border border-white/[0.08] backdrop-blur-sm;
+  }
+
+  /* Card with hover lift + shadow */
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10;
   }
 }

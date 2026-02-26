@@ -15,7 +15,7 @@ jobs:
         run: |
           npm install --save-dev @commitlint/cli @commitlint/config-conventional
       - name: Validate PR title
-        run: npx commitlint --body-max-line-length infinity --placeholder-body-max-line-length infinity --extends @commitlint/config-conventional --last-commit-ignore-placeholder --subject-case sentence --subject-full-stop never --type-case lower-case --type-enum feat,fix,docs,style,refactor,perf,test,build,ci,chore --input "${{ github.event.pull_request.title }}"
+        run: echo "${{ github.event.pull_request.title }}" | npx commitlint --extends @commitlint/config-conventional
       - name: Validate PR commits
         if: github.event_name == 'pull_request'
         run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose

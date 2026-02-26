@@ -6,24 +6,11 @@ type TagProps = {
   text: string
 }
 
-/**
- * A functional component that renders a tag link.
- *
- * @remarks
- * This component takes a `text` prop, which represents the tag's text.
- * It uses the `kebabCase` function to format the tag text.
- * The tag link is rendered as a Next.js `Link` component with the appropriate href and className.
- *
- * @param props - The props for the Tag component.
- * @param props.text - The text of the tag.
- *
- * @returns A ReactElement representing the Tag component.
- */
 const Tag = ({ text }: TagProps): ReactElement<TagProps> => {
   return (
     <Link
       href={`/tags/${kebabCase(text)}`}
-      className="mr-3 text-sm font-medium uppercase text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+      className="mr-1.5 mb-1.5 inline-flex items-center rounded-full bg-blue-500/10 px-2.5 py-0.5 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-500/20 dark:bg-blue-400/10 dark:text-blue-400 dark:hover:bg-blue-400/20"
     >
       {text.split(' ').join('-')}
     </Link>

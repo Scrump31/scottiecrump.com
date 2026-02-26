@@ -24,11 +24,12 @@ const config: Config = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        sans: ['var(--font-jakarta)', ...defaultTheme.fontFamily.sans],
+        display: ['var(--font-outfit)', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: colors.cyan,
-        gray: colors.neutral,
+        primary: colors.blue,
+        gray: colors.zinc,
         code: {
           green: '#b5f4a5',
           yellow: '#ffe484',
@@ -43,23 +44,26 @@ const config: Config = {
           css: {
             color: theme('colors.gray.700'),
             a: {
-              color: theme('colors.primary.500'),
+              color: theme('colors.primary.600'),
               '&:hover': {
-                color: theme('colors.primary.600'),
+                color: theme('colors.primary.700'),
               },
               code: { color: theme('colors.primary.400') },
             },
             h1: {
+              fontFamily: 'var(--font-outfit)',
               fontWeight: '700',
               letterSpacing: theme('letterSpacing.tight'),
               color: theme('colors.gray.900'),
             },
             h2: {
+              fontFamily: 'var(--font-outfit)',
               fontWeight: '700',
               letterSpacing: theme('letterSpacing.tight'),
               color: theme('colors.gray.900'),
             },
             h3: {
+              fontFamily: 'var(--font-outfit)',
               fontWeight: '600',
               color: theme('colors.gray.900'),
             },
@@ -110,9 +114,9 @@ const config: Config = {
           css: {
             color: theme('colors.gray.300'),
             a: {
-              color: theme('colors.primary.500'),
+              color: theme('colors.primary.400'),
               '&:hover': {
-                color: theme('colors.primary.400'),
+                color: theme('colors.primary.300'),
               },
               code: { color: theme('colors.primary.400') },
             },

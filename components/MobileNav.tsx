@@ -12,7 +12,6 @@ const MobileNav = () => {
       if (status) {
         document.body.style.overflow = 'auto'
       } else {
-        // Prevent scrolling
         document.body.style.overflow = 'hidden'
       }
       return !status
@@ -23,54 +22,73 @@ const MobileNav = () => {
     <div className="sm:hidden">
       <button
         type="button"
-        className="w-8 h-8 ml-1 mr-1 rounded"
+        className="ml-1 flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/[0.06] dark:hover:text-zinc-100"
         aria-label="Toggle Menu"
+        aria-expanded={navShow}
         onClick={onToggleNav}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="text-gray-900 dark:text-gray-100"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-5 w-5"
+          aria-hidden="true"
         >
           {navShow ? (
-            <path
-              fillRule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
+            <>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </>
           ) : (
-            <path
-              fillRule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-              clipRule="evenodd"
-            />
+            <>
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </>
           )}
         </svg>
       </button>
+
+      {/* Full-screen overlay */}
       <div
-        className={`fixed w-full h-full top-24 right-0 bg-gray-200 dark:bg-gray-800 opacity-95 z-10 ease-in-out duration-300 ${
-          navShow ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed inset-0 top-[65px] z-50 transition-all duration-300 ${
+          navShow ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
+        {/* Backdrop */}
         <button
           type="button"
-          aria-label="toggle modal"
-          className="fixed w-full h-full cursor-auto focus:outline-none"
+          aria-label="Close menu"
+          className="absolute inset-0 cursor-default bg-black/40 backdrop-blur-sm"
           onClick={onToggleNav}
-        ></button>
-        <nav className="fixed h-full mt-8">
-          {headerNavLinks.map((link: { title: string; href: string }) => (
-            <div key={link.title} className="px-12 py-4">
+        />
+
+        {/* Slide-in panel */}
+        <nav
+          className={`absolute right-0 top-0 h-full w-72 overflow-y-auto border-l border-zinc-200 bg-white shadow-2xl transition-transform duration-300 ease-out dark:border-white/[0.08] dark:bg-[#12121a] ${
+            navShow ? 'translate-x-0' : 'translate-x-full'
+          }`}
+          aria-label="Mobile navigation"
+        >
+          <div className="px-6 pt-8 pb-10">
+            <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-zinc-400">
+              Navigation
+            </p>
+            {headerNavLinks.map((link: { title: string; href: string }) => (
               <Link
+                key={link.title}
                 href={link.href}
-                className="text-2xl font-bold tracking-widest text-gray-900 dark:text-gray-100"
+                className="block border-b border-zinc-100 py-4 font-display text-xl font-semibold text-zinc-900 transition-colors last:border-b-0 hover:text-blue-600 dark:border-white/[0.06] dark:text-zinc-100 dark:hover:text-blue-400"
                 onClick={onToggleNav}
               >
                 {link.title}
               </Link>
-            </div>
-          ))}
+            ))}
+          </div>
         </nav>
       </div>
     </div>

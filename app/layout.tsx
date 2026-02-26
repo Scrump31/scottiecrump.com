@@ -1,7 +1,7 @@
 import '@/css/tailwind.css'
 
 import { ReactNode } from 'react'
-import { Inter } from 'next/font/google'
+import { Outfit, Plus_Jakarta_Sans } from 'next/font/google'
 
 import Analytics from '@/components/analytics'
 import Footer from '@/components/Footer'
@@ -15,9 +15,15 @@ import siteMetadata from '@/data/siteMetadata'
 import logoUrl from '@/data/logo.svg'
 import { Metadata, Viewport } from 'next'
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  variable: '--font-outfit',
+  display: 'swap',
+})
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-jakarta',
   display: 'swap',
 })
 
@@ -54,58 +60,65 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const logoSrc = (() => {
+    const mod = (logoUrl as unknown) as any
+    return typeof mod === 'string' ? mod : mod?.src || mod?.default?.src || String(mod)
+  })()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} antialiased text-black bg-white dark:bg-gray-900 dark:text-white`}
+        className={`${outfit.variable} ${plusJakartaSans.variable} font-sans antialiased text-zinc-800 bg-zinc-50 dark:bg-[#0a0a0f] dark:text-zinc-200`}
       >
         <Providers>
           <Analytics />
-          <SectionContainer>
-            <div className="flex flex-col justify-between h-screen">
-              <header className="flex items-center justify-between py-10">
-                <div>
-                  <Link href="/" aria-label="Tailwind CSS Blog">
-                    <div className="flex items-center justify-between">
-                      <div className="mr-3">
-                        {(() => {
-                          const mod = (logoUrl as unknown) as any
-                          const src =
-                            typeof mod === 'string'
-                              ? mod
-                              : mod?.src || mod?.default?.src || String(mod)
-                          // eslint-disable-next-line @next/next/no-img-element
-                          return <img src={src} alt="Logo" width={60} height={60} />
-                        })()}
-                      </div>
-                      {
-                        <div className="hidden h-6 text-2xl font-semibold sm:block">
-                          {siteMetadata.headerTitle}
-                        </div>
-                      }
-                    </div>
-                  </Link>
-                </div>
-                <div className="flex items-center text-base leading-5">
-                  <div className="hidden sm:block">
+          <div className="flex min-h-screen flex-col">
+            {/* Sticky glassmorphism header */}
+            <header className="sticky top-0 z-50 w-full border-b border-zinc-200/70 bg-zinc-50/80 backdrop-blur-xl dark:border-white/[0.06] dark:bg-[#0a0a0f]/80">
+              <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 xl:px-0">
+                {/* Logo + site name */}
+                <Link href="/" aria-label="Scottie Crump — Home">
+                  <div className="flex items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={logoSrc}
+                      alt="Scottie Crump logo"
+                      width={34}
+                      height={34}
+                      className="rounded-lg"
+                    />
+                    <span className="hidden font-display text-[1.05rem] font-semibold text-zinc-900 dark:text-zinc-50 sm:block">
+                      Scottie Crump
+                    </span>
+                  </div>
+                </Link>
+
+                {/* Desktop nav + controls */}
+                <div className="flex items-center gap-1">
+                  <nav className="hidden items-center sm:flex" aria-label="Main navigation">
                     {headerNavLinks.map((link) => (
                       <Link
                         key={link.title}
                         href={link.href}
-                        className="p-1 font-medium text-gray-900 sm:p-4 dark:text-gray-100"
+                        className="rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/[0.06] dark:hover:text-zinc-100"
                       >
                         {link.title}
                       </Link>
                     ))}
-                  </div>
+                  </nav>
                   <ThemeSwitch />
                   <MobileNav />
                 </div>
-              </header>
-              <main className="mb-auto">{children}</main>
-              <Footer />
-            </div>
-          </SectionContainer>
+              </div>
+            </header>
+
+            {/* Page content */}
+            <main className="flex-1">
+              <SectionContainer>{children}</SectionContainer>
+            </main>
+
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>
