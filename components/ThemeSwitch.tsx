@@ -3,17 +3,10 @@
 import { useEffect, useState, ReactElement } from 'react'
 import { useTheme } from 'next-themes'
 
-/**
- * A React component that toggles the theme between light and dark modes.
- * Uses the `next-themes` library to manage the theme state.
- *
- * @returns {ReactElement} - The ThemeSwitch component.
- */
 const ThemeSwitch = (): ReactElement => {
   const [mounted, setMounted] = useState<boolean>(false)
   const { theme, setTheme, resolvedTheme } = useTheme()
 
-  // When mounted on the client, then show the UI
   useEffect(() => setMounted(true), [])
 
   const handleThemeToggle = () => {
@@ -24,29 +17,42 @@ const ThemeSwitch = (): ReactElement => {
     }
   }
 
+  const isDark = mounted && (theme === 'dark' || resolvedTheme === 'dark')
+
   return (
     <button
       aria-label="Toggle Dark Mode"
       type="button"
-      className="w-8 h-8 p-1 ml-1 mr-1 rounded sm:ml-4"
+      className="ml-1 flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/[0.06] dark:hover:text-zinc-100"
       onClick={handleThemeToggle}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        className="text-gray-900 dark:text-gray-100"
-      >
-        {mounted && (theme === 'dark' || resolvedTheme === 'dark') ? (
+      {isDark ? (
+        /* Sun icon */
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="h-5 w-5"
+          aria-hidden="true"
+        >
+          <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.166 17.834a.75.75 0 00-1.06 1.06l1.59 1.591a.75.75 0 001.061-1.06l-1.59-1.591zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.166 7.166a.75.75 0 00-1.06-1.06L3.514 7.696a.75.75 0 001.061 1.06l1.591-1.59z" />
+        </svg>
+      ) : (
+        /* Moon icon */
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="h-5 w-5"
+          aria-hidden="true"
+        >
           <path
             fillRule="evenodd"
-            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+            d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"
             clipRule="evenodd"
           />
-        ) : (
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-        )}
-      </svg>
+        </svg>
+      )}
     </button>
   )
 }
