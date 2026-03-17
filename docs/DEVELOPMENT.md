@@ -4,7 +4,7 @@ This file documents a quick, reproducible developer workflow for ScottieCrump.co
 
 Prerequisites
 
-- Node.js >= 18.17.0
+- Node.js >= 20.9.0
 - npm (or yarn)
 
 Setup
