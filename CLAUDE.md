@@ -151,7 +151,7 @@ npm run analyze      # Analyze bundle size
 
 ### Dependencies
 
-- Node.js >= 18.17.0 required
+- Node.js >= 20.9.0 required
 - `sharp` is pinned to 0.32.6 for compatibility
 - React 19 is being used (latest stable)
 
