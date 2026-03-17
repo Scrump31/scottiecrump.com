@@ -44,3 +44,4 @@ yarn-error.log*
 /playwright/.cache/
 /allure-results/
 /metrics_results/
+.playwright-cli
