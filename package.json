@@ -32,7 +32,7 @@
     "chart.js": "^4.4.1",
     "chartjs-plugin-annotation": "^3.0.1",
     "dotenv": "^16.4.5",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.1",
     "framer-motion": "^12.34.3",
     "gray-matter": "^4.0.2",
     "image-size": "1.0.0",
@@ -94,7 +94,7 @@
     "next-remote-watch": "^1.0.0",
     "prettier": "2.2.1",
     "typescript": "^5",
-    "vite": "^6.4.2",
+    "vite": "^8.0.16",
     "vite-tsconfig-paths": "^5.1.2",
     "vitest": "^4.1.8"
   },
