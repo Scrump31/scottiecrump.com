@@ -8,7 +8,7 @@ linkedin: https://www.linkedin.com/in/scottiecrump/
 github: https://github.com/Scrump31/
 ---
 
-Scottie Crump is a Lead Software Engineer in Test with over seven years of experience as a consultant working with
+Scottie Crump is a Lead Software Engineer in Test with over nine years of experience as a consultant working with
 clients from various sectors, including automotive, retail, telecommunications, and healthcare. He received his
 Bachelors and Graduate Certificate from The University of North Carolina at Charlotte.
 
