@@ -8,7 +8,7 @@ summary: "Every issue you catch by hand in a pull request is a rule that doesn't
 
 # Intro
 
-I reviewed a pull request a few weeks ago in a Playwright repository and left a comment I had left before. Same reviewer (me), same repository, different author: _"Please don't use `waitForTimeout`. Use a web-first assertion instead."_
+I reviewed a pull request (PR) a few weeks ago in a Playwright repository and left a comment I had left before. Same reviewer (me), same repository, different author: _"Please don't use `waitForTimeout`. Use a web-first assertion instead."_
 
 I went looking, and I had written some version of that comment many times.
 
@@ -24,18 +24,18 @@ The first time you flag something, you don't yet know whether it's a pattern. Th
 
 There are four places I've landed on for review rules, and they're ordered by cost. Not the cost of building the rule, the cost of _enforcing_ it, every time, forever.
 
-| Lane | Where it lives          | When it catches       | Who pays                     |
-| ---- | ----------------------- | --------------------- | ---------------------------- |
-| 01   | **Lint rule**           | Before the PR exists  | Nobody. Costs you nothing.   |
-| 02   | **CI check**            | ~2 minutes after push | The author fixes it, not you |
-| 03   | **Copilot instruction** | At PR open            | Advisory, can't be a gate    |
-| 04   | **Your comment**        | After you read a diff | Your day                     |
+| Lane | Where it lives                        | When it catches       | Who pays                     |
+| ---- | ------------------------------------- | --------------------- | ---------------------------- |
+| 01   | **Lint rule**                         | Before the PR exists  | Nobody. Costs you nothing.   |
+| 02   | **Continuous integration (CI) check** | ~2 minutes after push | The author fixes it, not you |
+| 03   | **Copilot instruction**               | At PR open            | Advisory, can't be a gate    |
+| 04   | **Your comment**                      | After you read a diff | Your day                     |
 
 Lane 01 is cheap and deterministic. Lane 04 is expensive and non-repeatable. The whole discipline is pushing issues as far left as we can reasonably get them.
 
 Each lane has exactly one test. **If an issue passes the test for a cheaper lane, it goes there, even if a deeper lane would catch it more elegantly.** Elegance isn't the goal; never thinking about it again is the goal.
 
-One important caveat before the lanes: triage a _single, specific issue_, not a category. "Tests are bad" isn't triageable. "Tests assert on CSS class names instead of user-visible behavior" is.
+One important caveat before the lanes: triage a _single, specific issue_, not a category. "Tests are bad" isn't triageable. "Tests assert on Cascading Style Sheets (CSS) class names instead of user-visible behavior" is.
 
 ## Lane 01 — Lint rule: wrong on sight
 
@@ -52,7 +52,7 @@ Examples of things that belong here:
 How to ship it:
 
 - **Check for an existing plugin rule first.** `eslint-plugin-playwright` for test smells, `typescript-eslint` for type-safety rules like `no-floating-promises`, etc. Enabling beats authoring, every time.
-- For one-offs, `no-restricted-syntax` with an AST selector takes minutes, not hours.
+- For one-offs, `no-restricted-syntax` with an abstract syntax tree (AST) selector takes minutes, not hours.
 - Set the severity to `error`, not `warn`. **A warning is a review comment with extra steps.**
 - Run it in pre-commit _and_ CI.
 
@@ -183,7 +183,7 @@ Examples of things that belong here:
 
 **This is the lane you're actually paid for. It should be the only one left.**
 
-And it comes with an obligation attached. Leave the comment, then write the knowledge down. An ADR, an `AGENTS.md` entry, an instructions file. Because the moment that knowledge lives in the repo, the exact same issue is a **lane 03** problem next time, and the bot catches it before you open the diff.
+And it comes with an obligation attached. Leave the comment, then write the knowledge down. An architecture decision record (ADR), an `AGENTS.md` entry, an instructions file. Because the moment that knowledge lives in the repo, the exact same issue is a **lane 03** problem next time, and the bot catches it before you open the diff.
 
 If you find yourself making the same comment a third time, the write-down step got skipped. That's the whole diagnosis.
 
