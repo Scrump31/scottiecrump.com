@@ -1,0 +1,243 @@
+---
+title: 'Say It Twice, and It Stops Being Your Job'
+date: '2026-08-26'
+tags: ['code review', 'test automation', 'ci', 'developer experience', 'linting']
+draft: false
+summary: "Every issue you catch by hand in a pull request is a rule that doesn't exist yet. Here's a four-lane triage ladder (lint rule, CI check, Copilot instruction, your comment) for deciding where each rule belongs, and why the answer is almost never 'leave another comment.'"
+---
+
+<div className="text-center">
+  <Image
+    alt="A code review issue flowing into four automated guardrail lanes"
+    src="/static/images/say-it-twice-hero.png"
+    width={800}
+    height={400}
+  />
+</div>
+
+# Intro
+
+I reviewed a pull request (PR) a few weeks ago in a Playwright repository and left a comment I had left before. Same reviewer (me), same repository, different author: _"Please don't use `waitForTimeout`. Use a web-first assertion instead."_
+
+I went looking, and I had written some version of that comment many times.
+
+That's not a code problem anymore. That's a process defect. Multiple engineers hit the same wall, at the same spot, and the only guardrail in place was whether I happened to be paying attention that day. The fix took about four minutes and a single line of ESLint config, and now nobody, including me, will ever spend time on it again.
+
+That experience turned into a rule I now apply to every review comment I write:
+
+> **Say it twice, and it stops being your job.**
+
+The first time you flag something, you don't yet know whether it's a pattern. The second time, it stops being feedback and becomes a defect in your process. Every issue you catch by hand is a rule that doesn't exist yet. The only real question is where that rule should live.
+
+# The four lanes
+
+There are four places I've landed on for review rules, and they're ordered by cost. Not the cost of building the rule, the cost of _enforcing_ it, every time, forever.
+
+| Lane | Where it lives                        | When it catches       | Who pays                     |
+| ---- | ------------------------------------- | --------------------- | ---------------------------- |
+| 01   | **Lint rule**                         | Before the PR exists  | Nobody. Costs you nothing.   |
+| 02   | **Continuous integration (CI) check** | ~2 minutes after push | The author fixes it, not you |
+| 03   | **Copilot instruction**               | At PR open            | Advisory, can't be a gate    |
+| 04   | **Your comment**                      | After you read a diff | Your day                     |
+
+Lane 01 is cheap and deterministic. Lane 04 is expensive and non-repeatable. The whole discipline is pushing issues as far left as we can reasonably get them.
+
+Each lane has exactly one test. **If an issue passes the test for a cheaper lane, it goes there, even if a deeper lane would catch it more elegantly.** Elegance isn't the goal; never thinking about it again is the goal.
+
+One important caveat before the lanes: triage a _single, specific issue_, not a category. "Tests are bad" isn't triageable. "Tests assert on Cascading Style Sheets (CSS) class names instead of user-visible behavior" is.
+
+## Lane 01 — Lint rule: wrong on sight
+
+**The test:** a machine can prove it's wrong from the source text alone. No execution, no context, no judgment. If two engineers could reasonably disagree about it, it isn't this lane.
+
+Examples of things that belong here:
+
+- Banned APIs: `waitForTimeout`, `Thread.sleep`, raw XPath selectors
+- A missing `await` on an async call
+- `any` types, stray `console.log`, a `.only` left in a spec file
+- Naming and file-location conventions
+- Direct locator use where a page object is preferred
+
+How to ship it:
+
+- **Check for an existing plugin rule first.** `eslint-plugin-playwright` for test smells, `typescript-eslint` for type-safety rules like `no-floating-promises`, etc. Enabling beats authoring, every time.
+- For one-offs, `no-restricted-syntax` with an abstract syntax tree (AST) selector takes minutes, not hours.
+- Set the severity to `error`, not `warn`. **A warning is a review comment with extra steps.**
+- Run it in pre-commit _and_ CI.
+
+Here's the rule that retired that comment for good:
+
+```js
+// .eslintrc
+"no-restricted-syntax": ["error", {
+  "selector": "CallExpression[callee.property.name='waitForTimeout']",
+  "message": "Use a web-first assertion (expect().toBeVisible()) instead of a fixed wait."
+}]
+```
+
+Notice the message. It doesn't say "banned." It says what to do instead. It's the advice I would have given in the review, delivered at the author's keyboard instead of two days later in a GitHub thread.
+
+## Lane 02 — CI check: provable by running something
+
+**The test:** a script can produce a yes/no by executing, measuring, or scanning. The verdict is identical every time you run it, and that determinism is exactly what makes it eligible to block a merge.
+
+Examples of things that belong here:
+
+- Diff size over a threshold (excluding lockfiles and generated code)
+- Coverage drop on changed lines
+- Secrets, dependency vulnerabilities, license violations
+- PR descriptions missing required sections
+- Schema/contract drift, bundle size, flaky-test detection
+- **Anything that must not merge.**
+
+How to ship it:
+
+- A plain GitHub Actions job on the `pull_request` trigger covers almost all of it. The checkout, the diff, and the PR's own metadata under `github.event.pull_request` are all right there. You rarely need a dedicated bot framework.
+- Emit findings with workflow commands (`::error::`, `::warning::`) so they surface as annotations on the check instead of being buried in the job log.
+- Add it to branch protection as a **required status check**. An unenforced check is decoration.
+- Ship it as a warning for one sprint to shake out false positives, then flip it to blocking.
+
+The diff-size gate is the highest-leverage one I've added, because large PRs quietly degrade every other form of review:
+
+```yaml
+# .github/workflows/pr-size.yml
+name: PR size
+
+on: pull_request
+
+jobs:
+  diff-size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Count added lines, excluding noise
+        id: count
+        run: |
+          ADDED=$(git diff --numstat "origin/${{ github.base_ref }}...HEAD" -- . \
+            ':(exclude)**/package-lock.json' \
+            ':(exclude)**/yarn.lock' \
+            ':(exclude)**/*.snap' \
+            ':(exclude)**/__generated__/**' \
+            ':(exclude)**/*.svg' \
+            | awk '{ sum += $1 } END { print sum + 0 }')
+          echo "added=$ADDED" >> "$GITHUB_OUTPUT"
+
+      - name: Enforce the threshold
+        env:
+          ADDED: ${{ steps.count.outputs.added }}
+          OVERRIDE: ${{ contains(github.event.pull_request.labels.*.name, 'oversized-approved') }}
+        run: |
+          if [ "$ADDED" -gt 400 ] && [ "$OVERRIDE" != "true" ]; then
+            echo "::error::$ADDED changed lines. Split this, or add the 'oversized-approved' label and say in the description why it can't be split."
+            exit 1
+          elif [ "$ADDED" -gt 200 ]; then
+            echo "::warning::$ADDED changed lines. Reviewer defect detection drops off past this point."
+          fi
+```
+
+Three details worth stealing. The `...` in the diff range compares against the merge base, so you measure what this branch actually added rather than everything that landed on `main` since you branched. The pathspec exclusions mean nobody gets penalized for a regenerated lockfile. And the failure message names an escape hatch. A gate that can't be argued with gets routed around, while a gate that asks for a label and a justification gets respected.
+
+## Lane 03 — Copilot instruction: judgment a reader could make from the diff
+
+**The test:** it takes reading comprehension, but everything needed to make the call is visible in the diff plus the repo's own conventions. Nothing from outside the repository is required.
+
+This is the lane most teams skip, and it's where a huge share of senior review time actually goes. A sharp engineer who joined last week, with the repo open in front of them, could catch these:
+
+- Tests asserting on implementation details instead of behavior
+- Swallowed errors and empty `catch` blocks
+- Missing negative or edge-case coverage
+- Logic placed at the wrong layer
+- Naming that doesn't match the domain language
+
+How to ship it:
+
+- Use path-scoped files in `.github/instructions/` with an `applyTo` glob. **A file with no `applyTo` gets ignored.**
+- One file per area: `tests`, `api`, `security`. Not one giant file.
+- Keep each file under ~100 lines. Too many instructions is the most common reason they quietly stop working.
+- Write a concrete bad/good example, not a principle. Principles get ignored; examples get applied.
+- Repo-wide standards go in `.github/copilot-instructions.md`; general repo context goes in `AGENTS.md`.
+
+```text
+# .github/instructions/playwright-tests.instructions.md
+---
+applyTo: 'tests/**/*.spec.ts'
+---
+
+## Assertions
+
+Flag assertions on internal state or DOM structure. Tests must assert on
+user-visible behavior.
+
+Bad:  expect(page.locator('.btn-primary')).toHaveClass(/active/)
+Good: expect(page.getByRole('button', { name: 'Save' })).toBeEnabled()
+```
+
+**The one hard limit on this lane:** AI review is non-deterministic. It will miss things. Never let it be the only thing standing between a defect and `main`. If an issue genuinely has to block a merge, it does not belong here. Go back to lane 02 and find the deterministic proxy.
+
+That proxy is rarely perfect, and that's fine. You can't reliably detect "insufficient edge-case coverage" with a script, but you _can_ require coverage on changed lines. The proxy is imperfect and consistent; the AI reviewer is smarter and inconsistent. For a gate, consistent wins. Ship the CI check as the gate and add the Copilot instruction on top as advisory depth.
+
+## Lane 04 — Your comment: knowledge that isn't in the repo
+
+**The test:** answering it requires something only you know. Architectural direction. An in-flight migration. A past incident. A compliance constraint. A business rule that lives in somebody's head.
+
+Examples of things that belong here:
+
+- _"This violates the migration plan we agreed to in Q2."_
+- _"We had an incident on this code path, so it needs a feature flag."_
+- _"This is the right code for the wrong problem."_
+- Genuine one-offs that will never recur.
+
+**This is the lane you're actually paid for. It should be the only one left.**
+
+And it comes with an obligation attached. Leave the comment, then write the knowledge down. An architecture decision record (ADR), an `AGENTS.md` entry, an instructions file. Because the moment that knowledge lives in the repo, the exact same issue is a **lane 03** problem next time, and the bot catches it before you open the diff.
+
+If you find yourself making the same comment a third time, the write-down step got skipped. That's the whole diagnosis.
+
+# The rule of two
+
+Here's the loop that makes this compound instead of just being a nice diagram:
+
+**1st time → comment. 2nd time → triage. → rule.**
+
+The first occurrence isn't a pattern yet, and automating it costs more than the comment did. So comment, and log it somewhere you'll see it again. The second occurrence is your signal: stop, run the issue through the four lanes, and ship the artifact.
+
+Lane 04 has a permanent leak upward. Every human comment born from undocumented knowledge should end with that knowledge written into the repo. Do that consistently and **lane 04 shrinks month over month** instead of holding steady forever.
+
+# A starter backlog you already have
+
+You don't need to plan this. The backlog already exists in your review history.
+
+Pull your last ~50 review comments, cluster them by theme, and run the top 10 through the ladder. Mine looked something like this:
+
+| Issue                           | Seen  | Lane | Artifact shipped                      |
+| ------------------------------- | ----- | ---- | ------------------------------------- |
+| Hardcoded waits in specs        | many  | 01   | `no-restricted-syntax` rule           |
+| PRs over 400 lines              | daily | 02   | `pr-size.yml` Actions job             |
+| Tests assert on CSS classes     | a few | 03   | `playwright-tests.instructions.md`    |
+| Missing feature flag on /orders | twice | 04   | ADR + `AGENTS.md` entry → now lane 03 |
+
+Four artifacts. Maybe a day of work total. They now run on every pull request, forever, without me.
+
+# One last check: if it fits nowhere
+
+Sometimes you run an issue through all four lanes and nothing fits. It isn't mechanically checkable, isn't provable by running something, isn't visible in the diff, and doesn't need outside knowledge.
+
+That almost always means the issue is stated too broadly. "Bad test design" is three or four separate rules wearing a trench coat. Break it into the specific things you actually flag, and run each one through the ladder on its own.
+
+And if a piece genuinely resists all four lanes after that? It's probably a coaching conversation, not a review rule. That's a legitimate outcome too, just be honest that it's what you're doing, instead of leaving the same comment one more time.
+
+# Wrapping up
+
+Review comments feel like the work. They're really a draft of the work. The finished version is a lint rule, a CI check, or an instruction file that catches the issue without you.
+
+So the next time you're about to type a comment you've typed before, stop and ask the four questions:
+
+1. Can a machine prove it's wrong from the source text alone? → **Lint rule.**
+2. Can a script prove it by running, measuring, or scanning? → **CI check.**
+3. Is everything needed to make the call visible in the diff and the repo? → **Copilot instruction.**
+4. Does it require knowledge that lives outside the repo? → **Your comment, plus a write-up.**
+
+Say it twice, and it stops being your job.
