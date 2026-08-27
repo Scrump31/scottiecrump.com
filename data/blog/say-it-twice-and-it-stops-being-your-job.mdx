@@ -51,12 +51,12 @@ Examples of things that belong here:
 
 How to ship it:
 
-- **Check for an existing plugin rule first.** `eslint-plugin-playwright` for test smells, `typescript-eslint` for type-safety rules like `no-floating-promises`, `eslint-plugin-unicorn` for general hygiene — enabling beats authoring, every time.
+- **Check for an existing plugin rule first.** `eslint-plugin-playwright` for test smells, `typescript-eslint` for type-safety rules like `no-floating-promises`, etc. Enabling beats authoring, every time.
 - For one-offs, `no-restricted-syntax` with an AST selector takes minutes, not hours.
 - Set the severity to `error`, not `warn`. **A warning is a review comment with extra steps.**
 - Run it in pre-commit _and_ CI.
 
-Here's the rule that retired my seven-times comment:
+Here's the rule that retired my many-times comment:
 
 ```js
 // .eslintrc
@@ -66,51 +66,70 @@ Here's the rule that retired my seven-times comment:
 }]
 ```
 
-Notice the message. It doesn't say "banned." It says what to do instead — it's the advice I would have given in the review, delivered at the author's keyboard instead of two days later in a GitHub thread.
+Notice the message. It doesn't say "banned." It says what to do instead. It's the advice I would have given in the review, delivered at the author's keyboard instead of two days later in a GitHub thread.
 
 ## Lane 02 — CI check: provable by running something
 
-**The test:** a script can produce a yes/no by executing, measuring, or scanning. The verdict is identical every time you run it — and that determinism is exactly what makes it eligible to block a merge.
+**The test:** a script can produce a yes/no by executing, measuring, or scanning. The verdict is identical every time you run it, and that determinism is exactly what makes it eligible to block a merge.
 
-Things that belong here:
+Examples of things that belong here:
 
 - Diff size over a threshold (excluding lockfiles and generated code)
 - Coverage drop on changed lines
 - Secrets, dependency vulnerabilities, license violations
 - PR descriptions missing required sections
 - Schema/contract drift, bundle size, flaky-test detection
-- **Anything that must not merge. Full stop.**
+- **Anything that must not merge.**
 
-How to ship it:
+Examples of how to ship it:
 
-- Danger.js for PR-shaped rules — size, description, ownership, labels.
-- A plain GitHub Actions job for anything that needs the repo built or tested.
+- A plain GitHub Actions job on the `pull_request` trigger covers almost all of it. The checkout, the diff, and the PR's own metadata under `github.event.pull_request` are all right there. You rarely need a dedicated bot framework.
+- Emit findings with workflow commands (`::error::`, `::warning::`) so they surface as annotations on the check instead of being buried in the job log.
 - Add it to branch protection as a **required status check**. An unenforced check is decoration.
 - Ship it as a warning for one sprint to shake out false positives, then flip it to blocking.
 
 The diff-size gate is the highest-leverage one I've added, because large PRs quietly degrade every other form of review:
 
-```ts
-// dangerfile.ts
-const NOISE = /(package-lock|yarn\.lock|\.snap|__generated__|\.svg$)/
+```yaml
+# .github/workflows/pr-size.yml
+name: PR size
 
-const files = [...danger.git.created_files, ...danger.git.modified_files].filter(
-  (f) => !NOISE.test(f)
-)
+on: pull_request
 
-const lines = (await Promise.all(files.map((f) => danger.git.diffForFile(f)))).reduce(
-  (n, d) => n + (d?.added.split('\n').length ?? 0),
-  0
-)
+jobs:
+  diff-size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-if (lines > 400) {
-  fail(`${lines} changed lines. Split this, or say in the description why it can't be split.`)
-} else if (lines > 200) {
-  warn(`${lines} changed lines — reviewer defect detection drops off past this point.`)
-}
+      - name: Count added lines, excluding noise
+        id: count
+        run: |
+          ADDED=$(git diff --numstat "origin/${{ github.base_ref }}...HEAD" -- . \
+            ':(exclude)**/package-lock.json' \
+            ':(exclude)**/yarn.lock' \
+            ':(exclude)**/*.snap' \
+            ':(exclude)**/__generated__/**' \
+            ':(exclude)**/*.svg' \
+            | awk '{ sum += $1 } END { print sum + 0 }')
+          echo "added=$ADDED" >> "$GITHUB_OUTPUT"
+
+      - name: Enforce the threshold
+        env:
+          ADDED: ${{ steps.count.outputs.added }}
+          OVERRIDE: ${{ contains(github.event.pull_request.labels.*.name, 'oversized-approved') }}
+        run: |
+          if [ "$ADDED" -gt 400 ] && [ "$OVERRIDE" != "true" ]; then
+            echo "::error::$ADDED changed lines. Split this, or add the 'oversized-approved' label and say in the description why it can't be split."
+            exit 1
+          elif [ "$ADDED" -gt 200 ]; then
+            echo "::warning::$ADDED changed lines — reviewer defect detection drops off past this point."
+          fi
 ```
 
-Two details worth stealing: the noise filter (nobody should be penalized for a lockfile), and the escape hatch in the failure message. A gate that can't be argued with gets routed around; a gate that asks for a justification gets respected.
+Three details worth stealing. The `...` in the diff range compares against the merge base, so you measure what this branch actually added rather than everything that landed on `main` since you branched. The pathspec exclusions mean nobody gets penalized for a regenerated lockfile. And the failure message names an escape hatch. A gate that can't be argued with gets routed around, while a gate that asks for a label and a justification gets respected.
 
 ## Lane 03 — Copilot instruction: judgment a reader could make from the diff
 
@@ -184,7 +203,7 @@ Pull your last ~50 review comments, cluster them by theme, and run the top 10 th
 | Issue                           | Seen  | Lane | Artifact shipped                      |
 | ------------------------------- | ----- | ---- | ------------------------------------- |
 | Hardcoded waits in specs        | 7×    | 01   | `no-restricted-syntax` rule           |
-| PRs over 400 lines              | daily | 02   | `dangerfile.ts` diff-size gate        |
+| PRs over 400 lines              | daily | 02   | `pr-size.yml` Actions job             |
 | Tests assert on CSS classes     | 4×    | 03   | `playwright-tests.instructions.md`    |
 | Missing feature flag on /orders | 2×    | 04   | ADR + `AGENTS.md` entry → now lane 03 |
 
