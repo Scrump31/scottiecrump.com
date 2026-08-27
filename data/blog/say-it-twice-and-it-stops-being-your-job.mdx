@@ -6,6 +6,15 @@ draft: false
 summary: "Every issue you catch by hand in a pull request is a rule that doesn't exist yet. Here's a four-lane triage ladder (lint rule, CI check, Copilot instruction, your comment) for deciding where each rule belongs, and why the answer is almost never 'leave another comment.'"
 ---
 
+<div className="text-center">
+  <Image
+    alt="A code review issue flowing into four automated guardrail lanes"
+    src="/static/images/say-it-twice-hero.png"
+    width={800}
+    height={400}
+  />
+</div>
+
 # Intro
 
 I reviewed a pull request (PR) a few weeks ago in a Playwright repository and left a comment I had left before. Same reviewer (me), same repository, different author: _"Please don't use `waitForTimeout`. Use a web-first assertion instead."_
