@@ -52,7 +52,7 @@ export default function PostLayout({
                       width={40}
                       height={40}
                       alt={`${author.name} avatar`}
-                      className="h-10 w-10 rounded-full"
+                      className="h-10 w-10 rounded-full object-cover object-top"
                     />
                   )}
                   <div className="text-sm">
