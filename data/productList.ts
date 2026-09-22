@@ -2,6 +2,14 @@ import { Product } from '@/types/product'
 
 const productList: Product[] = [
   {
+    title: 'ISTQB CT-GenAI Certification: Generative AI for Testers',
+    description: `Build practical GenAI testing skills and prepare for ISTQB CT-GenAI.
+    Learn prompt engineering, apply AI to real testing tasks, and evaluate results
+    with hands-on exercises.`,
+    imgSrc: '/static/images/genai-certification-course.png',
+    href: '/blog/istqb-ct-genai-certification',
+  },
+  {
     title: 'Simplify Testing with React Testing Library',
     description: `React Testing Library (RTL) is a lightweight and easy-to-use tool
      for testing the document object model (DOM) output of components. 

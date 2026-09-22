@@ -1,0 +1,116 @@
+WEBVTT
+
+00:00.553 --> 00:06.073
+Okay, so your AI assistant just wrote
+40 test cases in nine seconds, and
+
+00:06.083 --> 00:10.825
+they all look right, but there's
+one that's was skipped, and that's
+
+00:10.825 --> 00:11.845
+the one that will be shipped
+
+00:13.845 --> 00:14.985
+So I'm Scotty Crump.
+
+00:15.135 --> 00:19.325
+I'm a lead software developer
+engineer in test, and I'm a
+
+00:19.345 --> 00:21.505
+ISTQB certified instructor.
+
+00:22.505 --> 00:26.195
+So this course that I've created is for
+testers that's already using generative
+
+00:26.365 --> 00:32.415
+AI also for ones who are about to and who
+have the goal of wanting to use it well
+
+00:33.415 --> 00:38.215
+so what you'll learn in the course is
+how to turn a requirement into a prompt
+
+00:38.635 --> 00:45.445
+that returns reusable test ideas and
+apply that across test analysis, test
+
+00:45.445 --> 00:47.985
+design, and automated regression testing
+
+00:48.985 --> 00:54.145
+Then comes the harder half spotting
+hallucinations and reasoning errors
+
+00:54.645 --> 00:59.575
+handling non-deterministic results
+and protecting your test data from
+
+00:59.615 --> 01:01.765
+privacy and prompt injection risk
+
+01:02.765 --> 01:07.335
+so we'll go past the chatbot and
+we'll look at things like retrieval,
+
+01:07.565 --> 01:12.475
+agents, fine-tuning, and LLM ops
+and real test infrastructure.
+
+01:13.055 --> 01:15.955
+And we'll also look at an
+adoption strategy that your
+
+01:15.955 --> 01:17.655
+organization will back you up on
+
+01:18.655 --> 01:24.315
+so every lesson is gonna be paired with
+a guided demo and hands-on worksheets
+
+01:24.825 --> 01:29.125
+and knowledge checks so that you're not
+just watching the videos, you'll also
+
+01:29.135 --> 01:33.825
+be actually applying the skill, which
+is gonna really drive the knowledge into
+
+01:33.825 --> 01:39.575
+your long-term memory and ultimately
+help you in either the exam or when
+
+01:39.575 --> 01:41.205
+you're actually working on the job
+
+01:42.205 --> 01:46.815
+so we have 37 lessons spread out
+over five chapters, and it's gonna
+
+01:46.815 --> 01:49.605
+cover the whole CT GenAI syllabus.
+
+01:50.185 --> 01:54.295
+And so every lesson's gonna be
+mapped to an exam objective.
+
+01:55.295 --> 02:00.405
+And you don't need any prior GenAI
+experience, although at this point
+
+02:00.485 --> 02:03.945
+everyone has at least dabbled
+in using AI assistants and stuff
+
+02:04.945 --> 02:08.775
+so take a few moments and skim through
+some of the free lessons that I provided,
+
+02:09.095 --> 02:14.105
+and if you feel like this course would
+be a good fit for your learning goals,
+
+02:14.385 --> 02:16.295
+then enroll today and let's get started
