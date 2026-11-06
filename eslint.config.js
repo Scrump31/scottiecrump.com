@@ -3,14 +3,15 @@ const next = require('eslint-config-next/core-web-vitals')
 const globals = require('globals')
 const playwright = require('eslint-plugin-playwright')
 
-// Try to reuse Playwright's recommended flat config if available
-const playwrightRecommended = (playwright.configs && playwright.configs.recommended) || null
+// Reuse Playwright's recommended flat config (`recommended` is the legacy eslintrc format)
+const playwrightRecommended = (playwright.configs && playwright.configs['flat/recommended']) || null
 
 module.exports = [
   // Top-level ignores (replacement for legacy .eslintignore)
   {
     ignores: [
       'node_modules',
+      'next-env.d.ts',
       '.next',
       'out',
       'dist',
