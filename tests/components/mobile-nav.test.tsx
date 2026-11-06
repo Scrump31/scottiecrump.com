@@ -39,7 +39,10 @@ describe(`${MobileNav.name}`, () => {
     render(<MobileNav />)
 
     await user.click(screen.getByRole('button', { name: /toggle menu/i }))
-    await user.click(screen.getByRole('link', { name: headerNavLinks[0].title }))
+    const link = screen.getByRole('link', { name: headerNavLinks[0].title })
+    // jsdom doesn't implement navigation; block it so only the close behavior is exercised
+    link.addEventListener('click', (e) => e.preventDefault())
+    await user.click(link)
 
     expect(screen.getByRole('button', { name: /toggle menu/i })).toHaveAttribute(
       'aria-expanded',

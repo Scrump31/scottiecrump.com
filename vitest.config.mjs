@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitest/config'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import AllureReporter from 'allure-vitest/reporter'
 
 export default defineConfig({
@@ -24,8 +23,7 @@ export default defineConfig({
       '**/{webpack,vite,vitest,babel,nyc,tsup,build}.config.*',
     ],
   },
-  esbuild: {
-    jsx: 'automatic',
+  resolve: {
+    tsconfigPaths: true,
   },
-  plugins: [tsconfigPaths()],
 })
