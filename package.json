@@ -19,7 +19,7 @@
     "allure-report": "npx allure serve allure-results",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
-    "lint": "next lint --fix --dir pages --dir components --dir lib --dir layouts --dir scripts",
+    "lint": "eslint --fix app components lib layouts scripts e2e",
     "prepare": "husky install",
     "send-metrics": "node scripts/send-metrics.mjs"
   },
